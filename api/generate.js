@@ -1,6 +1,5 @@
 export default async function handler(req, res) {
 
-  // Vérifier que la requête est bien POST
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Méthode non autorisée"
@@ -9,83 +8,71 @@ export default async function handler(req, res) {
 
   try {
 
-    // Récupérer les informations envoyées par le site
     const {
       characterType,
       height,
       weight
     } = req.body || {};
 
-    // Vérifier les informations
     if (!characterType || !height || !weight) {
       return res.status(400).json({
-        error: "Il manque la taille, le poids ou le type de personnage."
+        error: "Informations manquantes."
       });
     }
 
-    // Construire la demande pour l'IA
+    if (!process.env.openai_api_key) {
+      return res.status(500).json({
+        error: "La clé OpenAI n'est pas configurée."
+      });
+    }
+
     const prompt = `
 Tu es un styliste expert en DisneyBound.
 
-Je veux créer une tenue DisneyBound pour une personne.
+Crée un DisneyBound moderne et portable pour une personne de ${height} cm et ${weight} kg.
 
-Type de personnage :
+Type demandé :
 ${characterType === "villain" ? "Méchant Disney" : "Personnage Disney gentil"}
 
-Taille :
-${height} cm
+Choisis un personnage Disney correspondant.
 
-Poids :
-${weight} kg
-
-Choisis un personnage Disney correspondant au type demandé.
-
-Crée ensuite une tenue DisneyBound moderne, élégante et portable au quotidien.
+Ensuite, sélectionne exactement 5 pièces de vêtements ou accessoires que l'on pourrait rechercher dans une boutique de mode comme SHEIN.
 
 IMPORTANT :
 - Ne reproduis pas le costume du personnage.
-- Utilise seulement ses couleurs, son univers et ses éléments visuels comme inspiration.
-- La tenue doit être réaliste et portable.
-- Adapte les proportions et la coupe à la morphologie générale de la personne.
+- Inspire-toi uniquement de ses couleurs, de son univers et de ses éléments visuels.
+- Les vêtements doivent être modernes et portables au quotidien.
+- Les recherches doivent être suffisamment précises pour trouver des produits réels.
 
-Réponds exactement avec cette structure :
+Réponds UNIQUEMENT avec ce JSON :
 
-PERSONNAGE :
-[personnage choisi]
-
-HAUT :
-[haut]
-
-BAS :
-[bas]
-
-CHAUSSURES :
-[chaussures]
-
-VESTE :
-[veste ou "Aucune"]
-
-ACCESSOIRE :
-[accessoire]
-
-COULEURS :
-[couleurs principales]
-
-EXPLICATION :
-[explique pourquoi cette tenue correspond au personnage]
+{
+  "character": "Nom du personnage",
+  "items": [
+    {
+      "category": "Haut",
+      "search": "termes précis pour rechercher le produit"
+    },
+    {
+      "category": "Bas",
+      "search": "termes précis pour rechercher le produit"
+    },
+    {
+      "category": "Chaussures",
+      "search": "termes précis pour rechercher le produit"
+    },
+    {
+      "category": "Veste",
+      "search": "termes précis pour rechercher le produit"
+    },
+    {
+      "category": "Accessoire",
+      "search": "termes précis pour rechercher le produit"
+    }
+  ]
+}
 `;
 
-    // Vérifier que la clé existe
-    if (!process.env.openai_api_key) {
-
-      console.error("OPENAI_API_KEY manquante");
-
-      return res.status(500).json({
-        error: "La clé OpenAI n'est pas configurée dans Vercel."
-      });
-    }
-
-    // Appel à OpenAI
     const openaiResponse = await fetch(
       "https://api.openai.com/v1/responses",
       {
@@ -103,11 +90,9 @@ EXPLICATION :
       }
     );
 
-    // Lire la réponse OpenAI
     const openaiData =
       await openaiResponse.json();
 
-    // Afficher l'erreur réelle dans les logs Vercel
     if (!openaiResponse.ok) {
 
       console.error(
@@ -118,18 +103,20 @@ EXPLICATION :
       return res.status(500).json({
         error:
           openaiData?.error?.message ||
-          "Erreur lors de la communication avec OpenAI."
+          "Erreur OpenAI."
       });
     }
 
-    // Extraire le texte de la réponse
     let result = "";
 
     if (openaiData.output) {
 
       for (const item of openaiData.output) {
 
-        if (item.type === "message" && item.content) {
+        if (
+          item.type === "message" &&
+          item.content
+        ) {
 
           for (const content of item.content) {
 
@@ -137,7 +124,9 @@ EXPLICATION :
               content.type === "output_text" &&
               content.text
             ) {
+
               result += content.text;
+
             }
 
           }
@@ -148,32 +137,50 @@ EXPLICATION :
 
     }
 
-    // Vérifier que nous avons reçu du texte
     if (!result) {
 
+      return res.status(500).json({
+        error: "Aucune réponse de l'IA."
+      });
+
+    }
+
+    // Nettoyer les éventuels blocs Markdown
+    result = result
+      .replace(/^```json\s*/i, "")
+      .replace(/^```\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .trim();
+
+    let disneyBound;
+
+    try {
+
+      disneyBound =
+        JSON.parse(result);
+
+    } catch (error) {
+
       console.error(
-        "Réponse OpenAI inattendue :",
-        openaiData
+        "JSON reçu par OpenAI :",
+        result
       );
 
       return res.status(500).json({
         error:
-          "L'IA a répondu mais aucun texte n'a été trouvé."
+          "L'IA n'a pas renvoyé un résultat valide."
       });
+
     }
 
-    // Envoyer le résultat au site
     return res.status(200).json({
       success: true,
-      result: result
+      result: disneyBound
     });
 
   } catch (error) {
 
-    console.error(
-      "Erreur serveur :",
-      error
-    );
+    console.error(error);
 
     return res.status(500).json({
       error:
