@@ -1,0 +1,1102 @@
+```html
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>DisneyBound Studio</title>
+
+  <style>
+    /* =========================
+       VARIABLES
+    ========================== */
+    :root {
+      --bg: #09090f;
+      --card: #141420;
+      --card-light: #1d1d2b;
+      --purple: #7c3aed;
+      --pink: #ec4899;
+      --gold: #fbbf24;
+      --text: #ffffff;
+      --text-muted: #a1a1aa;
+      --border: rgba(255,255,255,0.1);
+    }
+
+    /* =========================
+       GLOBAL
+    ========================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.25), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.18), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+    }
+
+    /* =========================
+       HEADER
+    ========================== */
+    header {
+      width: 100%;
+      padding: 20px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      background: rgba(9, 9, 15, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: var(--pink);
+    }
+
+    .badge {
+      font-size: 13px;
+      padding: 8px 12px;
+      border-radius: 50px;
+      background: rgba(124, 58, 237, 0.2);
+      border: 1px solid rgba(124, 58, 237, 0.5);
+      color: #ddd6fe;
+    }
+
+    /* =========================
+       MAIN
+    ========================== */
+    main {
+      width: min(1100px, 90%);
+      margin: 0 auto;
+      padding: 60px 0;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .hero h1 {
+      font-size: clamp(38px, 6vw, 70px);
+      line-height: 1;
+      margin-bottom: 20px;
+      letter-spacing: -3px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(
+        90deg,
+        var(--purple),
+        var(--pink),
+        var(--gold)
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: auto;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    /* =========================
+       FORM CARD
+    ========================== */
+    .generator {
+      background: rgba(20, 20, 32, 0.9);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 35px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    }
+
+    .step {
+      margin-bottom: 35px;
+    }
+
+    .step-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .step-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: bold;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+    }
+
+    .step-title h2 {
+      font-size: 20px;
+    }
+
+    /* =========================
+       UPLOAD
+    ========================== */
+    .upload-zone {
+      min-height: 220px;
+      border: 2px dashed rgba(255,255,255,0.18);
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 25px;
+      transition: 0.3s;
+      background: rgba(255,255,255,0.02);
+    }
+
+    .upload-zone:hover {
+      border-color: var(--pink);
+      background: rgba(236,72,153,0.05);
+    }
+
+    .upload-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .upload-icon {
+      font-size: 45px;
+    }
+
+    .upload-zone h3 {
+      font-size: 18px;
+    }
+
+    .upload-zone p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .upload-button {
+      padding: 12px 20px;
+      border-radius: 12px;
+      background: var(--card-light);
+      color: white;
+      border: 1px solid var(--border);
+    }
+
+    #photoInput {
+      display: none;
+    }
+
+    #preview {
+      display: none;
+      width: 160px;
+      height: 160px;
+      border-radius: 20px;
+      object-fit: cover;
+      border: 3px solid var(--purple);
+    }
+
+    /* =========================
+       CHARACTER TYPE
+    ========================== */
+    .character-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .character-option {
+      min-height: 150px;
+      padding: 25px;
+      border-radius: 20px;
+      background: var(--card-light);
+      border: 2px solid transparent;
+      color: white;
+      text-align: left;
+      transition: 0.3s;
+    }
+
+    .character-option:hover {
+      transform: translateY(-4px);
+    }
+
+    .character-option.selected {
+      border-color: var(--pink);
+      box-shadow: 0 0 30px rgba(236,72,153,0.25);
+    }
+
+    .character-option .emoji {
+      font-size: 40px;
+      display: block;
+      margin-bottom: 12px;
+    }
+
+    .character-option h3 {
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+
+    .character-option p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* =========================
+       BODY INFO
+    ========================== */
+    .body-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .input-card {
+      background: var(--card-light);
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+    }
+
+    .input-card label {
+      display: block;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .input-wrapper span {
+      color: var(--pink);
+      font-weight: bold;
+    }
+
+    /* =========================
+       GENERATE BUTTON
+    ========================== */
+    .generate-button {
+      width: 100%;
+      padding: 20px;
+      border-radius: 18px;
+      font-size: 18px;
+      font-weight: bold;
+      color: white;
+      background:
+        linear-gradient(
+          90deg,
+          var(--purple),
+          var(--pink)
+        );
+      box-shadow: 0 15px 35px rgba(124,58,237,0.3);
+      transition: 0.3s;
+    }
+
+    .generate-button:hover {
+      transform: scale(1.02);
+      box-shadow: 0 20px 45px rgba(236,72,153,0.3);
+    }
+
+    .generate-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* =========================
+       RESULT
+    ========================== */
+    #result {
+      display: none;
+      margin-top: 40px;
+      animation: appear 0.6s ease;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-card {
+      background: linear-gradient(
+        145deg,
+        rgba(124,58,237,0.18),
+        rgba(236,72,153,0.1)
+      );
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 30px;
+      padding: 35px;
+      text-align: center;
+    }
+
+    .result-character {
+      font-size: 65px;
+      margin-bottom: 10px;
+    }
+
+    .result-card h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .result-card > p {
+      color: var(--text-muted);
+      margin-bottom: 30px;
+    }
+
+    .look-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      text-align: left;
+    }
+
+    .look-item {
+      background: rgba(0,0,0,0.25);
+      border: 1px solid var(--border);
+      padding: 18px;
+      border-radius: 15px;
+    }
+
+    .look-item strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .look-item span {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* =========================
+       LOADING
+    ========================== */
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 25px;
+    }
+
+    .spinner {
+      width: 45px;
+      height: 45px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top-color: var(--pink);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================== */
+    @media (max-width: 700px) {
+      main {
+        padding: 40px 0;
+      }
+
+      .generator {
+        padding: 20px;
+      }
+
+      .character-grid,
+      .body-grid,
+      .look-list {
+        grid-template-columns: 1fr;
+      }
+
+      .hero h1 {
+        letter-spacing: -2px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">
+      DISNEY<span>BOUND</span> AI ✨
+    </div>
+
+    <div class="badge">
+      AI STYLE GENERATOR
+    </div>
+  </header>
+
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero">
+      <h1>
+        Trouve ton <span class="gradient-text">DisneyBound</span>
+      </h1>
+
+      <p>
+        Télécharge ta photo, choisis ton univers et laisse
+        l'intelligence artificielle imaginer ton prochain look.
+      </p>
+    </section>
+
+
+    <!-- GENERATOR -->
+    <section class="generator">
+
+      <!-- STEP 1 -->
+      <div class="step">
+
+        <div class="step-title">
+          <div class="step-number">1</div>
+          <h2>Ajoute ta photo</h2>
+        </div>
+
+        <label class="upload-zone" for="photoInput">
+
+          <div class="upload-content" id="uploadContent">
+
+            <div class="upload-icon">📸</div>
+
+            <h3>Choisis une photo</h3>
+
+            <p>
+              Une photo en pied donnera un meilleur résultat.
+            </p>
+
+            <div class="upload-button">
+              Importer une photo
+            </div>
+
+          </div>
+
+          <img id="preview" alt="Aperçu de votre photo">
+
+        </label>
+
+        <input
+          type="file"
+          id="photoInput"
+          accept="image/*"
+        >
+
+      </div>
+
+
+      <!-- STEP 2 -->
+      <div class="step">
+
+        <div class="step-title">
+          <div class="step-number">2</div>
+          <h2>Choisis ton univers</h2>
+        </div>
+
+        <div class="character-grid">
+
+          <button
+            class="character-option"
+            data-type="hero"
+          >
+            <span class="emoji">😊</span>
+            <h3>Gentil</h3>
+            <p>
+              Héros, princesses et personnages iconiques.
+            </p>
+          </button>
+
+
+          <button
+            class="character-option"
+            data-type="villain"
+          >
+            <span class="emoji">😈</span>
+            <h3>Méchant</h3>
+            <p>
+              Villains, styles sombres et looks puissants.
+            </p>
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- STEP 3 -->
+      <div class="step">
+
+        <div class="step-title">
+          <div class="step-number">3</div>
+          <h2>Ta morphologie</h2>
+        </div>
+
+        <div class="body-grid">
+
+          <div class="input-card">
+
+            <label for="height">
+              Taille
+            </label>
+
+            <div class="input-wrapper">
+
+              <input
+                type="number"
+                id="height"
+                placeholder="175"
+                min="100"
+                max="250"
+              >
+
+              <span>cm</span>
+
+            </div>
+
+          </div>
+
+
+          <div class="input-card">
+
+            <label for="weight">
+              Poids
+            </label>
+
+            <div class="input-wrapper">
+
+              <input
+                type="number"
+                id="weight"
+                placeholder="75"
+                min="30"
+                max="300"
+              >
+
+              <span>kg</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- BUTTON -->
+      <button
+        class="generate-button"
+        id="generateButton"
+      >
+        ✨ Générer mon DisneyBound
+      </button>
+
+
+      <!-- LOADING -->
+      <div
+        class="loading"
+        id="loading"
+      >
+
+        <div class="spinner"></div>
+
+        <p>
+          L'IA recherche ton style idéal...
+        </p>
+
+      </div>
+
+    </section>
+
+
+    <!-- RESULT -->
+    <section id="result">
+
+      <div class="result-card">
+
+        <div
+          class="result-character"
+          id="resultEmoji"
+        >
+          ✨
+        </div>
+
+        <h2 id="resultTitle">
+          Ton look est prêt !
+        </h2>
+
+        <p id="resultSubtitle"></p>
+
+
+        <div class="look-list">
+
+          <div class="look-item">
+            <strong>👕 Haut</strong>
+            <span id="resultTop"></span>
+          </div>
+
+          <div class="look-item">
+            <strong>👖 Bas</strong>
+            <span id="resultBottom"></span>
+          </div>
+
+          <div class="look-item">
+            <strong>👟 Chaussures</strong>
+            <span id="resultShoes"></span>
+          </div>
+
+          <div class="look-item">
+            <strong>✨ Accessoires</strong>
+            <span id="resultAccessory"></span>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    /* =========================
+       VARIABLES
+    ========================== */
+
+    const photoInput =
+      document.getElementById("photoInput");
+
+    const preview =
+      document.getElementById("preview");
+
+    const uploadContent =
+      document.getElementById("uploadContent");
+
+    const characterButtons =
+      document.querySelectorAll(".character-option");
+
+    const generateButton =
+      document.getElementById("generateButton");
+
+    const loading =
+      document.getElementById("loading");
+
+    const result =
+      document.getElementById("result");
+
+
+    let selectedType = null;
+
+
+    /* =========================
+       PHOTO PREVIEW
+    ========================== */
+
+    photoInput.addEventListener(
+      "change",
+      function(event) {
+
+        const file =
+          event.target.files[0];
+
+        if (!file) return;
+
+
+        const reader =
+          new FileReader();
+
+
+        reader.onload =
+          function(e) {
+
+            preview.src =
+              e.target.result;
+
+            preview.style.display =
+              "block";
+
+            uploadContent.style.display =
+              "none";
+
+          };
+
+
+        reader.readAsDataURL(file);
+
+      }
+    );
+
+
+    /* =========================
+       CHARACTER SELECTION
+    ========================== */
+
+    characterButtons.forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          function() {
+
+            characterButtons.forEach(
+              item => {
+                item.classList.remove("selected");
+              }
+            );
+
+            this.classList.add(
+              "selected"
+            );
+
+            selectedType =
+              this.dataset.type;
+
+          }
+        );
+
+      }
+    );
+
+
+    /* =========================
+       DISNEYBOUND DATABASE
+    ========================== */
+
+    const heroLooks = [
+
+      {
+        character: "Le Roi Lion",
+        emoji: "🦁",
+        subtitle:
+          "Un look aventureux inspiré d'un héros de la savane.",
+
+        top:
+          "T-shirt beige ou crème avec veste kaki",
+
+        bottom:
+          "Pantalon camel ou marron clair",
+
+        shoes:
+          "Sneakers blanches ou beige",
+
+        accessory:
+          "Montre dorée et accessoires naturels"
+      },
+
+      {
+        character: "Aladdin",
+        emoji: "🧞‍♂️",
+        subtitle:
+          "Un DisneyBound urbain aux couleurs royales.",
+
+        top:
+          "Chemise blanche avec surchemise bleu roi",
+
+        bottom:
+          "Jean noir ou pantalon bleu foncé",
+
+        shoes:
+          "Baskets blanches premium",
+
+        accessory:
+          "Montre dorée et bracelet bleu"
+      },
+
+      {
+        character: "Hercule",
+        emoji: "⚡",
+        subtitle:
+          "Un look sportif et puissant.",
+
+        top:
+          "T-shirt bleu avec veste blanche",
+
+        bottom:
+          "Pantalon gris ou bleu marine",
+
+        shoes:
+          "Sneakers sport blanches",
+
+        accessory:
+          "Ceinture inspirée de la Grèce antique"
+      }
+
+    ];
+
+
+    const villainLooks = [
+
+      {
+        character: "Scar",
+        emoji: "🦁",
+        subtitle:
+          "Un look sombre et élégant inspiré du roi déchu.",
+
+        top:
+          "Veste noire avec haut bordeaux",
+
+        bottom:
+          "Pantalon noir ou camel",
+
+        shoes:
+          "Bottines marron foncé",
+
+        accessory:
+          "Bijoux dorés et détails rouges"
+      },
+
+      {
+        character: "Maléfique",
+        emoji: "🖤",
+        subtitle:
+          "Un look mystérieux, élégant et puissant.",
+
+        top:
+          "Blazer noir avec touches violettes",
+
+        bottom:
+          "Pantalon noir ajusté",
+
+        shoes:
+          "Bottines noires",
+
+        accessory:
+          "Bijoux violets et accessoires pointus"
+      },
+
+      {
+        character: "Capitaine Crochet",
+        emoji: "🏴‍☠️",
+        subtitle:
+          "Un look pirate chic revisité en streetwear.",
+
+        top:
+          "Chemise blanche avec veste rouge",
+
+        bottom:
+          "Jean noir",
+
+        shoes:
+          "Boots noires",
+
+        accessory:
+          "Montre dorée et détails métalliques"
+      }
+
+    ];
+
+
+    /* =========================
+       GENERATE LOOK
+    ========================== */
+
+    generateButton.addEventListener(
+      "click",
+      function() {
+
+        const height =
+          document.getElementById("height").value;
+
+        const weight =
+          document.getElementById("weight").value;
+
+
+        /* VALIDATION */
+
+        if (!photoInput.files[0]) {
+
+          alert(
+            "Ajoute d'abord une photo."
+          );
+
+          return;
+
+        }
+
+
+        if (!selectedType) {
+
+          alert(
+            "Choisis Gentil ou Méchant."
+          );
+
+          return;
+
+        }
+
+
+        if (!height || !weight) {
+
+          alert(
+            "Entre ta taille et ton poids."
+          );
+
+          return;
+
+        }
+
+
+        /* LOADING */
+
+        generateButton.style.display =
+          "none";
+
+        loading.style.display =
+          "block";
+
+
+        /* SIMULATION IA */
+
+        setTimeout(
+          function() {
+
+            loading.style.display =
+              "none";
+
+            generateButton.style.display =
+              "block";
+
+
+            let looks;
+
+
+            if (selectedType === "hero") {
+
+              looks =
+                heroLooks;
+
+            } else {
+
+              looks =
+                villainLooks;
+
+            }
+
+
+            const randomLook =
+              looks[
+                Math.floor(
+                  Math.random() *
+                  looks.length
+                )
+              ];
+
+
+            /* RESULT */
+
+            document.getElementById(
+              "resultEmoji"
+            ).textContent =
+              randomLook.emoji;
+
+
+            document.getElementById(
+              "resultTitle"
+            ).textContent =
+              `Inspiré de ${randomLook.character}`;
+
+
+            document.getElementById(
+              "resultSubtitle"
+            ).textContent =
+              randomLook.subtitle;
+
+
+            document.getElementById(
+              "resultTop"
+            ).textContent =
+              randomLook.top;
+
+
+            document.getElementById(
+              "resultBottom"
+            ).textContent =
+              randomLook.bottom;
+
+
+            document.getElementById(
+              "resultShoes"
+            ).textContent =
+              randomLook.shoes;
+
+
+            document.getElementById(
+              "resultAccessory"
+            ).textContent =
+              randomLook.accessory;
+
+
+            result.style.display =
+              "block";
+
+
+            result.scrollIntoView({
+              behavior: "smooth",
+              block: "start"
+            });
+
+
+          },
+          1800
+        );
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
+```
