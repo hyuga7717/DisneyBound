@@ -1055,48 +1055,54 @@ generateButton.addEventListener(
          AFFICHAGE DU RÉSULTAT
       ========================== */
 
-      document.getElementById(
-        "resultEmoji"
-      ).textContent =
-        "✨";
+document.getElementById(
+  "resultEmoji"
+).textContent = "✨";
+
+document.getElementById(
+  "resultTitle"
+).textContent =
+  `DisneyBound inspiré de ${data.result.character}`;
+
+document.getElementById(
+  "resultSubtitle"
+).textContent =
+  "Voici les pièces à rechercher pour créer ton look.";
 
 
-      document.getElementById(
-        "resultTitle"
-      ).textContent =
-        "Ton DisneyBound est prêt !";
+/* PIÈCES DU DISNEYBOUND */
 
+if (
+  data.result.items &&
+  data.result.items.length >= 5
+) {
 
-      document.getElementById(
-        "resultSubtitle"
-      ).textContent =
-        data.result;
+  document.getElementById(
+    "resultTop"
+  ).textContent =
+    `${data.result.items[0].category} : ${data.result.items[0].search}`;
 
+  document.getElementById(
+    "resultBottom"
+  ).textContent =
+    `${data.result.items[1].category} : ${data.result.items[1].search}`;
 
-      document.getElementById(
-        "resultTop"
-      ).textContent =
-        "Analyse IA disponible";
+  document.getElementById(
+    "resultShoes"
+  ).textContent =
+    `${data.result.items[2].category} : ${data.result.items[2].search}`;
 
+  document.getElementById(
+    "resultAccessory"
+  ).textContent =
+    `${data.result.items[3].category} : ${data.result.items[3].search}`;
 
-      document.getElementById(
-        "resultBottom"
-      ).textContent =
-        "Voir la proposition ci-dessus";
+  document.getElementById(
+    "resultSubtitle"
+  ).textContent +=
+    ` ${data.result.items[4].category} : ${data.result.items[4].search}`;
 
-
-      document.getElementById(
-        "resultShoes"
-      ).textContent =
-        "À déterminer";
-
-
-      document.getElementById(
-        "resultAccessory"
-      ).textContent =
-        "À déterminer";
-
-
+}
       result.style.display =
         "block";
 
