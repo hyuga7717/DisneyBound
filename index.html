@@ -942,158 +942,198 @@
        GENERATE LOOK
     ========================== */
 
-    generateButton.addEventListener(
-      "click",
-      function() {
+```javascript
+generateButton.addEventListener(
+  "click",
+  async function() {
 
-        const height =
-          document.getElementById("height").value;
+    const height =
+      document.getElementById("height").value;
 
-        const weight =
-          document.getElementById("weight").value;
-
-
-        /* VALIDATION */
-
-        if (!photoInput.files[0]) {
-
-          alert(
-            "Ajoute d'abord une photo."
-          );
-
-          return;
-
-        }
+    const weight =
+      document.getElementById("weight").value;
 
 
-        if (!selectedType) {
+    /* =========================
+       VALIDATION
+    ========================== */
 
-          alert(
-            "Choisis Gentil ou Méchant."
-          );
+    if (!photoInput.files[0]) {
 
-          return;
+      alert(
+        "Ajoute d'abord une photo."
+      );
 
-        }
+      return;
 
-
-        if (!height || !weight) {
-
-          alert(
-            "Entre ta taille et ton poids."
-          );
-
-          return;
-
-        }
+    }
 
 
-        /* LOADING */
+    if (!selectedType) {
 
-        generateButton.style.display =
-          "none";
+      alert(
+        "Choisis Gentil ou Méchant."
+      );
 
-        loading.style.display =
-          "block";
+      return;
 
-
-        /* SIMULATION IA */
-
-        setTimeout(
-          function() {
-
-            loading.style.display =
-              "none";
-
-            generateButton.style.display =
-              "block";
+    }
 
 
-            let looks;
+    if (!height || !weight) {
+
+      alert(
+        "Entre ta taille et ton poids."
+      );
+
+      return;
+
+    }
 
 
-            if (selectedType === "hero") {
+    /* =========================
+       LOADING
+    ========================== */
 
-              looks =
-                heroLooks;
+    generateButton.style.display =
+      "none";
 
-            } else {
-
-              looks =
-                villainLooks;
-
-            }
+    loading.style.display =
+      "block";
 
 
-            const randomLook =
-              looks[
-                Math.floor(
-                  Math.random() *
-                  looks.length
-                )
-              ];
+    try {
 
+      /* =========================
+         APPEL À NOTRE API
+      ========================== */
 
-            /* RESULT */
+      const response =
+        await fetch("/api/generate", {
 
-            document.getElementById(
-              "resultEmoji"
-            ).textContent =
-              randomLook.emoji;
+          method: "POST",
 
-
-            document.getElementById(
-              "resultTitle"
-            ).textContent =
-              `Inspiré de ${randomLook.character}`;
-
-
-            document.getElementById(
-              "resultSubtitle"
-            ).textContent =
-              randomLook.subtitle;
-
-
-            document.getElementById(
-              "resultTop"
-            ).textContent =
-              randomLook.top;
-
-
-            document.getElementById(
-              "resultBottom"
-            ).textContent =
-              randomLook.bottom;
-
-
-            document.getElementById(
-              "resultShoes"
-            ).textContent =
-              randomLook.shoes;
-
-
-            document.getElementById(
-              "resultAccessory"
-            ).textContent =
-              randomLook.accessory;
-
-
-            result.style.display =
-              "block";
-
-
-            result.scrollIntoView({
-              behavior: "smooth",
-              block: "start"
-            });
-
-
+          headers: {
+            "Content-Type": "application/json"
           },
-          1800
+
+          body: JSON.stringify({
+
+            characterType:
+              selectedType,
+
+            height:
+              height,
+
+            weight:
+              weight
+
+          })
+
+        });
+
+
+      /* =========================
+         RÉCUPÉRATION DU RÉSULTAT
+      ========================== */
+
+      const data =
+        await response.json();
+
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.error ||
+          "Une erreur est survenue."
         );
 
       }
-    );
+
+
+      /* =========================
+         AFFICHAGE DU RÉSULTAT
+      ========================== */
+
+      document.getElementById(
+        "resultEmoji"
+      ).textContent =
+        "✨";
+
+
+      document.getElementById(
+        "resultTitle"
+      ).textContent =
+        "Ton DisneyBound est prêt !";
+
+
+      document.getElementById(
+        "resultSubtitle"
+      ).textContent =
+        data.result;
+
+
+      document.getElementById(
+        "resultTop"
+      ).textContent =
+        "Analyse IA disponible";
+
+
+      document.getElementById(
+        "resultBottom"
+      ).textContent =
+        "Voir la proposition ci-dessus";
+
+
+      document.getElementById(
+        "resultShoes"
+      ).textContent =
+        "À déterminer";
+
+
+      document.getElementById(
+        "resultAccessory"
+      ).textContent =
+        "À déterminer";
+
+
+      result.style.display =
+        "block";
+
+
+      result.scrollIntoView({
+
+        behavior: "smooth",
+
+        block: "start"
+
+      });
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "Impossible de contacter l'IA : " +
+        error.message
+      );
+
+
+    } finally {
+
+      loading.style.display =
+        "none";
+
+      generateButton.style.display =
+        "block";
+
+    }
+
+  }
+);
+```
+
 
   </script>
 
