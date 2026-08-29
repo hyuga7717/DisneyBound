@@ -234,7 +234,7 @@ Aucun texte avant le JSON.
 Aucun texte après le JSON.
 
 ==================================================
-7. DESCRIPTION DES VÊTEMENTS
+9. DESCRIPTION DES VÊTEMENTS
 ==================================================
 
 IMPORTANT :
@@ -262,7 +262,7 @@ Les champs :
 doivent être courts, naturels et sans répétition.
 
 ==================================================
-8. RECHERCHES PRODUITS
+10. RECHERCHES PRODUITS
 ==================================================
 
 Les champs "recherches" doivent contenir UNIQUEMENT
@@ -286,7 +286,7 @@ Maximum environ 8 mots par recherche.
 N'utilise pas le nom du personnage.
 
 ==================================================
-9. ACCESSOIRES
+11. ACCESSOIRES
 ==================================================
 
 Propose entre 2 et 4 accessoires maximum.
@@ -304,13 +304,13 @@ Exemple :
 La recherche correspondante doit être courte.
 
 ==================================================
-10. COULEURS
+12. COULEURS
 ==================================================
 
 Indique entre 3 et 5 couleurs principales de la tenue.
 
 ==================================================
-11. FORMAT JSON
+13. FORMAT JSON
 ==================================================
 
 Réponds UNIQUEMENT avec un JSON valide.
@@ -357,6 +357,43 @@ Avant de répondre, vérifie obligatoirement :
 - inspiration Disney subtile
 - aucun cosplay
 - JSON valide
+
+==================================================
+9. RÈGLE ABSOLUE POUR LES CHAMPS
+==================================================
+
+ATTENTION : les champs de description NE DOIVENT JAMAIS
+contenir les termes de recherche.
+
+Exemple OBLIGATOIRE :
+
+"haut": "Body noir à fines bretelles"
+
+ET
+
+"recherches": {
+  "haut": "body noir fines bretelles femme"
+}
+
+Il est STRICTEMENT INTERDIT de produire :
+
+"haut": "Body noir à fines bretellesbody noir fines bretelles femme"
+
+Même règle pour :
+- bas
+- veste
+- chaussures
+- accessoires
+
+Chaque champ doit avoir UNE SEULE valeur.
+
+Les champs "haut", "bas", "veste", "chaussures" et
+"accessoires" servent uniquement à décrire la tenue.
+
+Les champs "recherches" servent uniquement aux recherches
+de produits.
+
+Ne mélange jamais les deux.
 
 `;
 
