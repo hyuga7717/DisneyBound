@@ -908,6 +908,14 @@
          APPEL À NOTRE API
       ========================== */
 
+       console.log("TEST API");
+       console.log("photoInput.files:", photoInput.files);
+       console.log("selectedType:", selectedType);
+       console.log("height:", height);
+       console.log("weight:", weight);
+       console.log("mimeType:", file.type);
+       console.log("fileName:", file.name);
+        
       const response =
         await fetch("/api/generate", {
 
