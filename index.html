@@ -696,6 +696,11 @@
           </div>
 
           <div class="look-item">
+            <strong>🧥 Veste</strong>
+            <span id="resultJacket"></span>
+          </div>
+
+          <div class="look-item">
             <strong>✨ Accessoires</strong>
             <span id="resultAccessory"></span>
           </div>
@@ -1093,14 +1098,15 @@ if (
     `${data.result.items[2].category} : ${data.result.items[2].search}`;
 
   document.getElementById(
-    "resultAccessory"
-  ).textContent =
-    `${data.result.items[3].category} : ${data.result.items[3].search}`;
+    "resultJacket"
+   ).textContent =
+     `${data.result.items[3].category} : ${data.result.items[3].search}`;
 
   document.getElementById(
-    "resultSubtitle"
-  ).textContent +=
-    ` ${data.result.items[4].category} : ${data.result.items[4].search}`;
+    "resultAccessory"
+  ).textContent =
+    `${data.result.items[4].category} : ${data.result.items[4].search}`;
+
 
 }
       result.style.display =
