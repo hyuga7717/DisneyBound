@@ -11,18 +11,19 @@ export default async function handler(req, res) {
 
     // Récupérer les informations du site
     const {
-      characterType,
-      height,
-      weight
-    } = req.body || {};
+  characterType,
+  height,
+  weight,
+  image,
+  mimeType
+} = req.body || {};
 
     // Vérification
-    if (!characterType || !height || !weight) {
-      return res.status(400).json({
-        error: "Informations manquantes."
-      });
-    }
-
+   if (!characterType || !height || !weight || !image || !mimeType) {
+  return res.status(400).json({
+    error: "Photo ou informations manquantes."
+  });
+   }
     // Vérifier la clé Gemini
     if (!process.env.gemini_api_key) {
       return res.status(500).json({
@@ -32,58 +33,73 @@ export default async function handler(req, res) {
 
     // Demande envoyée à Gemini
     const prompt = `
-Tu es un styliste expert en DisneyBound.
 
-Crée un DisneyBound moderne et portable pour une personne de ${height} cm et ${weight} kg.
+Tu es l'IA de DisneyBound.
 
-Type demandé :
-${characterType === "villain"
-  ? "Méchant Disney"
-  : "Personnage Disney gentil"}
+À partir de la photo fournie, ton objectif est de proposer
+une tenue DisneyBound portable dans la vie quotidienne.
 
-Choisis un personnage Disney correspondant au type demandé.
+Analyse uniquement les éléments nécessaires pour proposer la tenue :
 
-Ensuite, sélectionne exactement 5 pièces de vêtements ou accessoires que l'on pourrait rechercher dans une boutique de mode comme SHEIN.
+- style vestimentaire général
+- couleurs visibles
+- types de vêtements
+- style général
 
-IMPORTANT :
-- Ne reproduis pas le costume du personnage.
-- Inspire-toi uniquement de ses couleurs, de son univers et de ses éléments visuels.
-- Les vêtements doivent être modernes et portables au quotidien.
-- Les recherches doivent être suffisamment précises pour trouver des produits réels.
+Ne cherche jamais à identifier la personne.
 
-Réponds UNIQUEMENT avec ce JSON :
+La personne mesure ${height} cm et pèse ${weight} kg.
+
+Le type de personnage demandé est :
+${
+  characterType === "villain"
+    ? "Méchant Disney"
+    : "Personnage Disney gentil"
+}
+
+Choisis un personnage Disney correspondant au style observé
+et au type demandé.
+
+Propose ensuite :
+
+1. Un personnage Disney
+2. Un haut
+3. Un bas
+4. Une veste
+5. Des chaussures
+6. Des accessoires
+
+La tenue doit être inspirée du personnage mais rester
+portable au quotidien.
+
+Les recherches doivent correspondre à de vrais produits
+de mode et être suffisamment précises pour être utilisées
+dans un catalogue de vêtements.
+
+Réponds exclusivement avec ce JSON :
 
 {
-  "character": "Nom du personnage",
-  "items": [
-    {
-      "category": "Haut",
-      "search": "termes précis pour rechercher le produit"
-    },
-    {
-      "category": "Bas",
-      "search": "termes précis pour rechercher le produit"
-    },
-    {
-      "category": "Chaussures",
-      "search": "termes précis pour rechercher le produit"
-    },
-    {
-      "category": "Veste",
-      "search": "termes précis pour rechercher le produit"
-    },
-    {
-      "category": "Accessoire",
-      "search": "termes précis pour rechercher le produit"
-    }
-  ]
+  "personnage": "",
+  "haut": "",
+  "bas": "",
+  "veste": "",
+  "chaussures": "",
+  "accessoires": [],
+  "couleurs": [],
+  "recherches": {
+    "haut": "",
+    "bas": "",
+    "veste": "",
+    "chaussures": "",
+    "accessoires": ""
+  }
 }
 `;
 
     // Appel à Gemini
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=" +
-      process.env.gemini_api_key,
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=" +
+  process.env.gemini_api_key,
       {
         method: "POST",
 
@@ -93,14 +109,20 @@ Réponds UNIQUEMENT avec ce JSON :
 
         body: JSON.stringify({
           contents: [
-            {
-              parts: [
-                {
-                  text: prompt
-                }
-              ]
-            }
-          ],
+  {
+    parts: [
+      {
+        text: prompt
+      },
+      {
+        inlineData: {
+          mimeType: mimeType,
+          data: image
+        }
+      }
+    ]
+  }
+]
           generationConfig: {
             responseMimeType: "application/json"
           }

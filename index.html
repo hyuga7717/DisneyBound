@@ -1000,6 +1000,61 @@ generateButton.addEventListener(
        LOADING
     ========================== */
 
+generateButton.addEventListener(
+  "click",
+  async function() {
+
+    const height =
+      document.getElementById("height").value;
+
+    const weight =
+      document.getElementById("weight").value;
+
+    const file =
+      photoInput.files[0];
+
+
+    /* =========================
+       VALIDATION
+    ========================== */
+
+    if (!file) {
+
+      alert(
+        "Ajoute d'abord une photo."
+      );
+
+      return;
+
+    }
+
+
+    if (!selectedType) {
+
+      alert(
+        "Choisis Gentil ou Méchant."
+      );
+
+      return;
+
+    }
+
+
+    if (!height || !weight) {
+
+      alert(
+        "Entre ta taille et ton poids."
+      );
+
+      return;
+
+    }
+
+
+    /* =========================
+       LOADING
+    ========================== */
+
     generateButton.style.display =
       "none";
 
@@ -1008,6 +1063,38 @@ generateButton.addEventListener(
 
 
     try {
+
+      /* =========================
+         CONVERSION PHOTO
+      ========================== */
+
+      const imageBase64 =
+        await new Promise((resolve, reject) => {
+
+          const reader =
+            new FileReader();
+
+          reader.onload =
+            () => {
+
+              const base64 =
+                reader.result.split(",")[1];
+
+              resolve(base64);
+
+            };
+
+          reader.onerror =
+            () => reject(
+              new Error(
+                "Impossible de lire la photo."
+              )
+            );
+
+          reader.readAsDataURL(file);
+
+        });
+
 
       /* =========================
          APPEL À NOTRE API
@@ -1031,7 +1118,13 @@ generateButton.addEventListener(
               height,
 
             weight:
-              weight
+              weight,
+
+            image:
+              imageBase64,
+
+            mimeType:
+              file.type
 
           })
 
@@ -1057,58 +1150,66 @@ generateButton.addEventListener(
 
 
       /* =========================
-         AFFICHAGE DU RÉSULTAT
+         AFFICHAGE DU PERSONNAGE
       ========================== */
 
-document.getElementById(
-  "resultEmoji"
-).textContent = "✨";
-
-document.getElementById(
-  "resultTitle"
-).textContent =
-  `DisneyBound inspiré de ${data.result.character}`;
-
-document.getElementById(
-  "resultSubtitle"
-).textContent =
-  "Voici les pièces à rechercher pour créer ton look.";
+      document.getElementById(
+        "resultEmoji"
+      ).textContent = "✨";
 
 
-/* PIÈCES DU DISNEYBOUND */
-
-if (
-  data.result.items &&
-  data.result.items.length >= 5
-) {
-
-  document.getElementById(
-    "resultTop"
-  ).textContent =
-    `${data.result.items[0].category} : ${data.result.items[0].search}`;
-
-  document.getElementById(
-    "resultBottom"
-  ).textContent =
-    `${data.result.items[1].category} : ${data.result.items[1].search}`;
-
-  document.getElementById(
-    "resultShoes"
-  ).textContent =
-    `${data.result.items[2].category} : ${data.result.items[2].search}`;
-
-  document.getElementById(
-    "resultJacket"
-   ).textContent =
-     `${data.result.items[3].category} : ${data.result.items[3].search}`;
-
-  document.getElementById(
-    "resultAccessory"
-  ).textContent =
-    `${data.result.items[4].category} : ${data.result.items[4].search}`;
+      document.getElementById(
+        "resultTitle"
+      ).textContent =
+        `DisneyBound inspiré de ${data.result.personnage}`;
 
 
-}
+      document.getElementById(
+        "resultSubtitle"
+      ).textContent =
+        "Voici les pièces à rechercher pour créer ton look.";
+
+
+      /* =========================
+         AFFICHAGE DES VÊTEMENTS
+      ========================== */
+
+      document.getElementById(
+        "resultTop"
+      ).textContent =
+        data.result.haut || "";
+
+
+      document.getElementById(
+        "resultBottom"
+      ).textContent =
+        data.result.bas || "";
+
+
+      document.getElementById(
+        "resultShoes"
+      ).textContent =
+        data.result.chaussures || "";
+
+
+      document.getElementById(
+        "resultJacket"
+      ).textContent =
+        data.result.veste || "";
+
+
+      document.getElementById(
+        "resultAccessory"
+      ).textContent =
+        Array.isArray(data.result.accessoires)
+          ? data.result.accessoires.join(", ")
+          : data.result.accessoires || "";
+
+
+      /* =========================
+         AFFICHER LE RÉSULTAT
+      ========================== */
+
       result.style.display =
         "block";
 
@@ -1141,6 +1242,7 @@ if (
         "block";
 
     }
+
   }
 );
 
