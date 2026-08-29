@@ -415,6 +415,19 @@
       font-size: 14px;
     }
 
+    .look-item small {
+      display: block;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      color: #c4b5fd;
+      font-size: 13px;
+    }
+
+.look-item small::before {
+  content: "🔎 ";
+}
+
     /* =========================
        LOADING
     ========================== */
@@ -680,32 +693,39 @@
 
         <div class="look-list">
 
-          <div class="look-item">
-            <strong>👕 Haut</strong>
-            <span id="resultTop"></span>
-          </div>
+      <div class="look-list">
 
-          <div class="look-item">
-            <strong>👖 Bas</strong>
-            <span id="resultBottom"></span>
-          </div>
+  <div class="look-item">
+    <strong>👕 Haut</strong>
+    <span id="resultTop"></span>
+    <small id="searchTop"></small>
+  </div>
 
-          <div class="look-item">
-            <strong>👟 Chaussures</strong>
-            <span id="resultShoes"></span>
-          </div>
+  <div class="look-item">
+    <strong>👖 Bas</strong>
+    <span id="resultBottom"></span>
+    <small id="searchBottom"></small>
+  </div>
 
-          <div class="look-item">
-            <strong>🧥 Veste</strong>
-            <span id="resultJacket"></span>
-          </div>
+  <div class="look-item">
+    <strong>👟 Chaussures</strong>
+    <span id="resultShoes"></span>
+    <small id="searchShoes"></small>
+  </div>
 
-          <div class="look-item">
-            <strong>✨ Accessoires</strong>
-            <span id="resultAccessory"></span>
-          </div>
+  <div class="look-item">
+    <strong>🧥 Veste</strong>
+    <span id="resultJacket"></span>
+    <small id="searchJacket"></small>
+  </div>
 
-        </div>
+  <div class="look-item">
+    <strong>✨ Accessoires</strong>
+    <span id="resultAccessory"></span>
+    <small id="searchAccessory"></small>
+  </div>
+
+</div>  
 
       </div>
 
@@ -1013,6 +1033,37 @@
         Array.isArray(accessories)
           ? accessories.join(", ")
           : accessories || "Non renseigné";
+      
+      /* =========================
+   AFFICHAGE DES RECHERCHES
+========================= */
+
+      const searches =
+        data.result.recherches || {};
+
+
+      document.getElementById(
+        "searchTop"
+      ).textContent =
+        searches.haut || "Recherche non disponible";
+
+
+      document.getElementById(
+        "searchShoes"
+      ).textContent =
+        searches.chaussures || "Recherche non disponible";
+
+
+      document.getElementById(
+        "searchJacket"
+      ).textContent =
+        searches.veste || "Recherche non disponible";
+
+
+      document.getElementById(
+        "searchAccessory"
+      ).textContent =
+        searches.accessoires || "Recherche non disponible";
 
 
       /* =========================
