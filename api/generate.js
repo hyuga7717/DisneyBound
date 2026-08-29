@@ -56,6 +56,14 @@ export default async function handler(req, res) {
       /^image\/(jpeg|jpg|png|webp|gif)$/.test(mimeType)
         ? mimeType
         : "image/jpeg";
+    
+    console.log("=== DEBUG DISNEYBOUND ===");
+    console.log("characterType:", characterType);
+    console.log("height:", height);
+    console.log("weight:", weight);
+    console.log("mimeType reçu:", mimeType);
+    console.log("image présente:", !!image);
+    console.log("longueur image:", image ? image.length : 0);
 
     // ==================================================
     // CLÉ API
