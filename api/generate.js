@@ -1,5 +1,6 @@
 export default async function handler(req, res) {
 
+  // Vérifier la méthode
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Méthode non autorisée"
@@ -8,33 +9,39 @@ export default async function handler(req, res) {
 
   try {
 
+    // Récupérer les informations du site
     const {
       characterType,
       height,
       weight
     } = req.body || {};
 
+    // Vérification
     if (!characterType || !height || !weight) {
       return res.status(400).json({
         error: "Informations manquantes."
       });
     }
 
-    if (!process.env.openai_api_key) {
+    // Vérifier la clé Gemini
+    if (!process.env.gemini_api_key) {
       return res.status(500).json({
-        error: "La clé OpenAI n'est pas configurée."
+        error: "La clé Gemini n'est pas configurée dans Vercel."
       });
     }
 
+    // Demande envoyée à Gemini
     const prompt = `
 Tu es un styliste expert en DisneyBound.
 
 Crée un DisneyBound moderne et portable pour une personne de ${height} cm et ${weight} kg.
 
 Type demandé :
-${characterType === "villain" ? "Méchant Disney" : "Personnage Disney gentil"}
+${characterType === "villain"
+  ? "Méchant Disney"
+  : "Personnage Disney gentil"}
 
-Choisis un personnage Disney correspondant.
+Choisis un personnage Disney correspondant au type demandé.
 
 Ensuite, sélectionne exactement 5 pièces de vêtements ou accessoires que l'on pourrait rechercher dans une boutique de mode comme SHEIN.
 
@@ -73,85 +80,68 @@ Réponds UNIQUEMENT avec ce JSON :
 }
 `;
 
-    const openaiResponse = await fetch(
-      "https://api.openai.com/v1/responses",
+    // Appel à Gemini
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=" +
+      process.env.gemini_api_key,
       {
         method: "POST",
 
         headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.openai_api_key}`
+          "Content-Type": "application/json"
         },
 
         body: JSON.stringify({
-          model: "gpt-5.6-luna",
-          input: prompt
+          contents: [
+            {
+              parts: [
+                {
+                  text: prompt
+                }
+              ]
+            }
+          ],
+          generationConfig: {
+            responseMimeType: "application/json"
+          }
         })
       }
     );
 
-    const openaiData =
-      await openaiResponse.json();
+    const data = await response.json();
 
-    if (!openaiResponse.ok) {
+    // Gestion des erreurs Gemini
+    if (!response.ok) {
 
       console.error(
-        "Erreur OpenAI :",
-        openaiData
+        "Erreur Gemini :",
+        data
       );
 
       return res.status(500).json({
         error:
-          openaiData?.error?.message ||
-          "Erreur OpenAI."
+          data?.error?.message ||
+          "Erreur lors de la communication avec Gemini."
       });
     }
 
-    let result = "";
-
-    if (openaiData.output) {
-
-      for (const item of openaiData.output) {
-
-        if (
-          item.type === "message" &&
-          item.content
-        ) {
-
-          for (const content of item.content) {
-
-            if (
-              content.type === "output_text" &&
-              content.text
-            ) {
-
-              result += content.text;
-
-            }
-
-          }
-
-        }
-
-      }
-
-    }
+    // Récupérer le texte
+    const result =
+      data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
     if (!result) {
 
-      return res.status(500).json({
-        error: "Aucune réponse de l'IA."
-      });
+      console.error(
+        "Réponse Gemini inattendue :",
+        data
+      );
 
+      return res.status(500).json({
+        error: "Gemini n'a pas renvoyé de résultat."
+      });
     }
 
-    // Nettoyer les éventuels blocs Markdown
-    result = result
-      .replace(/^```json\s*/i, "")
-      .replace(/^```\s*/i, "")
-      .replace(/\s*```$/i, "")
-      .trim();
-
+    // Convertir le JSON
     let disneyBound;
 
     try {
@@ -162,17 +152,17 @@ Réponds UNIQUEMENT avec ce JSON :
     } catch (error) {
 
       console.error(
-        "JSON reçu par OpenAI :",
+        "JSON Gemini :",
         result
       );
 
       return res.status(500).json({
         error:
-          "L'IA n'a pas renvoyé un résultat valide."
+          "Gemini n'a pas renvoyé un JSON valide."
       });
-
     }
 
+    // Retour au site
     return res.status(200).json({
       success: true,
       result: disneyBound
@@ -180,14 +170,15 @@ Réponds UNIQUEMENT avec ce JSON :
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "Erreur serveur :",
+      error
+    );
 
     return res.status(500).json({
       error:
         error.message ||
         "Erreur serveur."
     });
-
   }
-
 }
