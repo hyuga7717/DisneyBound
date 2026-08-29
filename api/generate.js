@@ -186,6 +186,54 @@ Les talons sont autorisés uniquement lorsqu'ils sont
 cohérents avec le style observé.
 
 ==================================================
+7. RECHERCHES VÊTEMENTS
+==================================================
+
+Pour chaque pièce, crée également une requête de recherche
+destinée à trouver un véritable vêtement ou accessoire
+dans une boutique en ligne.
+
+IMPORTANT :
+
+La description de la tenue et la recherche sont DEUX
+éléments différents.
+
+La description doit expliquer ce que la personne doit porter.
+
+La recherche doit uniquement contenir les mots-clés
+nécessaires pour trouver le produit.
+
+Exemple :
+
+haut :
+"Body noir à fines bretelles"
+
+recherches.haut :
+"body noir fines bretelles femme"
+
+INTERDICTIONS :
+
+- ne jamais répéter deux fois la même recherche
+- ne jamais coller la description et la recherche ensemble
+- ne jamais écrire deux recherches dans le même champ
+- ne jamais ajouter la recherche à la fin de la description
+- ne jamais utiliser de phrase complète dans une recherche
+- ne jamais mettre de guillemets dans les recherches
+
+Les recherches doivent être courtes et directement
+utilisables dans un moteur de recherche de vêtements.
+
+==================================================
+8. FORMAT DE RÉPONSE
+==================================================
+
+Réponds UNIQUEMENT avec le JSON demandé.
+
+Aucun texte avant le JSON.
+
+Aucun texte après le JSON.
+
+==================================================
 7. DESCRIPTION DES VÊTEMENTS
 ==================================================
 
