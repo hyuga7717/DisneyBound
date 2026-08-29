@@ -1,8 +1,8 @@
-```js
+```javascript
 export default async function handler(req, res) {
 
   // ==================================================
-  // 1. VÉRIFIER LA MÉTHODE
+  // MÉTHODE
   // ==================================================
 
   if (req.method !== "POST") {
@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   try {
 
     // ==================================================
-    // 2. RÉCUPÉRER LES DONNÉES DU SITE
+    // DONNÉES REÇUES
     // ==================================================
 
     const {
@@ -26,23 +26,39 @@ export default async function handler(req, res) {
     } = req.body || {};
 
     // ==================================================
-    // 3. VÉRIFICATION DES DONNÉES
+    // VÉRIFICATION
     // ==================================================
 
-    if (
-      !characterType ||
-      !height ||
-      !weight ||
-      !image ||
-      !mimeType
-    ) {
+    if (!characterType) {
       return res.status(400).json({
-        error: "Photo ou informations manquantes."
+        error: "Le type de personnage est manquant."
+      });
+    }
+
+    if (!height || !weight) {
+      return res.status(400).json({
+        error: "La taille ou le poids est manquant."
+      });
+    }
+
+    if (!image) {
+      return res.status(400).json({
+        error: "La photo est manquante."
       });
     }
 
     // ==================================================
-    // 4. VÉRIFIER LA CLÉ GEMINI
+    // TYPE MIME SÉCURISÉ
+    // ==================================================
+
+    const safeMimeType =
+      typeof mimeType === "string" &&
+      /^image\/(jpeg|jpg|png|webp|gif)$/.test(mimeType)
+        ? mimeType
+        : "image/jpeg";
+
+    // ==================================================
+    // CLÉ API
     // ==================================================
 
     if (!process.env.gemini_api_key) {
@@ -52,27 +68,23 @@ export default async function handler(req, res) {
     }
 
     // ==================================================
-    // 5. PROMPT GEMINI
+    // PROMPT
     // ==================================================
 
     const prompt = `
 
 Tu es l'IA de DisneyBound.
 
-Ta mission est de créer une tenue DisneyBound moderne,
-élégante et portable au quotidien à partir de la photo fournie.
+À partir de la photo fournie, crée une tenue DisneyBound
+moderne, élégante et portable au quotidien.
 
-==================================================
-1. ANALYSE DE LA PHOTO
-==================================================
+ANALYSE UNIQUEMENT :
 
-Analyse uniquement les éléments utiles à la création de la tenue :
-
-- style vestimentaire général
+- style vestimentaire
 - couleurs visibles
 - types de vêtements
 - coupes générales
-- style casual, streetwear, chic, sportif, etc.
+- style casual, streetwear, chic ou sportif
 - harmonie générale
 
 Ne cherche jamais à identifier la personne.
@@ -85,227 +97,111 @@ Ne déduis jamais :
 - sa personnalité
 - toute autre information personnelle.
 
-==================================================
-2. MORPHOLOGIE
-==================================================
-
 La personne mesure ${height} cm et pèse ${weight} kg.
 
-Utilise ces informations UNIQUEMENT pour choisir des coupes
-et proportions adaptées.
-
-Ne donne aucune analyse ou appréciation du corps.
-
-==================================================
-3. PERSONNAGE DISNEY
-==================================================
+Utilise ces informations uniquement pour choisir
+des coupes et proportions adaptées.
 
 Le type demandé est :
-
 ${
   characterType === "villain"
     ? "Méchant Disney"
     : "Personnage Disney gentil"
 }
 
-Choisis UN personnage Disney correspondant au mieux :
+Choisis UN personnage Disney correspondant
+au style observé et au type demandé.
 
-- au style observé
-- aux couleurs observées
-- au type demandé
-- à une tenue portable au quotidien
-
-Évite de choisir systématiquement le même personnage.
-
-Si plusieurs personnages conviennent,
-choisis celui qui correspond le mieux au style observé.
-
-==================================================
-4. PRINCIPE DISNEYBOUND
-==================================================
-
-DisneyBound signifie S'INSPIRER d'un personnage,
-et non reproduire son costume.
-
-La tenue doit être moderne et portable dans la vie quotidienne.
+DisneyBound signifie s'inspirer du personnage,
+pas reproduire son costume.
 
 INTERDIT :
-
 - cosplay
 - déguisement
 - costume
-- reproduction exacte du costume
 - oreilles de personnage
 - imprimés représentant le personnage
 - accessoires de cosplay
-- vêtements extrêmement extravagants
+- vêtements extravagants
 
 PRIVILÉGIE :
-
-- palette de couleurs du personnage
+- couleurs
+- palette
 - matières
 - silhouettes
 - détails subtils
 - accessoires discrets
-- vêtements réellement disponibles dans des boutiques classiques
+- vêtements disponibles dans des boutiques classiques
 
-==================================================
-5. COHÉRENCE AVEC LA PHOTO
-==================================================
+La tenue doit rester cohérente avec le style
+observé sur la photo.
 
-La tenue doit conserver une partie importante
-du style vestimentaire observé sur la photo.
+Si le style est casual, reste casual.
+Si le style est streetwear, reste streetwear.
+Si le style est chic, reste chic.
+Si le style est sportif, reste sportif/casual.
 
-Si la personne est casual :
-reste casual.
-
-Si la personne est streetwear :
-reste majoritairement streetwear.
-
-Si la personne est chic :
-reste chic.
-
-Si la personne est sportive :
-reste majoritairement sportif/casual.
-
-Ne transforme pas complètement le style de la personne
-uniquement pour correspondre au personnage.
-
-==================================================
-6. CHAUSSURES
-==================================================
+CHAUSSURES :
 
 Privilégie :
-
 - baskets
 - sneakers
 - bottines
 - mocassins
 - chaussures plates
 
-Les talons sont autorisés uniquement lorsqu'ils sont
-cohérents avec le style observé sur la photo.
+Les talons sont autorisés uniquement
+s'ils sont cohérents avec le style observé.
 
-==================================================
-7. DESCRIPTION DES VÊTEMENTS
-==================================================
+DESCRIPTION DES VÊTEMENTS :
 
-Les champs :
+"haut", "bas", "veste" et "chaussures"
+doivent contenir uniquement une description
+courte du vêtement.
 
-"haut"
-"bas"
-"veste"
-"chaussures"
+NE PAS mettre de recherche dans ces champs.
 
-doivent contenir UNIQUEMENT une description naturelle
-du vêtement.
+Exemple :
 
-IMPORTANT :
+"haut": "Body noir à fines bretelles"
 
-NE JAMAIS mettre dans ces champs :
+RECHERCHES :
 
-- une recherche produit
-- plusieurs variantes
-- deux descriptions
-- des mots-clés de recherche
-- une deuxième fois le nom du vêtement
-- une recherche avec "femme" ou "homme" collée à la description
+Chaque recherche doit être directement utilisable
+dans une boutique de vêtements.
 
-Exemple CORRECT :
+Maximum 8 mots.
 
-"Body noir à fines bretelles"
+Les recherches doivent être différentes
+des descriptions.
 
-Exemple INCORRECT :
-
-"Body noir à fines bretelles femme body noir fines bretelles"
-
-Chaque champ doit contenir UNE SEULE pièce.
-
-==================================================
-8. RECHERCHES PRODUITS
-==================================================
-
-Les recherches servent UNIQUEMENT à rechercher
-un produit réel dans une boutique de vêtements.
-
-Chaque recherche doit :
-
-- être différente de la description
-- être courte
-- contenir uniquement des mots-clés
-- être directement utilisable dans un moteur de recherche
-- contenir le type de produit
-- contenir la couleur
-- contenir une caractéristique importante
-- contenir "femme" ou "homme" uniquement lorsque pertinent
-
-Maximum 8 mots par recherche.
-
-IMPORTANT :
-
-NE JAMAIS coller la recherche à la description.
-
-Exemple CORRECT :
+Exemple :
 
 "haut": "Body noir à fines bretelles"
 
 "recherches.haut": "body noir fines bretelles femme"
 
-==================================================
-9. ACCESSOIRES
-==================================================
+Ne jamais répéter la description.
+
+Ne jamais mettre le nom du personnage
+dans une recherche.
+
+ACCESSOIRES :
 
 Propose entre 2 et 4 accessoires maximum.
 
-Chaque accessoire doit être une description courte
-et naturelle.
+Chaque accessoire doit être court.
 
-Exemple :
+COULEURS :
 
-"Collier doré fin"
-"Bracelet jonc doré"
-"Petite pochette noire"
+Indique entre 3 et 5 couleurs principales.
 
-La recherche des accessoires doit être placée
-UNIQUEMENT dans :
-
-"recherches.accessoires"
-
-==================================================
-10. COULEURS
-==================================================
-
-Indique entre 3 et 5 couleurs principales
-utilisées dans la tenue.
-
-==================================================
-11. RÈGLE ABSOLUE CONTRE LES DOUBLONS
-==================================================
-
-AVANT DE RÉPONDRE, vérifie :
-
-1. Aucun champ ne contient deux fois la même information.
-2. Aucun vêtement n'est répété.
-3. Les descriptions ne contiennent aucune recherche produit.
-4. Les recherches ne contiennent pas de phrase complète.
-5. Les recherches ne sont jamais collées à une description.
-6. Les recherches font maximum 8 mots.
-7. Les recherches ne contiennent jamais le nom du personnage.
-8. Chaque champ de vêtement contient UNE seule pièce.
-9. Les accessoires contiennent entre 2 et 4 éléments.
-10. Le JSON est strictement valide.
-
-==================================================
-12. FORMAT DE RÉPONSE
-==================================================
-
-Réponds UNIQUEMENT avec un JSON VALIDE.
+RÉPONDS UNIQUEMENT AVEC LE JSON.
 
 Aucun texte avant le JSON.
-
 Aucun texte après le JSON.
 
-Utilise EXACTEMENT cette structure :
+Utilise exactement cette structure :
 
 {
   "personnage": "",
@@ -324,36 +220,18 @@ Utilise EXACTEMENT cette structure :
   }
 }
 
-==================================================
-13. CONTRÔLE FINAL
-==================================================
-
-Avant de répondre, vérifie mentalement :
-
-- personnage = uniquement le nom du personnage
-- haut = uniquement le vêtement
-- bas = uniquement le vêtement
-- veste = uniquement le vêtement
-- chaussures = uniquement les chaussures
-- accessoires = uniquement les accessoires
-- couleurs = uniquement les couleurs
-- recherches.haut = uniquement les mots-clés produit
-- recherches.bas = uniquement les mots-clés produit
-- recherches.veste = uniquement les mots-clés produit
-- recherches.chaussures = uniquement les mots-clés produit
-- recherches.accessoires = uniquement les mots-clés produit
-
-Ne mélange jamais les descriptions et les recherches.
-
 `;
 
     // ==================================================
-    // 6. APPEL À GEMINI
+    // APPEL GEMINI
     // ==================================================
 
-    const response = await fetch(
+    const geminiUrl =
       "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=" +
-      process.env.gemini_api_key,
+      encodeURIComponent(process.env.gemini_api_key);
+
+    const response = await fetch(
+      geminiUrl,
       {
         method: "POST",
 
@@ -370,7 +248,7 @@ Ne mélange jamais les descriptions et les recherches.
                 },
                 {
                   inlineData: {
-                    mimeType: mimeType,
+                    mimeType: safeMimeType,
                     data: image
                   }
                 }
@@ -386,20 +264,20 @@ Ne mélange jamais les descriptions et les recherches.
     );
 
     // ==================================================
-    // 7. RÉCUPÉRER LA RÉPONSE GEMINI
+    // RÉPONSE GEMINI
     // ==================================================
 
     const data = await response.json();
 
     // ==================================================
-    // 8. GESTION DES ERREURS GEMINI
+    // ERREUR GEMINI
     // ==================================================
 
     if (!response.ok) {
 
       console.error(
         "Erreur Gemini :",
-        data
+        JSON.stringify(data, null, 2)
       );
 
       return res.status(500).json({
@@ -410,7 +288,7 @@ Ne mélange jamais les descriptions et les recherches.
     }
 
     // ==================================================
-    // 9. RÉCUPÉRER LE TEXTE
+    // RÉCUPÉRATION DU TEXTE
     // ==================================================
 
     const result =
@@ -420,7 +298,7 @@ Ne mélange jamais les descriptions et les recherches.
 
       console.error(
         "Réponse Gemini inattendue :",
-        data
+        JSON.stringify(data, null, 2)
       );
 
       return res.status(500).json({
@@ -429,15 +307,14 @@ Ne mélange jamais les descriptions et les recherches.
     }
 
     // ==================================================
-    // 10. CONVERTIR LE JSON GEMINI
+    // PARSE JSON
     // ==================================================
 
     let disneyBound;
 
     try {
 
-      disneyBound =
-        JSON.parse(result);
+      disneyBound = JSON.parse(result);
 
     } catch (error) {
 
@@ -447,13 +324,12 @@ Ne mélange jamais les descriptions et les recherches.
       );
 
       return res.status(500).json({
-        error:
-          "Gemini n'a pas renvoyé un JSON valide."
+        error: "Gemini n'a pas renvoyé un JSON valide."
       });
     }
 
     // ==================================================
-    // 11. VÉRIFICATION DU FORMAT
+    // VÉRIFICATION DU RÉSULTAT
     // ==================================================
 
     if (
@@ -461,25 +337,38 @@ Ne mélange jamais les descriptions et les recherches.
       !disneyBound.haut ||
       !disneyBound.bas ||
       !disneyBound.veste ||
-      !disneyBound.chaussures ||
-      !Array.isArray(disneyBound.accessoires) ||
-      !Array.isArray(disneyBound.couleurs) ||
-      !disneyBound.recherches
+      !disneyBound.chaussures
     ) {
 
       console.error(
-        "Structure DisneyBound incorrecte :",
+        "Résultat incomplet :",
         disneyBound
       );
 
       return res.status(500).json({
         error:
-          "La réponse de Gemini ne respecte pas le format demandé."
+          "La réponse de Gemini est incomplète."
       });
     }
 
     // ==================================================
-    // 12. RETOUR AU SITE
+    // VALEURS PAR DÉFAUT
+    // ==================================================
+
+    if (!Array.isArray(disneyBound.accessoires)) {
+      disneyBound.accessoires = [];
+    }
+
+    if (!Array.isArray(disneyBound.couleurs)) {
+      disneyBound.couleurs = [];
+    }
+
+    if (!disneyBound.recherches) {
+      disneyBound.recherches = {};
+    }
+
+    // ==================================================
+    // RÉPONSE AU SITE
     // ==================================================
 
     return res.status(200).json({
@@ -489,10 +378,6 @@ Ne mélange jamais les descriptions et les recherches.
 
   } catch (error) {
 
-    // ==================================================
-    // 13. ERREUR SERVEUR
-    // ==================================================
-
     console.error(
       "Erreur serveur :",
       error
@@ -500,7 +385,7 @@ Ne mélange jamais les descriptions et les recherches.
 
     return res.status(500).json({
       error:
-        error.message ||
+        error?.message ||
         "Erreur serveur."
     });
   }
