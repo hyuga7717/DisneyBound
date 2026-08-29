@@ -1,37 +1,68 @@
 export default async function handler(req, res) {
 
-  // Vérifier la méthode
+  // =========================
+  // VÉRIFIER LA MÉTHODE
+  // =========================
+
   if (req.method !== "POST") {
     return res.status(405).json({
       error: "Méthode non autorisée"
     });
   }
 
+
   try {
 
-    // Récupérer les informations du site
-    const {
-  characterType,
-  height,
-  weight,
-  image,
-  mimeType
-} = req.body || {};
+    // =========================
+    // RÉCUPÉRER LES DONNÉES
+    // =========================
 
-    // Vérification
-   if (!characterType || !height || !weight || !image || !mimeType) {
-  return res.status(400).json({
-    error: "Photo ou informations manquantes."
-  });
-   }
-    // Vérifier la clé Gemini
-    if (!process.env.gemini_api_key) {
-      return res.status(500).json({
-        error: "La clé Gemini n'est pas configurée dans Vercel."
+    const {
+      characterType,
+      height,
+      weight,
+      image,
+      mimeType
+    } = req.body || {};
+
+
+    // =========================
+    // VALIDATION
+    // =========================
+
+    if (
+      !characterType ||
+      !height ||
+      !weight ||
+      !image ||
+      !mimeType
+    ) {
+
+      return res.status(400).json({
+        error: "Photo ou informations manquantes."
       });
+
     }
 
-    // Demande envoyée à Gemini
+
+    // =========================
+    // CLÉ GEMINI
+    // =========================
+
+    if (!process.env.gemini_api_key) {
+
+      return res.status(500).json({
+        error:
+          "La clé Gemini n'est pas configurée dans Vercel."
+      });
+
+    }
+
+
+    // =========================
+    // PROMPT
+    // =========================
+
     const prompt = `
 
 Tu es l'IA de DisneyBound.
@@ -39,7 +70,8 @@ Tu es l'IA de DisneyBound.
 À partir de la photo fournie, ton objectif est de proposer
 une tenue DisneyBound portable dans la vie quotidienne.
 
-Analyse uniquement les éléments nécessaires pour proposer la tenue :
+Analyse uniquement les éléments nécessaires pour proposer
+la tenue :
 
 - style vestimentaire général
 - couleurs visibles
@@ -51,6 +83,7 @@ Ne cherche jamais à identifier la personne.
 La personne mesure ${height} cm et pèse ${weight} kg.
 
 Le type de personnage demandé est :
+
 ${
   characterType === "villain"
     ? "Méchant Disney"
@@ -60,7 +93,7 @@ ${
 Choisis un personnage Disney correspondant au style observé
 et au type demandé.
 
-Propose ensuite :
+Propose :
 
 1. Un personnage Disney
 2. Un haut
@@ -94,13 +127,19 @@ Réponds exclusivement avec ce JSON :
     "accessoires": ""
   }
 }
+
 `;
 
-    // Appel à Gemini
+
+    // =========================
+    // APPEL GEMINI
+    // =========================
+
     const response = await fetch(
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=" +
-  process.env.gemini_api_key,
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent?key=" +
+        process.env.gemini_api_key,
       {
+
         method: "POST",
 
         headers: {
@@ -108,31 +147,53 @@ Réponds exclusivement avec ce JSON :
         },
 
         body: JSON.stringify({
+
           contents: [
-  {
-    parts: [
-      {
-        text: prompt
-      },
-      {
-        inlineData: {
-          mimeType: mimeType,
-          data: image
-        }
-      }
-    ]
-  }
-]
+
+            {
+              parts: [
+
+                {
+                  text: prompt
+                },
+
+                {
+                  inlineData: {
+                    mimeType: mimeType,
+                    data: image
+                  }
+                }
+
+              ]
+            }
+
+          ],
+
           generationConfig: {
-            responseMimeType: "application/json"
+
+            responseMimeType:
+              "application/json"
+
           }
+
         })
+
       }
     );
 
-    const data = await response.json();
 
-    // Gestion des erreurs Gemini
+    // =========================
+    // RÉPONSE GEMINI
+    // =========================
+
+    const data =
+      await response.json();
+
+
+    // =========================
+    // ERREUR GEMINI
+    // =========================
+
     if (!response.ok) {
 
       console.error(
@@ -141,15 +202,24 @@ Réponds exclusivement avec ce JSON :
       );
 
       return res.status(500).json({
+
         error:
           data?.error?.message ||
           "Erreur lors de la communication avec Gemini."
+
       });
+
     }
 
-    // Récupérer le texte
+
+    // =========================
+    // RÉCUPÉRER LE JSON
+    // =========================
+
     const result =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      data?.candidates?.[0]
+        ?.content?.parts?.[0]?.text;
+
 
     if (!result) {
 
@@ -159,12 +229,21 @@ Réponds exclusivement avec ce JSON :
       );
 
       return res.status(500).json({
-        error: "Gemini n'a pas renvoyé de résultat."
+
+        error:
+          "Gemini n'a pas renvoyé de résultat."
+
       });
+
     }
 
-    // Convertir le JSON
+
+    // =========================
+    // PARSER LE JSON
+    // =========================
+
     let disneyBound;
+
 
     try {
 
@@ -174,23 +253,38 @@ Réponds exclusivement avec ce JSON :
     } catch (error) {
 
       console.error(
-        "JSON Gemini :",
+        "JSON Gemini invalide :",
         result
       );
 
       return res.status(500).json({
+
         error:
           "Gemini n'a pas renvoyé un JSON valide."
+
       });
+
     }
 
-    // Retour au site
+
+    // =========================
+    // RETOUR AU SITE
+    // =========================
+
     return res.status(200).json({
+
       success: true,
+
       result: disneyBound
+
     });
 
+
   } catch (error) {
+
+    // =========================
+    // ERREUR SERVEUR
+    // =========================
 
     console.error(
       "Erreur serveur :",
@@ -198,9 +292,13 @@ Réponds exclusivement avec ce JSON :
     );
 
     return res.status(500).json({
+
       error:
         error.message ||
         "Erreur serveur."
+
     });
+
   }
+
 }
