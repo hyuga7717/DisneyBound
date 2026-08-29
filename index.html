@@ -714,295 +714,92 @@
   </main>
 
 
-  <script>
+<script>
 
-    /* =========================
-       VARIABLES
-    ========================== */
+  /* =========================
+     VARIABLES
+  ========================== */
 
-    const photoInput =
-      document.getElementById("photoInput");
+  const photoInput =
+    document.getElementById("photoInput");
 
-    const preview =
-      document.getElementById("preview");
+  const preview =
+    document.getElementById("preview");
 
-    const uploadContent =
-      document.getElementById("uploadContent");
+  const uploadContent =
+    document.getElementById("uploadContent");
 
-    const characterButtons =
-      document.querySelectorAll(".character-option");
+  const characterButtons =
+    document.querySelectorAll(".character-option");
 
-    const generateButton =
-      document.getElementById("generateButton");
+  const generateButton =
+    document.getElementById("generateButton");
 
-    const loading =
-      document.getElementById("loading");
+  const loading =
+    document.getElementById("loading");
 
-    const result =
-      document.getElementById("result");
+  const result =
+    document.getElementById("result");
 
 
-    let selectedType = null;
+  let selectedType = null;
 
 
-    /* =========================
-       PHOTO PREVIEW
-    ========================== */
+  /* =========================
+     PHOTO PREVIEW
+  ========================== */
 
-    photoInput.addEventListener(
-      "change",
-      function(event) {
+  photoInput.addEventListener("change", function(event) {
 
-        const file =
-          event.target.files[0];
+    const file = event.target.files[0];
 
-        if (!file) return;
+    if (!file) return;
 
+    const reader = new FileReader();
 
-        const reader =
-          new FileReader();
+    reader.onload = function(e) {
 
+      preview.src = e.target.result;
 
-        reader.onload =
-          function(e) {
+      preview.style.display = "block";
 
-            preview.src =
-              e.target.result;
+      uploadContent.style.display = "none";
 
-            preview.style.display =
-              "block";
+    };
 
-            uploadContent.style.display =
-              "none";
+    reader.readAsDataURL(file);
 
-          };
+  });
 
 
-        reader.readAsDataURL(file);
+  /* =========================
+     CHARACTER SELECTION
+  ========================== */
 
-      }
-    );
+  characterButtons.forEach(function(button) {
 
+    button.addEventListener("click", function() {
 
-    /* =========================
-       CHARACTER SELECTION
-    ========================== */
+      characterButtons.forEach(function(item) {
 
-    characterButtons.forEach(
-      button => {
+        item.classList.remove("selected");
 
-        button.addEventListener(
-          "click",
-          function() {
+      });
 
-            characterButtons.forEach(
-              item => {
-                item.classList.remove("selected");
-              }
-            );
+      this.classList.add("selected");
 
-            this.classList.add(
-              "selected"
-            );
+      selectedType = this.dataset.type;
 
-            selectedType =
-              this.dataset.type;
+    });
 
-          }
-        );
+  });
 
-      }
-    );
 
+  /* =========================
+     GENERATE LOOK
+  ========================== */
 
-    /* =========================
-       DISNEYBOUND DATABASE
-    ========================== */
-
-    const heroLooks = [
-
-      {
-        character: "Le Roi Lion",
-        emoji: "🦁",
-        subtitle:
-          "Un look aventureux inspiré d'un héros de la savane.",
-
-        top:
-          "T-shirt beige ou crème avec veste kaki",
-
-        bottom:
-          "Pantalon camel ou marron clair",
-
-        shoes:
-          "Sneakers blanches ou beige",
-
-        accessory:
-          "Montre dorée et accessoires naturels"
-      },
-
-      {
-        character: "Aladdin",
-        emoji: "🧞‍♂️",
-        subtitle:
-          "Un DisneyBound urbain aux couleurs royales.",
-
-        top:
-          "Chemise blanche avec surchemise bleu roi",
-
-        bottom:
-          "Jean noir ou pantalon bleu foncé",
-
-        shoes:
-          "Baskets blanches premium",
-
-        accessory:
-          "Montre dorée et bracelet bleu"
-      },
-
-      {
-        character: "Hercule",
-        emoji: "⚡",
-        subtitle:
-          "Un look sportif et puissant.",
-
-        top:
-          "T-shirt bleu avec veste blanche",
-
-        bottom:
-          "Pantalon gris ou bleu marine",
-
-        shoes:
-          "Sneakers sport blanches",
-
-        accessory:
-          "Ceinture inspirée de la Grèce antique"
-      }
-
-    ];
-
-
-    const villainLooks = [
-
-      {
-        character: "Scar",
-        emoji: "🦁",
-        subtitle:
-          "Un look sombre et élégant inspiré du roi déchu.",
-
-        top:
-          "Veste noire avec haut bordeaux",
-
-        bottom:
-          "Pantalon noir ou camel",
-
-        shoes:
-          "Bottines marron foncé",
-
-        accessory:
-          "Bijoux dorés et détails rouges"
-      },
-
-      {
-        character: "Maléfique",
-        emoji: "🖤",
-        subtitle:
-          "Un look mystérieux, élégant et puissant.",
-
-        top:
-          "Blazer noir avec touches violettes",
-
-        bottom:
-          "Pantalon noir ajusté",
-
-        shoes:
-          "Bottines noires",
-
-        accessory:
-          "Bijoux violets et accessoires pointus"
-      },
-
-      {
-        character: "Capitaine Crochet",
-        emoji: "🏴‍☠️",
-        subtitle:
-          "Un look pirate chic revisité en streetwear.",
-
-        top:
-          "Chemise blanche avec veste rouge",
-
-        bottom:
-          "Jean noir",
-
-        shoes:
-          "Boots noires",
-
-        accessory:
-          "Montre dorée et détails métalliques"
-      }
-
-    ];
-
-
-    /* =========================
-       GENERATE LOOK
-    ========================== */
-
-
-generateButton.addEventListener(
-  "click",
-  async function() {
-
-    const height =
-      document.getElementById("height").value;
-
-    const weight =
-      document.getElementById("weight").value;
-
-
-    /* =========================
-       VALIDATION
-    ========================== */
-
-    if (!photoInput.files[0]) {
-
-      alert(
-        "Ajoute d'abord une photo."
-      );
-
-      return;
-
-    }
-
-
-    if (!selectedType) {
-
-      alert(
-        "Choisis Gentil ou Méchant."
-      );
-
-      return;
-
-    }
-
-
-    if (!height || !weight) {
-
-      alert(
-        "Entre ta taille et ton poids."
-      );
-
-      return;
-
-    }
-
-
-    /* =========================
-       LOADING
-    ========================== */
-
-generateButton.addEventListener(
-  "click",
-  async function() {
+  generateButton.addEventListener("click", async function() {
 
     const height =
       document.getElementById("height").value;
@@ -1020,9 +817,7 @@ generateButton.addEventListener(
 
     if (!file) {
 
-      alert(
-        "Ajoute d'abord une photo."
-      );
+      alert("Ajoute d'abord une photo.");
 
       return;
 
@@ -1031,9 +826,7 @@ generateButton.addEventListener(
 
     if (!selectedType) {
 
-      alert(
-        "Choisis Gentil ou Méchant."
-      );
+      alert("Choisis Gentil ou Méchant.");
 
       return;
 
@@ -1042,9 +835,7 @@ generateButton.addEventListener(
 
     if (!height || !weight) {
 
-      alert(
-        "Entre ta taille et ton poids."
-      );
+      alert("Entre ta taille et ton poids.");
 
       return;
 
@@ -1055,11 +846,9 @@ generateButton.addEventListener(
        LOADING
     ========================== */
 
-    generateButton.style.display =
-      "none";
+    generateButton.style.display = "none";
 
-    loading.style.display =
-      "block";
+    loading.style.display = "block";
 
 
     try {
@@ -1069,27 +858,26 @@ generateButton.addEventListener(
       ========================== */
 
       const imageBase64 =
-        await new Promise((resolve, reject) => {
+        await new Promise(function(resolve, reject) {
 
-          const reader =
-            new FileReader();
+          const reader = new FileReader();
 
-          reader.onload =
-            () => {
+          reader.onload = function() {
 
-              const base64 =
-                reader.result.split(",")[1];
+            const base64 =
+              reader.result.split(",")[1];
 
-              resolve(base64);
+            resolve(base64);
 
-            };
+          };
 
-          reader.onerror =
-            () => reject(
-              new Error(
-                "Impossible de lire la photo."
-              )
+          reader.onerror = function() {
+
+            reject(
+              new Error("Impossible de lire la photo.")
             );
+
+          };
 
           reader.readAsDataURL(file);
 
@@ -1150,7 +938,20 @@ generateButton.addEventListener(
 
 
       /* =========================
-         AFFICHAGE DU PERSONNAGE
+         VÉRIFICATION DU JSON
+      ========================== */
+
+      if (!data.result) {
+
+        throw new Error(
+          "Aucun résultat reçu de Gemini."
+        );
+
+      }
+
+
+      /* =========================
+         PERSONNAGE
       ========================== */
 
       document.getElementById(
@@ -1161,7 +962,7 @@ generateButton.addEventListener(
       document.getElementById(
         "resultTitle"
       ).textContent =
-        `DisneyBound inspiré de ${data.result.personnage}`;
+        `DisneyBound inspiré de ${data.result.personnage || "ton personnage"}`;
 
 
       document.getElementById(
@@ -1171,47 +972,54 @@ generateButton.addEventListener(
 
 
       /* =========================
-         AFFICHAGE DES VÊTEMENTS
+         VÊTEMENTS
       ========================== */
 
       document.getElementById(
         "resultTop"
       ).textContent =
-        data.result.haut || "";
+        data.result.haut || "Non renseigné";
 
 
       document.getElementById(
         "resultBottom"
       ).textContent =
-        data.result.bas || "";
+        data.result.bas || "Non renseigné";
 
 
       document.getElementById(
         "resultShoes"
       ).textContent =
-        data.result.chaussures || "";
+        data.result.chaussures || "Non renseigné";
 
 
       document.getElementById(
         "resultJacket"
       ).textContent =
-        data.result.veste || "";
+        data.result.veste || "Non renseigné";
+
+
+      /* =========================
+         ACCESSOIRES
+      ========================== */
+
+      const accessories =
+        data.result.accessoires;
 
 
       document.getElementById(
         "resultAccessory"
       ).textContent =
-        Array.isArray(data.result.accessoires)
-          ? data.result.accessoires.join(", ")
-          : data.result.accessoires || "";
+        Array.isArray(accessories)
+          ? accessories.join(", ")
+          : accessories || "Non renseigné";
 
 
       /* =========================
-         AFFICHER LE RÉSULTAT
+         AFFICHAGE
       ========================== */
 
-      result.style.display =
-        "block";
+      result.style.display = "block";
 
 
       result.scrollIntoView({
@@ -1225,7 +1033,10 @@ generateButton.addEventListener(
 
     } catch (error) {
 
-      console.error(error);
+      console.error(
+        "Erreur DisneyBound :",
+        error
+      );
 
       alert(
         "Impossible de contacter l'IA : " +
@@ -1235,16 +1046,13 @@ generateButton.addEventListener(
 
     } finally {
 
-      loading.style.display =
-        "none";
+      loading.style.display = "none";
 
-      generateButton.style.display =
-        "block";
+      generateButton.style.display = "block";
 
     }
 
-  }
-);
+  });
 
 </script>
 
