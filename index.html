@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -40,7 +39,6 @@
           transparent 30%
         ),
         var(--bg);
-
       color: var(--text);
       min-height: 100vh;
     }
@@ -55,17 +53,12 @@
     }
 
     header {
-      width: 100%;
       padding: 20px 5%;
-
       display: flex;
-      align-items: center;
       justify-content: space-between;
-
+      align-items: center;
       border-bottom: 1px solid var(--border);
-
       background: rgba(9,9,15,0.85);
-      backdrop-filter: blur(10px);
     }
 
     .logo {
@@ -80,17 +73,14 @@
     .badge {
       padding: 8px 12px;
       border-radius: 50px;
-
       font-size: 13px;
-
       background: rgba(124,58,237,0.2);
       border: 1px solid rgba(124,58,237,0.5);
-
       color: #ddd6fe;
     }
 
     main {
-      width: min(1000px, 92%);
+      width: min(1100px, 90%);
       margin: auto;
       padding: 60px 0;
     }
@@ -102,19 +92,17 @@
 
     .hero h1 {
       font-size: clamp(40px, 6vw, 70px);
-      line-height: 1;
       margin-bottom: 20px;
       letter-spacing: -3px;
     }
 
-    .gradient {
+    .gradient-text {
       background: linear-gradient(
         90deg,
         var(--purple),
         var(--pink),
         var(--gold)
       );
-
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -122,105 +110,80 @@
     .hero p {
       max-width: 650px;
       margin: auto;
-
       color: var(--muted);
-
       font-size: 18px;
       line-height: 1.6;
     }
 
     .generator {
-      background: rgba(20,20,32,0.95);
-
+      background: rgba(20,20,32,0.92);
       border: 1px solid var(--border);
       border-radius: 30px;
-
       padding: 35px;
-
-      box-shadow:
-        0 30px 80px rgba(0,0,0,0.4);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.4);
     }
 
     .step {
-      margin-bottom: 40px;
+      margin-bottom: 35px;
     }
 
     .step-title {
       display: flex;
       align-items: center;
       gap: 12px;
-
       margin-bottom: 18px;
     }
 
     .step-number {
-      width: 36px;
-      height: 36px;
-
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-
       display: grid;
       place-items: center;
-
       font-weight: bold;
-
-      background:
-        linear-gradient(
-          135deg,
-          var(--purple),
-          var(--pink)
-        );
+      background: linear-gradient(
+        135deg,
+        var(--purple),
+        var(--pink)
+      );
     }
 
     .step-title h2 {
       font-size: 20px;
     }
 
-    /* PHOTO */
-
     .upload-zone {
-      min-height: 240px;
-
+      min-height: 230px;
       border: 2px dashed rgba(255,255,255,0.18);
-
       border-radius: 22px;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
-      padding: 25px;
-
       text-align: center;
-
+      padding: 25px;
       transition: 0.3s;
-
       background: rgba(255,255,255,0.02);
-
       cursor: pointer;
     }
 
     .upload-zone:hover {
       border-color: var(--pink);
-
-      background:
-        rgba(236,72,153,0.05);
+      background: rgba(236,72,153,0.05);
     }
 
     .upload-content {
       display: flex;
       flex-direction: column;
       align-items: center;
-
       gap: 12px;
     }
 
     .upload-icon {
-      font-size: 48px;
+      font-size: 45px;
     }
 
     .upload-zone h3 {
-      font-size: 19px;
+      font-size: 18px;
     }
 
     .upload-zone p {
@@ -230,14 +193,10 @@
 
     .upload-button {
       padding: 12px 20px;
-
       border-radius: 12px;
-
       background: var(--card-light);
-
-      border: 1px solid var(--border);
-
       color: white;
+      border: 1px solid var(--border);
     }
 
     #photoInput {
@@ -246,72 +205,48 @@
 
     #preview {
       display: none;
-
-      max-width: 220px;
-      max-height: 260px;
-
-      width: auto;
-      height: auto;
-
+      max-width: 100%;
+      width: 220px;
+      height: 220px;
       border-radius: 20px;
-
+      object-fit: cover;
       border: 3px solid var(--purple);
-
-      object-fit: contain;
     }
-
-    /* PERSONNAGE */
 
     .character-grid {
       display: grid;
-
       grid-template-columns: repeat(2, 1fr);
-
       gap: 20px;
     }
 
     .character-option {
       min-height: 150px;
-
       padding: 25px;
-
       border-radius: 20px;
-
       background: var(--card-light);
-
       border: 2px solid transparent;
-
       color: white;
-
       text-align: left;
-
-      transition: 0.25s;
+      transition: 0.3s;
     }
 
     .character-option:hover {
       transform: translateY(-3px);
-
-      border-color: rgba(236,72,153,0.4);
     }
 
     .character-option.selected {
       border-color: var(--pink);
-
-      box-shadow:
-        0 0 30px rgba(236,72,153,0.25);
+      box-shadow: 0 0 30px rgba(236,72,153,0.25);
     }
 
     .character-option .emoji {
       font-size: 40px;
-
       display: block;
-
       margin-bottom: 12px;
     }
 
     .character-option h3 {
       margin-bottom: 8px;
-      font-size: 20px;
     }
 
     .character-option p {
@@ -319,97 +254,61 @@
       font-size: 14px;
     }
 
-    /* MORPHO */
-
     .body-grid {
       display: grid;
-
-      grid-template-columns: repeat(2,1fr);
-
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
     }
 
     .input-card {
       background: var(--card-light);
-
       padding: 20px;
-
       border-radius: 18px;
-
       border: 1px solid var(--border);
     }
 
     .input-card label {
       display: block;
-
       color: var(--muted);
-
       margin-bottom: 10px;
-
       font-size: 14px;
     }
 
     .input-wrapper {
       display: flex;
       align-items: center;
-
       gap: 10px;
     }
 
     .input-wrapper input {
       width: 100%;
-
       background: transparent;
-
       border: none;
-
       outline: none;
-
       color: white;
-
       font-size: 28px;
-
       font-weight: bold;
     }
 
     .input-wrapper span {
       color: var(--pink);
-
       font-weight: bold;
     }
-
-    /* BUTTON */
 
     .generate-button {
       width: 100%;
-
       padding: 20px;
-
       border-radius: 18px;
-
       border: none;
-
       font-size: 18px;
-
       font-weight: bold;
-
       color: white;
-
-      background:
-        linear-gradient(
-          90deg,
-          var(--purple),
-          var(--pink)
-        );
-
-      box-shadow:
-        0 15px 35px rgba(124,58,237,0.3);
-
-      transition: 0.25s;
-    }
-
-    .generate-button:hover {
-      transform: scale(1.01);
+      background: linear-gradient(
+        90deg,
+        var(--purple),
+        var(--pink)
+      );
+      box-shadow: 0 15px 35px rgba(124,58,237,0.3);
     }
 
     .generate-button:disabled {
@@ -417,28 +316,19 @@
       cursor: not-allowed;
     }
 
-    /* LOADING */
-
     .loading {
       display: none;
-
       text-align: center;
-
-      padding: 30px;
+      padding: 25px;
     }
 
     .spinner {
       width: 45px;
       height: 45px;
-
       border: 4px solid rgba(255,255,255,0.1);
-
       border-top-color: var(--pink);
-
       border-radius: 50%;
-
       animation: spin 1s linear infinite;
-
       margin: 0 auto 15px;
     }
 
@@ -448,126 +338,89 @@
       }
     }
 
-    /* ERREUR */
-
-    .error-box {
-      display: none;
-
-      margin-top: 20px;
-
-      padding: 15px;
-
-      border-radius: 12px;
-
-      background: rgba(220,38,38,0.15);
-
-      border: 1px solid rgba(248,113,113,0.4);
-
-      color: #fecaca;
-
-      line-height: 1.5;
-    }
-
-    /* RESULTAT */
-
     #result {
       display: none;
-
       margin-top: 40px;
     }
 
     .result-card {
-      background:
-        linear-gradient(
-          145deg,
-          rgba(124,58,237,0.18),
-          rgba(236,72,153,0.1)
-        );
-
+      background: linear-gradient(
+        145deg,
+        rgba(124,58,237,0.18),
+        rgba(236,72,153,0.1)
+      );
       border: 1px solid var(--border);
-
       border-radius: 30px;
-
       padding: 35px;
     }
 
-    .result-header {
-      text-align: center;
-
-      margin-bottom: 30px;
-    }
-
     .result-character {
+      text-align: center;
       font-size: 60px;
-
       margin-bottom: 10px;
     }
 
     .result-card h2 {
+      text-align: center;
       font-size: 32px;
-
       margin-bottom: 10px;
     }
 
-    .result-card > .result-header p {
+    .result-card > p {
+      text-align: center;
       color: var(--muted);
+      margin-bottom: 30px;
     }
 
     .look-list {
       display: grid;
-
       grid-template-columns: repeat(2,1fr);
-
       gap: 15px;
     }
 
     .look-item {
       background: rgba(0,0,0,0.25);
-
       border: 1px solid var(--border);
-
       padding: 18px;
-
       border-radius: 15px;
     }
 
     .look-item strong {
       display: block;
-
       margin-bottom: 8px;
     }
 
     .look-item span {
       color: var(--muted);
-
       font-size: 14px;
-
       line-height: 1.5;
     }
 
-    .search {
-      margin-top: 8px;
-
-      color: #ddd6fe !important;
-
-      font-size: 13px !important;
+    .colors {
+      margin-top: 20px;
+      text-align: center;
     }
 
-    .search-label {
-      display: block;
-
-      color: var(--pink);
-
-      font-size: 12px;
-
-      margin-top: 10px;
-      margin-bottom: 3px;
+    .colors span {
+      display: inline-block;
+      margin: 5px;
+      padding: 7px 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+      font-size: 13px;
     }
 
-    /* MOBILE */
+    .error {
+      display: none;
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 12px;
+      background: rgba(255,0,0,0.1);
+      border: 1px solid rgba(255,0,0,0.3);
+      color: #ffb4b4;
+    }
 
-    @media (max-width:700px) {
-
+    @media (max-width: 700px) {
       main {
         padding: 40px 0;
       }
@@ -582,301 +435,214 @@
         grid-template-columns: 1fr;
       }
 
-      .hero h1 {
-        letter-spacing: -2px;
-      }
-
       header {
-        padding: 15px 4%;
+        gap: 15px;
       }
 
       .badge {
         display: none;
       }
-
     }
-
   </style>
-
 </head>
 
 <body>
 
 <header>
-
   <div class="logo">
     DISNEY<span>BOUND</span> AI ✨
   </div>
 
   <div class="badge">
-    AI STYLE GENERATOR
+    GEMINI AI
   </div>
-
 </header>
 
 <main>
 
   <section class="hero">
+    <h1>
+      Trouve ton <span class="gradient-text">DisneyBound</span>
+    </h1>
 
-```
-<h1>
-  Trouve ton
-  <span class="gradient">
-    DisneyBound
-  </span>
-</h1>
-
-<p>
-  Télécharge ta photo et laisse l'intelligence
-  artificielle créer une tenue DisneyBound
-  moderne et portable.
-</p>
-```
-
+    <p>
+      Télécharge une photo, choisis ton univers et laisse
+      l'intelligence artificielle créer une tenue DisneyBound
+      portable au quotidien.
+    </p>
   </section>
 
   <section class="generator">
 
-```
-<!-- PHOTO -->
+    <!-- PHOTO -->
 
-<div class="step">
+    <div class="step">
 
-  <div class="step-title">
+      <div class="step-title">
+        <div class="step-number">1</div>
+        <h2>Ajoute ta photo</h2>
+      </div>
 
-    <div class="step-number">
-      1
+      <label class="upload-zone" for="photoInput">
+
+        <div class="upload-content" id="uploadContent">
+
+          <div class="upload-icon">📸</div>
+
+          <h3>Choisis une photo</h3>
+
+          <p>
+            Une photo en pied donnera un meilleur résultat.
+          </p>
+
+          <div class="upload-button">
+            Importer une photo
+          </div>
+
+        </div>
+
+        <img
+          id="preview"
+          alt="Aperçu de la photo"
+        >
+
+      </label>
+
+      <input
+        type="file"
+        id="photoInput"
+        accept="image/jpeg,image/png,image/webp"
+      >
+
     </div>
 
-    <h2>
-      Ajoute ta photo
-    </h2>
+    <!-- TYPE -->
 
-  </div>
+    <div class="step">
 
+      <div class="step-title">
+        <div class="step-number">2</div>
+        <h2>Choisis ton univers</h2>
+      </div>
 
-  <label
-    class="upload-zone"
-    for="photoInput"
-  >
+      <div class="character-grid">
+
+        <button
+          type="button"
+          class="character-option"
+          data-type="hero"
+        >
+          <span class="emoji">😊</span>
+
+          <h3>Gentil</h3>
+
+          <p>
+            Héros, princesses et personnages iconiques.
+          </p>
+        </button>
+
+        <button
+          type="button"
+          class="character-option"
+          data-type="villain"
+        >
+          <span class="emoji">😈</span>
+
+          <h3>Méchant</h3>
+
+          <p>
+            Villains, styles sombres et looks puissants.
+          </p>
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- MORPHOLOGIE -->
+
+    <div class="step">
+
+      <div class="step-title">
+        <div class="step-number">3</div>
+        <h2>Ta morphologie</h2>
+      </div>
+
+      <div class="body-grid">
+
+        <div class="input-card">
+
+          <label for="height">
+            Taille
+          </label>
+
+          <div class="input-wrapper">
+
+            <input
+              type="number"
+              id="height"
+              placeholder="175"
+              min="100"
+              max="250"
+            >
+
+            <span>cm</span>
+
+          </div>
+
+        </div>
+
+        <div class="input-card">
+
+          <label for="weight">
+            Poids
+          </label>
+
+          <div class="input-wrapper">
+
+            <input
+              type="number"
+              id="weight"
+              placeholder="75"
+              min="30"
+              max="300"
+            >
+
+            <span>kg</span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="generate-button"
+      id="generateButton"
+    >
+      ✨ Générer mon DisneyBound
+    </button>
 
     <div
-      class="upload-content"
-      id="uploadContent"
+      class="loading"
+      id="loading"
     >
 
-      <div class="upload-icon">
-        📸
-      </div>
-
-      <h3>
-        Choisis une photo
-      </h3>
+      <div class="spinner"></div>
 
       <p>
-        Une photo en pied donnera
-        un meilleur résultat.
+        Analyse de la photo et création du DisneyBound...
       </p>
 
-      <div class="upload-button">
-        Importer une photo
-      </div>
-
     </div>
 
-
-    <img
-      id="preview"
-      alt="Aperçu de la photo"
-    >
-
-  </label>
-
-
-  <input
-    type="file"
-    id="photoInput"
-    accept="image/jpeg,image/png,image/webp"
-  >
-
-</div>
-
-
-<!-- PERSONNAGE -->
-
-<div class="step">
-
-  <div class="step-title">
-
-    <div class="step-number">
-      2
-    </div>
-
-    <h2>
-      Choisis ton univers
-    </h2>
-
-  </div>
-
-
-  <div class="character-grid">
-
-    <button
-      type="button"
-      class="character-option"
-      data-type="hero"
-    >
-
-      <span class="emoji">
-        😊
-      </span>
-
-      <h3>
-        Gentil
-      </h3>
-
-      <p>
-        Héros, princesses et personnages
-        iconiques.
-      </p>
-
-    </button>
-
-
-    <button
-      type="button"
-      class="character-option"
-      data-type="villain"
-    >
-
-      <span class="emoji">
-        😈
-      </span>
-
-      <h3>
-        Méchant
-      </h3>
-
-      <p>
-        Villains, styles sombres
-        et looks puissants.
-      </p>
-
-    </button>
-
-  </div>
-
-</div>
-
-
-<!-- MORPHOLOGIE -->
-
-<div class="step">
-
-  <div class="step-title">
-
-    <div class="step-number">
-      3
-    </div>
-
-    <h2>
-      Tes informations
-    </h2>
-
-  </div>
-
-
-  <div class="body-grid">
-
-
-    <div class="input-card">
-
-      <label for="height">
-        Taille
-      </label>
-
-      <div class="input-wrapper">
-
-        <input
-          type="number"
-          id="height"
-          placeholder="171"
-          min="100"
-          max="250"
-        >
-
-        <span>
-          cm
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <div class="input-card">
-
-      <label for="weight">
-        Poids
-      </label>
-
-      <div class="input-wrapper">
-
-        <input
-          type="number"
-          id="weight"
-          placeholder="71"
-          min="30"
-          max="300"
-        >
-
-        <span>
-          kg
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- BOUTON -->
-
-<button
-  type="button"
-  class="generate-button"
-  id="generateButton"
->
-  ✨ Générer mon DisneyBound
-</button>
-
-
-<!-- LOADING -->
-
-<div
-  class="loading"
-  id="loading"
->
-
-  <div class="spinner"></div>
-
-  <p>
-    L'IA analyse ta photo et crée ton look...
-  </p>
-
-</div>
-
-
-<!-- ERREUR -->
-
-<div
-  class="error-box"
-  id="errorBox"
-></div>
-```
+    <div
+      class="error"
+      id="error"
+    ></div>
 
   </section>
 
@@ -884,161 +650,69 @@
 
   <section id="result">
 
-```
-<div class="result-card">
+    <div class="result-card">
 
+      <div
+        class="result-character"
+        id="resultEmoji"
+      >
+        ✨
+      </div>
 
-  <div class="result-header">
+      <h2 id="resultTitle">
+        Ton DisneyBound
+      </h2>
 
-    <div
-      class="result-character"
-      id="resultEmoji"
-    >
-      ✨
-    </div>
+      <p id="resultSubtitle">
+        Voici ta tenue.
+      </p>
 
-    <h2 id="resultTitle">
-      Ton DisneyBound
-    </h2>
+      <div class="look-list">
 
-    <p id="resultSubtitle">
-      Voici ta proposition.
-    </p>
+        <div class="look-item">
+          <strong>👕 Haut</strong>
+          <span id="resultTop"></span>
+        </div>
 
-  </div>
+        <div class="look-item">
+          <strong>👖 Bas</strong>
+          <span id="resultBottom"></span>
+        </div>
 
+        <div class="look-item">
+          <strong>🧥 Veste</strong>
+          <span id="resultJacket"></span>
+        </div>
 
-  <div class="look-list">
+        <div class="look-item">
+          <strong>👟 Chaussures</strong>
+          <span id="resultShoes"></span>
+        </div>
 
+        <div class="look-item">
+          <strong>✨ Accessoires</strong>
+          <span id="resultAccessory"></span>
+        </div>
 
-    <div class="look-item">
+        <div class="look-item">
+          <strong>🔎 Recherches</strong>
+          <span id="resultSearches"></span>
+        </div>
 
-      <strong>
-        👕 Haut
-      </strong>
+      </div>
 
-      <span id="resultTop"></span>
-
-      <span class="search-label">
-        Recherche
-      </span>
-
-      <span
-        class="search"
-        id="searchTop"
-      ></span>
-
-    </div>
-
-
-    <div class="look-item">
-
-      <strong>
-        👖 Bas
-      </strong>
-
-      <span id="resultBottom"></span>
-
-      <span class="search-label">
-        Recherche
-      </span>
-
-      <span
-        class="search"
-        id="searchBottom"
-      ></span>
+      <div
+        class="colors"
+        id="resultColors"
+      ></div>
 
     </div>
-
-
-    <div class="look-item">
-
-      <strong>
-        🧥 Veste
-      </strong>
-
-      <span id="resultJacket"></span>
-
-      <span class="search-label">
-        Recherche
-      </span>
-
-      <span
-        class="search"
-        id="searchJacket"
-      ></span>
-
-    </div>
-
-
-    <div class="look-item">
-
-      <strong>
-        👟 Chaussures
-      </strong>
-
-      <span id="resultShoes"></span>
-
-      <span class="search-label">
-        Recherche
-      </span>
-
-      <span
-        class="search"
-        id="searchShoes"
-      ></span>
-
-    </div>
-
-
-    <div class="look-item">
-
-      <strong>
-        ✨ Accessoires
-      </strong>
-
-      <span id="resultAccessory"></span>
-
-      <span class="search-label">
-        Recherche
-      </span>
-
-      <span
-        class="search"
-        id="searchAccessory"
-      ></span>
-
-    </div>
-
-
-    <div class="look-item">
-
-      <strong>
-        🎨 Couleurs
-      </strong>
-
-      <span id="resultColors"></span>
-
-    </div>
-
-
-  </div>
-
-</div>
-```
 
   </section>
 
 </main>
 
 <script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-
-  /* ==========================================
-     ELEMENTS
-  ========================================== */
 
   const photoInput =
     document.getElementById("photoInput");
@@ -1062,633 +736,413 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("result");
 
   const errorBox =
-    document.getElementById("errorBox");
+    document.getElementById("error");
 
 
   let selectedType = null;
 
 
-  /* ==========================================
+  /* =========================
      PHOTO
-  ========================================== */
+  ========================= */
 
-  photoInput.addEventListener(
-    "change",
-    function () {
+  photoInput.addEventListener("change", function(event) {
 
-      const file =
-        this.files && this.files[0];
+    const file = event.target.files[0];
 
-      if (!file) {
-        return;
-      }
-
-
-      console.log(
-        "Photo sélectionnée :",
-        file.name
-      );
-
-      console.log(
-        "Type :",
-        file.type
-      );
-
-
-      if (!file.type.startsWith("image/")) {
-
-        showError(
-          "Le fichier sélectionné n'est pas une image."
-        );
-
-        return;
-      }
-
-
-      const reader =
-        new FileReader();
-
-
-      reader.onload =
-        function (event) {
-
-          preview.src =
-            event.target.result;
-
-          preview.style.display =
-            "block";
-
-          uploadContent.style.display =
-            "none";
-
-        };
-
-
-      reader.onerror =
-        function () {
-
-          showError(
-            "Impossible de lire la photo."
-          );
-
-        };
-
-
-      reader.readAsDataURL(file);
-
+    if (!file) {
+      return;
     }
-  );
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+      preview.src = e.target.result;
+
+      preview.style.display = "block";
+
+      uploadContent.style.display = "none";
+
+    };
+
+    reader.readAsDataURL(file);
+
+  });
 
 
-  /* ==========================================
-     CHOIX PERSONNAGE
-  ========================================== */
+  /* =========================
+     PERSONNAGE
+  ========================= */
 
-  characterButtons.forEach(
-    function (button) {
+  characterButtons.forEach(function(button) {
 
-      button.addEventListener(
-        "click",
-        function () {
+    button.addEventListener("click", function() {
 
-          characterButtons.forEach(
-            function (item) {
+      characterButtons.forEach(function(item) {
 
-              item.classList.remove(
-                "selected"
-              );
+        item.classList.remove("selected");
 
-            }
-          );
+      });
 
+      this.classList.add("selected");
 
-          this.classList.add(
-            "selected"
-          );
+      selectedType = this.dataset.type;
+
+    });
+
+  });
 
 
-          selectedType =
-            this.dataset.type;
-
-
-          console.log(
-            "Type sélectionné :",
-            selectedType
-          );
-
-        }
-      );
-
-    }
-  );
-
-
-  /* ==========================================
-     ERREUR
-  ========================================== */
-
-  function showError(message) {
-
-    errorBox.textContent =
-      message;
-
-    errorBox.style.display =
-      "block";
-
-  }
-
-
-  function hideError() {
-
-    errorBox.textContent =
-      "";
-
-    errorBox.style.display =
-      "none";
-
-  }
-
-
-  /* ==========================================
-     CONVERSION IMAGE
-  ========================================== */
-
-  function fileToBase64(file) {
-
-    return new Promise(
-      function (resolve, reject) {
-
-        const reader =
-          new FileReader();
-
-
-        reader.onload =
-          function () {
-
-            try {
-
-              const result =
-                reader.result;
-
-              const base64 =
-                result.split(",")[1];
-
-              if (!base64) {
-
-                reject(
-                  new Error(
-                    "Impossible de convertir la photo."
-                  )
-                );
-
-                return;
-              }
-
-
-              resolve(base64);
-
-            } catch (error) {
-
-              reject(error);
-
-            }
-
-          };
-
-
-        reader.onerror =
-          function () {
-
-            reject(
-              new Error(
-                "Erreur pendant la lecture de la photo."
-              )
-            );
-
-          };
-
-
-        reader.readAsDataURL(file);
-
-      }
-    );
-
-  }
-
-
-  /* ==========================================
+  /* =========================
      GENERATION
-  ========================================== */
+  ========================= */
 
-  generateButton.addEventListener(
-    "click",
-    async function () {
+  generateButton.addEventListener("click", async function() {
 
+    errorBox.style.display = "none";
 
-      hideError();
+    const file = photoInput.files[0];
 
+    const height =
+      document.getElementById("height").value.trim();
 
-      const file =
-        photoInput.files &&
-        photoInput.files[0];
-
-
-      const height =
-        document.getElementById(
-          "height"
-        ).value.trim();
+    const weight =
+      document.getElementById("weight").value.trim();
 
 
-      const weight =
-        document.getElementById(
-          "weight"
-        ).value.trim();
+    /* VALIDATION */
+
+    if (!file) {
+
+      showError("Ajoute d'abord une photo.");
+
+      return;
+
+    }
+
+    if (!selectedType) {
+
+      showError("Choisis Gentil ou Méchant.");
+
+      return;
+
+    }
+
+    if (!height || !weight) {
+
+      showError("Entre ta taille et ton poids.");
+
+      return;
+
+    }
 
 
-      console.log(
-        "TEST DISNEYBOUND"
-      );
+    /* LOADING */
 
-      console.log(
-        "Photo :",
-        file
-      );
+    generateButton.disabled = true;
 
-      console.log(
-        "Type :",
-        selectedType
-      );
-
-      console.log(
-        "Taille :",
-        height
-      );
-
-      console.log(
-        "Poids :",
-        weight
-      );
+    loading.style.display = "block";
 
 
-      /* VALIDATION */
+    try {
+
+      /* =========================
+         LIRE LA PHOTO
+      ========================= */
+
+      const imageBase64 = await fileToBase64(file);
 
 
-      if (!file) {
+      /* =========================
+         APPEL API
+      ========================= */
 
-        showError(
-          "Ajoute d'abord une photo."
-        );
+      const response = await fetch("/api/generate", {
 
-        return;
-      }
+        method: "POST",
 
+        headers: {
+          "Content-Type": "application/json"
+        },
 
-      if (!selectedType) {
+        body: JSON.stringify({
 
-        showError(
-          "Choisis Gentil ou Méchant."
-        );
+          characterType: selectedType,
 
-        return;
-      }
+          height: height,
 
+          weight: weight,
 
-      if (!height || !weight) {
+          image: imageBase64,
 
-        showError(
-          "Entre ta taille et ton poids."
-        );
+          mimeType: file.type
 
-        return;
-      }
+        })
 
-
-      if (!file.type.startsWith("image/")) {
-
-        showError(
-          "Le fichier sélectionné doit être une image."
-        );
-
-        return;
-      }
+      });
 
 
-      /* LOADING */
+      /* =========================
+         LIRE REPONSE
+      ========================= */
+
+      const text = await response.text();
+
+      console.log("Réponse API :", text);
 
 
-      generateButton.disabled =
-        true;
-
-      generateButton.style.display =
-        "none";
-
-      loading.style.display =
-        "block";
-
+      let data;
 
       try {
 
+        data = JSON.parse(text);
 
-        /* IMAGE */
+      } catch (jsonError) {
 
-
-        const imageBase64 =
-          await fileToBase64(file);
-
-
-        console.log(
-          "Image convertie en base64."
+        throw new Error(
+          "Le serveur n'a pas renvoyé de JSON valide."
         );
-
-
-        /* API */
-
-
-        const response =
-          await fetch(
-            "/api/generate",
-            {
-              method: "POST",
-
-              headers: {
-                "Content-Type":
-                  "application/json"
-              },
-
-              body: JSON.stringify({
-
-                characterType:
-                  selectedType,
-
-                height:
-                  height,
-
-                weight:
-                  weight,
-
-                image:
-                  imageBase64,
-
-                mimeType:
-                  file.type
-
-              })
-
-            }
-          );
-
-
-        console.log(
-          "Réponse API :",
-          response.status
-        );
-
-
-        /* LECTURE REPONSE */
-
-
-        const rawText =
-          await response.text();
-
-
-        console.log(
-          "Réponse serveur :",
-          rawText
-        );
-
-
-        let data;
-
-
-        try {
-
-          data =
-            JSON.parse(rawText);
-
-        } catch (jsonError) {
-
-          throw new Error(
-            "Le serveur n'a pas renvoyé de JSON valide."
-          );
-
-        }
-
-
-        if (!response.ok) {
-
-          throw new Error(
-            data.error ||
-            "Erreur serveur " +
-            response.status
-          );
-
-        }
-
-
-        if (
-          !data.result
-        ) {
-
-          throw new Error(
-            "La réponse de l'IA est vide."
-          );
-
-        }
-
-
-        const disneyBound =
-          data.result;
-
-
-        console.log(
-          "DisneyBound reçu :",
-          disneyBound
-        );
-
-
-        /* ==================================
-           AFFICHAGE
-        ================================== */
-
-
-        document.getElementById(
-          "resultTitle"
-        ).textContent =
-          "DisneyBound inspiré de " +
-          (
-            disneyBound.personnage ||
-            "ton personnage"
-          );
-
-
-        document.getElementById(
-          "resultSubtitle"
-        ).textContent =
-          "Voici les pièces à rechercher pour créer ton look.";
-
-
-        document.getElementById(
-          "resultTop"
-        ).textContent =
-          disneyBound.haut || "";
-
-
-        document.getElementById(
-          "resultBottom"
-        ).textContent =
-          disneyBound.bas || "";
-
-
-        document.getElementById(
-          "resultJacket"
-        ).textContent =
-          disneyBound.veste || "";
-
-
-        document.getElementById(
-          "resultShoes"
-        ).textContent =
-          disneyBound.chaussures || "";
-
-
-        /* ACCESSOIRES */
-
-
-        if (
-          Array.isArray(
-            disneyBound.accessoires
-          )
-        ) {
-
-          document.getElementById(
-            "resultAccessory"
-          ).textContent =
-            disneyBound.accessoires.join(
-              ", "
-            );
-
-        } else {
-
-          document.getElementById(
-            "resultAccessory"
-          ).textContent =
-            disneyBound.accessoires || "";
-
-        }
-
-
-        /* COULEURS */
-
-
-        if (
-          Array.isArray(
-            disneyBound.couleurs
-          )
-        ) {
-
-          document.getElementById(
-            "resultColors"
-          ).textContent =
-            disneyBound.couleurs.join(
-              ", "
-            );
-
-        } else {
-
-          document.getElementById(
-            "resultColors"
-          ).textContent =
-            disneyBound.couleurs || "";
-
-        }
-
-
-        /* ==================================
-           RECHERCHES
-        ================================== */
-
-        const searches =
-          disneyBound.recherches || {};
-
-
-        document.getElementById(
-          "searchTop"
-        ).textContent =
-          searches.haut || "";
-
-
-        document.getElementById(
-          "searchBottom"
-        ).textContent =
-          searches.bas || "";
-
-
-        document.getElementById(
-          "searchJacket"
-        ).textContent =
-          searches.veste || "";
-
-
-        document.getElementById(
-          "searchShoes"
-        ).textContent =
-          searches.chaussures || "";
-
-
-        document.getElementById(
-          "searchAccessory"
-        ).textContent =
-          searches.accessoires || "";
-
-
-        /* AFFICHAGE */
-
-
-        result.style.display =
-          "block";
-
-
-        result.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
-        });
-
-
-      } catch (error) {
-
-
-        console.error(
-          "Erreur DisneyBound :",
-          error
-        );
-
-
-        showError(
-          "Impossible de contacter l'IA : " +
-          error.message
-        );
-
-
-      } finally {
-
-
-        loading.style.display =
-          "none";
-
-
-        generateButton.style.display =
-          "block";
-
-
-        generateButton.disabled =
-          false;
 
       }
 
-    }
-  );
 
-});
+      if (!response.ok) {
+
+        throw new Error(
+          data.error ||
+          "Erreur serveur " + response.status
+        );
+
+      }
+
+
+      if (!data.result) {
+
+        throw new Error(
+          "Aucun résultat DisneyBound reçu."
+        );
+
+      }
+
+
+      displayResult(data.result);
+
+
+    } catch (error) {
+
+      console.error(
+        "Erreur DisneyBound :",
+        error
+      );
+
+      showError(
+        "Impossible de contacter l'IA : " +
+        error.message
+      );
+
+    } finally {
+
+      loading.style.display = "none";
+
+      generateButton.disabled = false;
+
+    }
+
+  });
+
+
+  /* =========================
+     BASE64
+  ========================= */
+
+  function fileToBase64(file) {
+
+    return new Promise(function(resolve, reject) {
+
+      const reader = new FileReader();
+
+      reader.onload = function() {
+
+        const result = reader.result;
+
+        if (
+          typeof result !== "string" ||
+          !result.includes(",")
+        ) {
+
+          reject(
+            new Error(
+              "Format de photo incorrect."
+            )
+          );
+
+          return;
+
+        }
+
+        const base64 =
+          result.split(",")[1];
+
+        resolve(base64);
+
+      };
+
+      reader.onerror = function() {
+
+        reject(
+          new Error(
+            "Impossible de lire la photo."
+          )
+        );
+
+      };
+
+      reader.readAsDataURL(file);
+
+    });
+
+  }
+
+
+  /* =========================
+     AFFICHAGE ERREUR
+  ========================= */
+
+  function showError(message) {
+
+    errorBox.textContent = message;
+
+    errorBox.style.display = "block";
+
+  }
+
+
+  /* =========================
+     AFFICHAGE RESULTAT
+  ========================= */
+
+  function displayResult(data) {
+
+    document.getElementById(
+      "resultEmoji"
+    ).textContent = "✨";
+
+
+    document.getElementById(
+      "resultTitle"
+    ).textContent =
+      "DisneyBound inspiré de " +
+      (data.personnage || "un personnage Disney");
+
+
+    document.getElementById(
+      "resultSubtitle"
+    ).textContent =
+      "Voici les pièces à rechercher pour créer ton look.";
+
+
+    document.getElementById(
+      "resultTop"
+    ).textContent =
+      data.haut || "";
+
+
+    document.getElementById(
+      "resultBottom"
+    ).textContent =
+      data.bas || "";
+
+
+    document.getElementById(
+      "resultJacket"
+    ).textContent =
+      data.veste || "";
+
+
+    document.getElementById(
+      "resultShoes"
+    ).textContent =
+      data.chaussures || "";
+
+
+    if (Array.isArray(data.accessoires)) {
+
+      document.getElementById(
+        "resultAccessory"
+      ).textContent =
+        data.accessoires.join(", ");
+
+    } else {
+
+      document.getElementById(
+        "resultAccessory"
+      ).textContent =
+        data.accessoires || "";
+
+    }
+
+
+    /* RECHERCHES */
+
+    const searches = data.recherches || {};
+
+    const searchText = [
+
+      "Haut : " + (searches.haut || ""),
+
+      "Bas : " + (searches.bas || ""),
+
+      "Veste : " + (searches.veste || ""),
+
+      "Chaussures : " + (searches.chaussures || ""),
+
+      "Accessoires : " + (searches.accessoires || "")
+
+    ].join(" • ");
+
+
+    document.getElementById(
+      "resultSearches"
+    ).textContent =
+      searchText;
+
+
+    /* COULEURS */
+
+    const colorsBox =
+      document.getElementById("resultColors");
+
+    colorsBox.innerHTML = "";
+
+
+    if (Array.isArray(data.couleurs)) {
+
+      data.couleurs.forEach(function(color) {
+
+        const span =
+          document.createElement("span");
+
+        span.textContent = color;
+
+        colorsBox.appendChild(span);
+
+      });
+
+    }
+
+
+    result.style.display = "block";
+
+    result.scrollIntoView({
+
+      behavior: "smooth",
+
+      block: "start"
+
+    });
+
+  }
 
 </script>
 
