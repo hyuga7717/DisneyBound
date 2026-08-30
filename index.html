@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -17,6 +18,7 @@
       --text: #ffffff;
       --text-muted: #a1a1aa;
       --border: rgba(255,255,255,0.1);
+      --error: #ef4444;
     }
 
     * {
@@ -53,10 +55,6 @@
       border: none;
     }
 
-    /* =========================
-       HEADER
-    ========================== */
-
     header {
       width: 100%;
       padding: 20px 5%;
@@ -86,10 +84,6 @@
       border: 1px solid rgba(124, 58, 237, 0.5);
       color: #ddd6fe;
     }
-
-    /* =========================
-       MAIN
-    ========================== */
 
     main {
       width: min(1100px, 90%);
@@ -128,10 +122,6 @@
       line-height: 1.6;
     }
 
-    /* =========================
-       GENERATOR
-    ========================== */
-
     .generator {
       background: rgba(20, 20, 32, 0.9);
       border: 1px solid var(--border);
@@ -168,10 +158,6 @@
     .step-title h2 {
       font-size: 20px;
     }
-
-    /* =========================
-       UPLOAD
-    ========================== */
 
     .upload-zone {
       min-height: 220px;
@@ -233,10 +219,6 @@
       border: 3px solid var(--purple);
     }
 
-    /* =========================
-       CHARACTER
-    ========================== */
-
     .character-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -279,10 +261,6 @@
       font-size: 14px;
     }
 
-    /* =========================
-       MORPHOLOGIE
-    ========================== */
-
     .body-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -324,10 +302,6 @@
       font-weight: bold;
     }
 
-    /* =========================
-       BUTTON
-    ========================== */
-
     .generate-button {
       width: 100%;
       padding: 20px;
@@ -353,10 +327,6 @@
       cursor: not-allowed;
     }
 
-    /* =========================
-       LOADING
-    ========================== */
-
     .loading {
       display: none;
       text-align: center;
@@ -378,10 +348,6 @@
         transform: rotate(360deg);
       }
     }
-
-    /* =========================
-       RESULT
-    ========================== */
 
     #result {
       display: none;
@@ -431,10 +397,6 @@
       color: var(--text-muted);
     }
 
-    /* =========================
-       LOOK
-    ========================== */
-
     .look-list {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -460,10 +422,6 @@
       line-height: 1.5;
     }
 
-    /* =========================
-       COULEURS
-    ========================== */
-
     .colors-section {
       margin-top: 25px;
     }
@@ -487,10 +445,6 @@
       border: 1px solid var(--border);
       font-size: 14px;
     }
-
-    /* =========================
-       RECHERCHES
-    ========================== */
 
     .search-section {
       margin-top: 30px;
@@ -536,9 +490,27 @@
       background: rgba(124,58,237,0.5);
     }
 
-    /* =========================
-       RESPONSIVE
-    ========================== */
+    /* MESSAGE D'ERREUR */
+
+    .error-box {
+      display: none;
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 15px;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.4);
+      color: #fecaca;
+      line-height: 1.5;
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .error-box strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #fca5a5;
+    }
 
     @media (max-width: 700px) {
 
@@ -600,12 +572,7 @@
 
 </header>
 
-
 <main>
-
-  <!-- =========================
-       HERO
-  ========================== -->
 
   <section class="hero">
 
@@ -623,14 +590,7 @@
 
   </section>
 
-
-  <!-- =========================
-       GENERATOR
-  ========================== -->
-
   <section class="generator">
-
-    <!-- PHOTO -->
 
     <div class="step">
 
@@ -645,7 +605,6 @@
         </h2>
 
       </div>
-
 
       <label
         class="upload-zone"
@@ -675,14 +634,12 @@
 
         </div>
 
-
         <img
           id="preview"
           alt="Aperçu de votre photo"
         >
 
       </label>
-
 
       <input
         type="file"
@@ -691,9 +648,6 @@
       >
 
     </div>
-
-
-    <!-- CHARACTER -->
 
     <div class="step">
 
@@ -708,7 +662,6 @@
         </h2>
 
       </div>
-
 
       <div class="character-grid">
 
@@ -731,7 +684,6 @@
           </p>
 
         </button>
-
 
         <button
           type="button"
@@ -757,9 +709,6 @@
 
     </div>
 
-
-    <!-- MORPHOLOGIE -->
-
     <div class="step">
 
       <div class="step-title">
@@ -773,7 +722,6 @@
         </h2>
 
       </div>
-
 
       <div class="body-grid">
 
@@ -800,7 +748,6 @@
           </div>
 
         </div>
-
 
         <div class="input-card">
 
@@ -830,9 +777,6 @@
 
     </div>
 
-
-    <!-- GENERATE -->
-
     <button
       type="button"
       class="generate-button"
@@ -840,9 +784,6 @@
     >
       ✨ Générer mon DisneyBound
     </button>
-
-
-    <!-- LOADING -->
 
     <div
       class="loading"
@@ -857,12 +798,18 @@
 
     </div>
 
+    <div
+      class="error-box"
+      id="errorBox"
+    >
+      <strong>
+        ⚠️ Erreur
+      </strong>
+
+      <span id="errorMessage"></span>
+    </div>
+
   </section>
-
-
-  <!-- =========================
-       RESULT
-  ========================== -->
 
   <section id="result">
 
@@ -887,9 +834,6 @@
 
       </div>
 
-
-      <!-- VÊTEMENTS -->
-
       <div class="look-list">
 
         <div class="look-item">
@@ -903,7 +847,6 @@
 
         </div>
 
-
         <div class="look-item">
 
           <strong>
@@ -914,7 +857,6 @@
           </span>
 
         </div>
-
 
         <div class="look-item">
 
@@ -927,7 +869,6 @@
 
         </div>
 
-
         <div class="look-item">
 
           <strong>
@@ -938,7 +879,6 @@
           </span>
 
         </div>
-
 
         <div class="look-item">
 
@@ -953,9 +893,6 @@
 
       </div>
 
-
-      <!-- COULEURS -->
-
       <div class="colors-section">
 
         <h3>
@@ -969,9 +906,6 @@
         </div>
 
       </div>
-
-
-      <!-- RECHERCHES -->
 
       <div class="search-section">
 
@@ -992,7 +926,6 @@
   </section>
 
 </main>
-
 
 <script>
 
@@ -1021,7 +954,43 @@
   const result =
     document.getElementById("result");
 
+  const errorBox =
+    document.getElementById("errorBox");
+
+  const errorMessage =
+    document.getElementById("errorMessage");
+
   let selectedType = null;
+
+
+  /* =========================
+     AFFICHER ERREUR
+  ========================== */
+
+  function showError(message) {
+
+    errorMessage.textContent =
+      message || "Une erreur inconnue est survenue.";
+
+    errorBox.style.display =
+      "block";
+
+  }
+
+
+  /* =========================
+     CACHER ERREUR
+  ========================== */
+
+  function hideError() {
+
+    errorBox.style.display =
+      "none";
+
+    errorMessage.textContent =
+      "";
+
+  }
 
 
   /* =========================
@@ -1041,17 +1010,21 @@
 
       if (!file.type.startsWith("image/")) {
 
-        alert(
-          "Merci de sélectionner une image."
+        showError(
+          "Merci de sélectionner une image valide."
         );
 
+        photoInput.value =
+          "";
+
         return;
+
       }
 
+      hideError();
 
       const reader =
         new FileReader();
-
 
       reader.onload =
         function(e) {
@@ -1067,16 +1040,14 @@
 
         };
 
-
       reader.onerror =
         function() {
 
-          alert(
+          showError(
             "Impossible de lire cette photo."
           );
 
         };
-
 
       reader.readAsDataURL(file);
 
@@ -1105,14 +1076,14 @@
             }
           );
 
-
           this.classList.add(
             "selected"
           );
 
-
           selectedType =
             this.dataset.type;
+
+          hideError();
 
         }
       );
@@ -1154,13 +1125,17 @@
         error
       );
 
+      showError(
+        "Impossible de copier la recherche."
+      );
+
     }
 
   }
 
 
   /* =========================
-     AFFICHAGE DES COULEURS
+     COULEURS
   ========================== */
 
   function displayColors(colors) {
@@ -1177,14 +1152,12 @@
       return;
     }
 
-
     colors.forEach(
       color => {
 
         if (!color) {
           return;
         }
-
 
         const tag =
           document.createElement(
@@ -1208,7 +1181,7 @@
 
 
   /* =========================
-     AFFICHAGE DES RECHERCHES
+     RECHERCHES
   ========================== */
 
   function displaySearches(searches) {
@@ -1221,8 +1194,10 @@
     container.innerHTML =
       "";
 
-
-    if (!searches || typeof searches !== "object") {
+    if (
+      !searches ||
+      typeof searches !== "object"
+    ) {
 
       container.innerHTML =
         "<p style='color:#a1a1aa;'>Aucune recherche disponible.</p>";
@@ -1230,7 +1205,6 @@
       return;
 
     }
-
 
     const labels = {
 
@@ -1246,7 +1220,6 @@
 
     };
 
-
     Object.keys(labels).forEach(
       key => {
 
@@ -1257,7 +1230,6 @@
           return;
         }
 
-
         const item =
           document.createElement(
             "div"
@@ -1265,7 +1237,6 @@
 
         item.className =
           "search-item";
-
 
         const label =
           document.createElement(
@@ -1278,7 +1249,6 @@
         label.textContent =
           labels[key];
 
-
         const search =
           document.createElement(
             "div"
@@ -1289,7 +1259,6 @@
 
         search.textContent =
           value;
-
 
         const button =
           document.createElement(
@@ -1305,7 +1274,6 @@
         button.textContent =
           "Copier";
 
-
         button.addEventListener(
           "click",
           function() {
@@ -1317,7 +1285,6 @@
 
           }
         );
-
 
         item.appendChild(
           label
@@ -1331,7 +1298,6 @@
           button
         );
 
-
         container.appendChild(
           item
         );
@@ -1343,7 +1309,117 @@
 
 
   /* =========================
-     GÉNÉRATION
+     LECTURE DE LA REPONSE API
+  ========================== */
+
+  async function readApiResponse(response) {
+
+    const contentType =
+      response.headers.get(
+        "content-type"
+      ) || "";
+
+    const rawText =
+      await response.text();
+
+    console.log(
+      "HTTP status:",
+      response.status
+    );
+
+    console.log(
+      "Content-Type:",
+      contentType
+    );
+
+    console.log(
+      "Réponse serveur:",
+      rawText
+    );
+
+
+    if (!rawText.trim()) {
+
+      throw new Error(
+        `Le serveur a renvoyé une réponse vide (HTTP ${response.status}).`
+      );
+
+    }
+
+
+    let data;
+
+
+    if (
+      contentType.includes(
+        "application/json"
+      )
+    ) {
+
+      try {
+
+        data =
+          JSON.parse(
+            rawText
+          );
+
+      } catch (error) {
+
+        throw new Error(
+          "Le serveur a annoncé du JSON mais a renvoyé un JSON invalide."
+        );
+
+      }
+
+    } else {
+
+      /*
+       * Certains serveurs peuvent renvoyer du JSON
+       * sans définir correctement Content-Type.
+       */
+
+      try {
+
+        data =
+          JSON.parse(
+            rawText
+          );
+
+      } catch {
+
+        /*
+         * Si Vercel renvoie une page HTML,
+         * on affiche le contenu utile.
+         */
+
+        const cleanText =
+          rawText
+            .replace(
+              /<[^>]*>/g,
+              " "
+            )
+            .replace(
+              /\s+/g,
+              " "
+            )
+            .trim();
+
+        throw new Error(
+          `Le serveur n'a pas renvoyé de JSON. HTTP ${response.status}. Réponse : ${cleanText.slice(0, 500)}`
+        );
+
+      }
+
+    }
+
+
+    return data;
+
+  }
+
+
+  /* =========================
+     GENERATION
   ========================== */
 
   generateButton.addEventListener(
@@ -1353,24 +1429,27 @@
       const height =
         document.getElementById(
           "height"
-        ).value;
+        ).value.trim();
 
       const weight =
         document.getElementById(
           "weight"
-        ).value;
+        ).value.trim();
 
       const file =
         photoInput.files[0];
 
 
+      hideError();
+
+
       /* =========================
-         VALIDATION
+         VALIDATION PHOTO
       ========================== */
 
       if (!file) {
 
-        alert(
+        showError(
           "Ajoute d'abord une photo."
         );
 
@@ -1379,9 +1458,13 @@
       }
 
 
+      /* =========================
+         VALIDATION TYPE
+      ========================== */
+
       if (!selectedType) {
 
-        alert(
+        showError(
           "Choisis Gentil ou Méchant."
         );
 
@@ -1390,10 +1473,44 @@
       }
 
 
-      if (!height || !weight) {
+      /* =========================
+         VALIDATION TAILLE
+      ========================== */
 
-        alert(
-          "Entre ta taille et ton poids."
+      if (!height) {
+
+        showError(
+          "Entre ta taille."
+        );
+
+        return;
+
+      }
+
+
+      /* =========================
+         VALIDATION POIDS
+      ========================== */
+
+      if (!weight) {
+
+        showError(
+          "Entre ton poids."
+        );
+
+        return;
+
+      }
+
+
+      /* =========================
+         VALIDATION FICHIER
+      ========================== */
+
+      if (!file.type.startsWith("image/")) {
+
+        showError(
+          "Le fichier sélectionné n'est pas une image."
         );
 
         return;
@@ -1431,13 +1548,11 @@
               const reader =
                 new FileReader();
 
-
               reader.onload =
                 function() {
 
                   const dataUrl =
                     reader.result;
-
 
                   if (
                     typeof dataUrl !==
@@ -1454,12 +1569,13 @@
 
                   }
 
-
                   const parts =
                     dataUrl.split(",");
 
-
-                  if (parts.length < 2) {
+                  if (
+                    parts.length < 2 ||
+                    !parts[1]
+                  ) {
 
                     reject(
                       new Error(
@@ -1471,13 +1587,11 @@
 
                   }
 
-
                   resolve(
                     parts[1]
                   );
 
                 };
-
 
               reader.onerror =
                 function() {
@@ -1490,7 +1604,6 @@
 
                 };
 
-
               reader.readAsDataURL(
                 file
               );
@@ -1500,7 +1613,7 @@
 
 
         /* =========================
-           API
+           APPEL API
         ========================== */
 
         const response =
@@ -1511,8 +1624,13 @@
               method: "POST",
 
               headers: {
+
                 "Content-Type":
+                  "application/json",
+
+                "Accept":
                   "application/json"
+
               },
 
               body:
@@ -1522,10 +1640,10 @@
                     selectedType,
 
                   height:
-                    height,
+                    Number(height),
 
                   weight:
-                    weight,
+                    Number(weight),
 
                   image:
                     imageBase64,
@@ -1540,54 +1658,46 @@
 
 
         /* =========================
-           RÉPONSE API
+           LECTURE REPONSE
         ========================== */
 
-        const rawText =
-          await response.text();
-
-
-        let data;
-
-
-        try {
-
-          data =
-            JSON.parse(
-              rawText
-            );
-
-        } catch (jsonError) {
-
-          console.error(
-            "Réponse serveur non JSON :",
-            rawText
+        const data =
+          await readApiResponse(
+            response
           );
 
-          throw new Error(
-            "Le serveur n'a pas renvoyé de JSON valide."
-          );
 
-        }
-
+        /* =========================
+           ERREUR SERVEUR
+        ========================== */
 
         if (!response.ok) {
 
           throw new Error(
-            data.error ||
-            `Erreur serveur ${response.status}`
+            data?.error ||
+            `Erreur serveur HTTP ${response.status}.`
           );
 
         }
 
 
+        /* =========================
+           VERIFICATION RESULTAT
+        ========================== */
+
         if (
+          !data ||
           !data.result ||
           typeof data.result !== "object"
         ) {
 
+          console.error(
+            "Réponse API incorrecte :",
+            data
+          );
+
           throw new Error(
-            "La réponse de l'IA est invalide."
+            "La réponse de l'IA ne contient pas de résultat DisneyBound valide."
           );
 
         }
@@ -1606,7 +1716,6 @@
         ).textContent =
           "✨";
 
-
         document.getElementById(
           "resultTitle"
         ).textContent =
@@ -1614,7 +1723,6 @@
             disneyBound.personnage ||
             "ton personnage Disney"
           }`;
-
 
         document.getElementById(
           "resultSubtitle"
@@ -1632,20 +1740,17 @@
           disneyBound.haut ||
           "Non renseigné";
 
-
         document.getElementById(
           "resultBottom"
         ).textContent =
           disneyBound.bas ||
           "Non renseigné";
 
-
         document.getElementById(
           "resultJacket"
         ).textContent =
           disneyBound.veste ||
           "Non renseigné";
-
 
         document.getElementById(
           "resultShoes"
@@ -1661,7 +1766,6 @@
         const accessories =
           disneyBound.accessoires;
 
-
         if (
           Array.isArray(accessories) &&
           accessories.length > 0
@@ -1670,9 +1774,9 @@
           document.getElementById(
             "resultAccessory"
           ).textContent =
-            accessories.join(
-              " • "
-            );
+            accessories
+              .filter(Boolean)
+              .join(" • ");
 
         } else {
 
@@ -1703,17 +1807,17 @@
 
 
         /* =========================
-           AFFICHER
+           AFFICHER RESULTAT
         ========================== */
 
         result.style.display =
           "block";
 
-
         result.scrollIntoView({
           behavior: "smooth",
           block: "start"
         });
+
 
       } catch (error) {
 
@@ -1722,11 +1826,11 @@
           error
         );
 
-
-        alert(
-          "Impossible de contacter l'IA : " +
-          error.message
+        showError(
+          error?.message ||
+          "Une erreur inconnue est survenue."
         );
+
 
       } finally {
 
@@ -1748,3 +1852,4 @@
 
 </body>
 </html>
+```
