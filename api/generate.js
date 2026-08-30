@@ -1,3 +1,4 @@
+````javascript
 export default async function handler(req, res) {
 
   /*
@@ -7,11 +8,9 @@ export default async function handler(req, res) {
    */
 
   if (req.method !== "POST") {
-
     return res.status(405).json({
       error: "Méthode non autorisée."
     });
-
   }
 
 
@@ -38,57 +37,99 @@ export default async function handler(req, res) {
      * ==========================================
      */
 
-    if (
-      !characterType ||
-      !height ||
-      !weight ||
-      !image ||
-      !mimeType
-    ) {
-
+    if (!characterType) {
       return res.status(400).json({
-        error: "Photo ou informations manquantes."
+        error: "Choisis Gentil ou Méchant."
       });
+    }
 
+    if (!height || !weight) {
+      return res.status(400).json({
+        error: "La taille et le poids sont obligatoires."
+      });
+    }
+
+    if (!image) {
+      return res.status(400).json({
+        error: "La photo est obligatoire."
+      });
+    }
+
+    if (!mimeType) {
+      return res.status(400).json({
+        error: "Le format de la photo est manquant."
+      });
     }
 
 
     /*
      * ==========================================
-     * 4. CLE GEMINI
+     * 4. VERIFICATION FORMAT IMAGE
+     * ==========================================
+     */
+
+    const allowedMimeTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/webp"
+    ];
+
+    if (!allowedMimeTypes.includes(mimeType)) {
+      return res.status(400).json({
+        error: "Format d'image non pris en charge."
+      });
+    }
+
+
+    /*
+     * ==========================================
+     * 5. CLE GEMINI
      * ==========================================
      */
 
     const apiKey =
       process.env.gemini_api_key;
 
-
     if (!apiKey) {
 
       console.error(
-        "gemini_api_key absente."
+        "gemini_api_key absente dans Vercel."
       );
 
       return res.status(500).json({
         error:
           "La clé Gemini n'est pas configurée dans Vercel."
       });
-
     }
 
 
     /*
      * ==========================================
-     * 5. PROMPT
+     * 6. TYPE DE PERSONNAGE
+     * ==========================================
+     */
+
+    const characterInstruction =
+      characterType === "villain"
+        ? "Méchant Disney"
+        : "Personnage Disney gentil";
+
+
+    /*
+     * ==========================================
+     * 7. PROMPT GEMINI
      * ==========================================
      */
 
     const prompt = `
-
 Tu es l'IA de DisneyBound.
 
 Ta mission est de créer une tenue DisneyBound moderne,
 élégante et portable au quotidien à partir de la photo fournie.
+
+==================================================
+ANALYSE DE LA PHOTO
+==================================================
 
 Analyse uniquement :
 
@@ -96,80 +137,105 @@ Analyse uniquement :
 - couleurs visibles
 - types de vêtements
 - coupes générales
-- style casual, streetwear, chic, sportif
+- style casual
+- style streetwear
+- style chic
+- style sportif
 - harmonie générale
 
 Ne cherche jamais à identifier la personne.
 
 Ne déduis jamais :
 
-- son identité
-- son âge
-- son origine
-- sa profession
-- son état de santé
+- identité
+- âge
+- origine
+- profession
+- état de santé
+- personnalité
 - toute autre information personnelle.
 
-La personne mesure ${height} cm et pèse ${weight} kg.
+==================================================
+MORPHOLOGIE
+==================================================
 
-Utilise ces informations uniquement pour choisir des
-coupes et proportions adaptées.
+Taille : ${height} cm
+Poids : ${weight} kg
 
-Ne donne aucune analyse ou appréciation du corps.
+Utilise ces informations uniquement pour choisir
+des coupes et proportions adaptées aux vêtements.
 
-TYPE DE PERSONNAGE :
+Ne donne aucune analyse du corps.
 
-${
-  characterType === "villain"
-    ? "Méchant Disney"
-    : "Personnage Disney gentil"
-}
+==================================================
+PERSONNAGE
+==================================================
 
-Choisis UN personnage Disney correspondant :
+Type demandé :
 
-- au style observé
+${characterInstruction}
+
+Choisis UN personnage Disney.
+
+Le personnage doit correspondre :
+
+- au style de la photo
 - aux couleurs observées
 - au type demandé
-- à une tenue portable au quotidien.
+- à une tenue portable au quotidien
 
 Évite de choisir systématiquement le même personnage.
 
-PRINCIPE DISNEYBOUND :
+==================================================
+DISNEYBOUND
+==================================================
 
-Inspire-toi du personnage sans reproduire son costume.
+DisneyBound signifie s'inspirer d'un personnage
+sans reproduire son costume.
 
 INTERDIT :
 
 - cosplay
 - déguisement
 - costume
-- reproduction exacte
+- reproduction exacte du costume
 - oreilles de personnage
 - imprimés représentant le personnage
 - accessoires de cosplay
-- vêtements trop extravagants.
+- vêtements trop extravagants
 
 PRIVILÉGIE :
 
-- couleurs
-- palette
+- couleurs du personnage
+- palette de couleurs
 - matières
 - silhouettes
 - détails subtils
 - accessoires discrets
-- vêtements disponibles dans des boutiques classiques.
+- vêtements trouvables dans des boutiques classiques
 
-COHERENCE :
+==================================================
+COHERENCE AVEC LA PHOTO
+==================================================
 
-Conserve une partie importante du style observé.
+La tenue doit conserver une partie importante
+du style observé sur la photo.
 
-Si le style est casual, reste casual.
+Si la photo montre un style casual,
+reste casual.
 
-Si le style est streetwear, reste majoritairement streetwear.
+Si la photo montre du streetwear,
+reste majoritairement streetwear.
 
-Si le style est chic, reste chic.
+Si la photo montre un style chic,
+reste chic.
 
-CHAUSSURES :
+Ne change pas complètement le style
+uniquement pour correspondre au personnage.
+
+==================================================
+CHAUSSURES
+==================================================
 
 Privilégie :
 
@@ -179,52 +245,147 @@ Privilégie :
 - mocassins
 - chaussures plates
 
-Les talons sont autorisés uniquement s'ils sont cohérents
-avec le style observé.
+Les talons sont autorisés uniquement lorsqu'ils
+sont cohérents avec le style observé.
 
-RECHERCHES PRODUITS :
+==================================================
+VETEMENTS
+==================================================
 
-Pour chaque pièce, crée également une recherche permettant
-de trouver un véritable produit de mode dans une boutique en ligne.
+Crée :
 
-La description et la recherche sont deux éléments différents.
+1. un haut
+2. un bas
+3. une veste
+4. des chaussures
+5. entre 2 et 4 accessoires
+
+Les descriptions doivent être courtes,
+naturelles et faciles à comprendre.
 
 Exemple :
 
-haut :
-"Body noir à fines bretelles"
+"Top noir ajusté à fines bretelles"
 
-recherches.haut :
-"body noir fines bretelles femme"
+CORRECT.
 
-RÈGLES DES RECHERCHES :
+Ne mets jamais de recherche produit
+dans les descriptions.
 
+==================================================
+RECHERCHES PRODUITS
+==================================================
+
+Pour chaque élément, crée une recherche destinée
+à trouver un véritable produit dans une boutique
+de vêtements en ligne.
+
+La recherche doit être différente de la description.
+
+Exemple :
+
+Description :
+
+"Top noir ajusté à fines bretelles"
+
+Recherche :
+
+"top noir fines bretelles femme"
+
+==================================================
+REGLES ABSOLUES DES RECHERCHES
+==================================================
+
+Chaque recherche :
+
+- contient uniquement des mots-clés
 - maximum 8 mots
-- mots-clés uniquement
-- pas de phrase complète
-- pas de guillemets
-- ne jamais utiliser le nom du personnage
-- ne jamais répéter deux fois la recherche
-- ne jamais coller la description et la recherche
-- une seule recherche par champ.
-
-ACCESSOIRES :
-
-Propose entre 2 et 4 accessoires maximum.
-
-Chaque accessoire doit être court.
-
-COULEURS :
-
-Indique entre 3 et 5 couleurs principales.
+- ne contient pas de phrase complète
+- ne contient pas de guillemets
+- ne contient pas le nom du personnage
+- ne contient pas deux recherches
+- ne répète jamais la description
+- ne doit jamais être collée à la description
 
 IMPORTANT :
 
-Réponds UNIQUEMENT avec le JSON.
-Aucun texte avant.
-Aucun texte après.
+Une recherche = une seule chaîne de texte.
 
-Utilise exactement cette structure :
+INTERDIT :
+
+"top noir fines bretelles femme top noir"
+
+CORRECT :
+
+"top noir fines bretelles femme"
+
+==================================================
+ACCESSOIRES
+==================================================
+
+Propose entre 2 et 4 accessoires maximum.
+
+Les accessoires doivent être courts.
+
+Exemple :
+
+"Collier doré fin"
+
+"Bracelet jonc doré"
+
+"Petit sac noir"
+
+La recherche accessoires doit être une seule
+chaîne de mots-clés.
+
+Exemple :
+
+"collier doré fin femme"
+
+==================================================
+COULEURS
+==================================================
+
+Indique entre 3 et 5 couleurs principales.
+
+Chaque couleur doit être un élément séparé
+dans le tableau.
+
+Exemple :
+
+[
+  "noir",
+  "violet",
+  "doré"
+]
+
+IMPORTANT :
+
+Ne colle jamais les couleurs.
+
+INTERDIT :
+
+"noirvioletdoré"
+
+CORRECT :
+
+[
+  "noir",
+  "violet",
+  "doré"
+]
+
+==================================================
+FORMAT DE REPONSE
+==================================================
+
+Réponds UNIQUEMENT avec le JSON.
+
+Aucun texte avant le JSON.
+
+Aucun texte après le JSON.
+
+Utilise EXACTEMENT cette structure :
 
 {
   "personnage": "",
@@ -243,12 +404,27 @@ Utilise exactement cette structure :
   }
 }
 
+==================================================
+REGLES JSON
+==================================================
+
+Le JSON doit être parfaitement valide.
+
+Utilise uniquement des guillemets doubles.
+
+N'utilise jamais de commentaire.
+
+Ne mets jamais de Markdown.
+
+Ne mets jamais de ```.
+
+Ne mets jamais de texte avant ou après le JSON.
 `;
 
 
     /*
      * ==========================================
-     * 6. URL GEMINI
+     * 8. URL GEMINI
      * ==========================================
      */
 
@@ -259,7 +435,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 7. APPEL GEMINI
+     * 9. APPEL GEMINI
      * ==========================================
      */
 
@@ -277,7 +453,6 @@ Utilise exactement cette structure :
           contents: [
 
             {
-
               role: "user",
 
               parts: [
@@ -287,17 +462,13 @@ Utilise exactement cette structure :
                 },
 
                 {
-                  inline_data: {
-
-                    mime_type: mimeType,
-
+                  inlineData: {
+                    mimeType: mimeType,
                     data: image
-
                   }
                 }
 
               ]
-
             }
 
           ],
@@ -307,7 +478,8 @@ Utilise exactement cette structure :
             responseMimeType:
               "application/json",
 
-            temperature: 0.8
+            temperature:
+              0.7
 
           }
 
@@ -318,7 +490,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 8. RECUPERATION REPONSE GEMINI
+     * 10. REPONSE GEMINI
      * ==========================================
      */
 
@@ -332,40 +504,55 @@ Utilise exactement cette structure :
     );
 
 
-    console.log(
-      "Gemini response:",
-      geminiText
-    );
-
-
     /*
      * ==========================================
-     * 9. ERREUR GEMINI
+     * 11. ERREUR GEMINI
      * ==========================================
      */
 
     if (!geminiResponse.ok) {
 
-      let geminiError;
+      console.error(
+        "Erreur Gemini :",
+        geminiText
+      );
+
+      let errorMessage =
+        "Erreur lors de la communication avec Gemini.";
 
       try {
 
-        geminiError =
+        const errorData =
           JSON.parse(geminiText);
 
-      } catch {
+        if (
+          errorData &&
+          errorData.error &&
+          errorData.error.message
+        ) {
 
-        geminiError = null;
+          errorMessage =
+            errorData.error.message;
+
+        }
+
+      } catch (error) {
+
+        console.error(
+          "Impossible de lire l'erreur Gemini."
+        );
 
       }
 
 
-      return res.status(500).json({
+      return res.status(
+        geminiResponse.status >= 400
+          ? geminiResponse.status
+          : 500
+      ).json({
 
         error:
-          geminiError?.error?.message ||
-          "Erreur Gemini : " +
-          geminiResponse.status
+          errorMessage
 
       });
 
@@ -374,7 +561,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 10. PARSE REPONSE GEMINI
+     * 12. PARSE REPONSE API GEMINI
      * ==========================================
      */
 
@@ -388,14 +575,14 @@ Utilise exactement cette structure :
     } catch (error) {
 
       console.error(
-        "Gemini n'a pas renvoyé du JSON API valide :",
+        "Réponse API Gemini invalide :",
         geminiText
       );
 
       return res.status(500).json({
 
         error:
-          "Réponse invalide reçue de Gemini."
+          "Gemini a renvoyé une réponse invalide."
 
       });
 
@@ -404,7 +591,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 11. EXTRACTION DU TEXTE
+     * 13. EXTRACTION DU TEXTE
      * ==========================================
      */
 
@@ -418,7 +605,7 @@ Utilise exactement cette structure :
     if (!resultText) {
 
       console.error(
-        "Réponse Gemini sans texte :",
+        "Gemini sans résultat :",
         geminiData
       );
 
@@ -434,23 +621,62 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 12. PARSE JSON DISNEYBOUND
+     * 14. NETTOYAGE DU JSON
+     * ==========================================
+     */
+
+    let cleanResult =
+      resultText.trim();
+
+
+    /*
+     * Gemini peut parfois entourer le JSON
+     * avec ```json ... ```
+     *
+     * On retire uniquement ces balises.
+     */
+
+    if (
+      cleanResult.startsWith("```json")
+    ) {
+
+      cleanResult =
+        cleanResult
+          .replace(/^```json\s*/i, "")
+          .replace(/\s*```$/i, "")
+          .trim();
+
+    } else if (
+      cleanResult.startsWith("```")
+    ) {
+
+      cleanResult =
+        cleanResult
+          .replace(/^```\s*/i, "")
+          .replace(/\s*```$/i, "")
+          .trim();
+
+    }
+
+
+    /*
+     * ==========================================
+     * 15. PARSE JSON DISNEYBOUND
      * ==========================================
      */
 
     let disneyBound;
 
-
     try {
 
       disneyBound =
-        JSON.parse(resultText);
+        JSON.parse(cleanResult);
 
     } catch (error) {
 
       console.error(
         "JSON DisneyBound invalide :",
-        resultText
+        cleanResult
       );
 
       return res.status(500).json({
@@ -465,7 +691,131 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 13. VERIFICATION STRUCTURE
+     * 16. NORMALISATION
+     * ==========================================
+     */
+
+    disneyBound.personnage =
+      String(
+        disneyBound.personnage || ""
+      ).trim();
+
+    disneyBound.haut =
+      String(
+        disneyBound.haut || ""
+      ).trim();
+
+    disneyBound.bas =
+      String(
+        disneyBound.bas || ""
+      ).trim();
+
+    disneyBound.veste =
+      String(
+        disneyBound.veste || ""
+      ).trim();
+
+    disneyBound.chaussures =
+      String(
+        disneyBound.chaussures || ""
+      ).trim();
+
+
+    /*
+     * ACCESSOIRES
+     */
+
+    if (
+      !Array.isArray(
+        disneyBound.accessoires
+      )
+    ) {
+
+      disneyBound.accessoires = [];
+
+    }
+
+    disneyBound.accessoires =
+      disneyBound.accessoires
+        .filter(Boolean)
+        .map(
+          item =>
+            String(item).trim()
+        )
+        .slice(0, 4);
+
+
+    /*
+     * COULEURS
+     */
+
+    if (
+      !Array.isArray(
+        disneyBound.couleurs
+      )
+    ) {
+
+      disneyBound.couleurs = [];
+
+    }
+
+    disneyBound.couleurs =
+      disneyBound.couleurs
+        .filter(Boolean)
+        .map(
+          item =>
+            String(item).trim()
+        )
+        .slice(0, 5);
+
+
+    /*
+     * RECHERCHES
+     */
+
+    if (
+      !disneyBound.recherches ||
+      typeof disneyBound.recherches !== "object"
+    ) {
+
+      disneyBound.recherches = {};
+
+    }
+
+
+    const recherches =
+      disneyBound.recherches;
+
+
+    recherches.haut =
+      String(
+        recherches.haut || ""
+      ).trim();
+
+    recherches.bas =
+      String(
+        recherches.bas || ""
+      ).trim();
+
+    recherches.veste =
+      String(
+        recherches.veste || ""
+      ).trim();
+
+    recherches.chaussures =
+      String(
+        recherches.chaussures || ""
+      ).trim();
+
+    recherches.accessoires =
+      String(
+        recherches.accessoires || ""
+      ).trim();
+
+
+    /*
+     * ==========================================
+     * 17. VERIFICATION MINIMALE
      * ==========================================
      */
 
@@ -474,21 +824,18 @@ Utilise exactement cette structure :
       !disneyBound.haut ||
       !disneyBound.bas ||
       !disneyBound.veste ||
-      !disneyBound.chaussures ||
-      !Array.isArray(disneyBound.accessoires) ||
-      !Array.isArray(disneyBound.couleurs) ||
-      !disneyBound.recherches
+      !disneyBound.chaussures
     ) {
 
       console.error(
-        "Structure DisneyBound incorrecte :",
+        "Résultat DisneyBound incomplet :",
         disneyBound
       );
 
       return res.status(500).json({
 
         error:
-          "Gemini a renvoyé un format DisneyBound incomplet."
+          "Gemini a renvoyé un résultat DisneyBound incomplet."
 
       });
 
@@ -497,7 +844,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 14. REPONSE AU SITE
+     * 18. REPONSE AU SITE
      * ==========================================
      */
 
@@ -514,7 +861,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * ERREUR GENERALE
+     * 19. ERREUR GENERALE
      * ==========================================
      */
 
@@ -535,3 +882,4 @@ Utilise exactement cette structure :
   }
 
 }
+````
