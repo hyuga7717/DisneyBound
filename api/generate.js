@@ -1,185 +1,170 @@
 export default async function handler(req, res) {
 
-  /*
-   * ==========================================
-   * DISNEYBOUND AI
-   * GEMINI 3.5 FLASH-LITE
-   * ==========================================
-   */
+/*
 
-  /*
-   * ==========================================
-   * 1. METHOD
-   * ==========================================
-   */
+* ==========================================
+* DISNEYBOUND AI
+* GEMINI 3.5 FLASH-LITE
+* ==========================================
+  */
 
-  if (req.method !== "POST") {
+if (req.method !== "POST") {
 
-    return res.status(405).json({
-      success: false,
-      error:
-        "Méthode non autorisée."
-    });
+```
+return res.status(405).json({
+  success: false,
+  error: "Méthode non autorisée."
+});
+```
 
-  }
+}
 
-  try {
+try {
 
-    /*
-     * ==========================================
-     * 2. BODY
-     * ==========================================
-     */
+```
+/*
+ * ==========================================
+ * BODY
+ * ==========================================
+ */
 
-    const body =
-      req.body || {};
+const body =
+  req.body || {};
 
-    const characterType =
-      body.characterType;
+const characterType =
+  body.characterType;
 
-    const height =
-      body.height;
+const height =
+  body.height;
 
-    const weight =
-      body.weight;
+const weight =
+  body.weight;
 
-    const topSize =
-      body.topSize;
+const topSize =
+  body.topSize;
 
-    const bottomSize =
-      body.bottomSize;
+const bottomSize =
+  body.bottomSize;
 
-    const shoeSize =
-      body.shoeSize;
+const shoeSize =
+  body.shoeSize;
 
-    const fitPreference =
-      body.fitPreference;
+const image =
+  body.image;
 
-    const stylePreference =
-      body.stylePreference;
+const mimeType =
+  body.mimeType;
 
-    const image =
-      body.image;
 
-    const mimeType =
-      body.mimeType;
+/*
+ * ==========================================
+ * VALIDATION
+ * ==========================================
+ */
 
-    /*
-     * ==========================================
-     * 3. VALIDATION
-     * ==========================================
-     */
+if (!characterType) {
 
-    if (!characterType) {
+  return res.status(400).json({
+    success: false,
+    error:
+      "Le type de personnage est manquant."
+  });
 
-      return res.status(400).json({
-        success: false,
-        error:
-          "Le type de personnage est manquant."
-      });
+}
 
-    }
+if (!height || !weight) {
 
-    if (!height || !weight) {
+  return res.status(400).json({
+    success: false,
+    error:
+      "La taille ou le poids est manquant."
+  });
 
-      return res.status(400).json({
-        success: false,
-        error:
-          "La taille ou le poids est manquant."
-      });
+}
 
-    }
+if (!topSize) {
 
-    if (!topSize || !bottomSize) {
+  return res.status(400).json({
+    success: false,
+    error:
+      "La taille du haut est manquante."
+  });
 
-      return res.status(400).json({
-        success: false,
-        error:
-          "La taille de haut ou de bas est manquante."
-      });
+}
 
-    }
+if (!bottomSize) {
 
-    if (!shoeSize) {
+  return res.status(400).json({
+    success: false,
+    error:
+      "La taille du bas est manquante."
+  });
 
-      return res.status(400).json({
-        success: false,
-        error:
-          "La pointure est manquante."
-      });
+}
 
-    }
+if (!shoeSize) {
 
-    if (!fitPreference) {
+  return res.status(400).json({
+    success: false,
+    error:
+      "La pointure est manquante."
+  });
 
-      return res.status(400).json({
-        success: false,
-        error:
-          "La coupe préférée est manquante."
-      });
+}
 
-    }
+if (!image) {
 
-    if (!stylePreference) {
+  return res.status(400).json({
+    success: false,
+    error:
+      "La photo est manquante."
+  });
 
-      return res.status(400).json({
-        success: false,
-        error:
-          "Le style vestimentaire est manquant."
-      });
+}
 
-    }
+if (!mimeType) {
 
-    if (!image) {
+  return res.status(400).json({
+    success: false,
+    error:
+      "Le type d'image est manquant."
+  });
 
-      return res.status(400).json({
-        success: false,
-        error:
-          "La photo est manquante."
-      });
+}
 
-    }
 
-    if (!mimeType) {
+/*
+ * ==========================================
+ * GEMINI API KEY
+ * ==========================================
+ */
 
-      return res.status(400).json({
-        success: false,
-        error:
-          "Le type d'image est manquant."
-      });
+const apiKey =
+  process.env.gemini_api_key;
 
-    }
+if (!apiKey) {
 
-    /*
-     * ==========================================
-     * 4. GEMINI API KEY
-     * ==========================================
-     */
+  console.error(
+    "gemini_api_key absente."
+  );
 
-    const apiKey =
-      process.env.gemini_api_key;
+  return res.status(500).json({
+    success: false,
+    error:
+      "La clé Gemini n'est pas configurée dans Vercel."
+  });
 
-    if (!apiKey) {
+}
 
-      console.error(
-        "gemini_api_key absente."
-      );
 
-      return res.status(500).json({
-        success: false,
-        error:
-          "La clé Gemini n'est pas configurée dans Vercel."
-      });
+/*
+ * ==========================================
+ * PROMPT
+ * ==========================================
+ */
 
-    }
-
-    /*
-     * ==========================================
-     * 5. PROMPT
-     * ==========================================
-     */
-
-    const prompt = `
+const prompt = `
+```
 
 Tu es l'IA officielle de DisneyBound.
 
@@ -190,140 +175,115 @@ de la photo fournie.
 Analyse uniquement les éléments visuels utiles à la
 création d'une tenue :
 
-- style vestimentaire général
-- couleurs visibles
-- vêtements portés
-- coupes générales
-- matières apparentes
-- style casual
-- style streetwear
-- style chic
-- style sportif
-- harmonie générale
-- accessoires visibles
+* style vestimentaire général
+* couleurs visibles
+* vêtements portés
+* coupes générales
+* matières apparentes
+* style casual
+* style streetwear
+* style chic
+* style sportif
+* harmonie générale
+* accessoires visibles
 
 Ne cherche jamais à identifier la personne.
 
 Ne déduis jamais :
 
-- identité
-- âge
-- origine
-- ethnie
-- profession
-- état de santé
-- personnalité
-- situation sociale
-- information personnelle sensible.
+* identité
+* âge
+* origine
+* ethnie
+* profession
+* état de santé
+* personnalité
+* situation sociale
+* information personnelle sensible.
 
-La personne mesure ${height} cm et pèse ${weight} kg.
+INFORMATIONS FOURNIES PAR L'UTILISATEUR :
 
-Utilise ces informations uniquement pour déterminer
-des proportions générales de vêtements et proposer des
-coupes adaptées.
+Taille : ${height} cm
+Poids : ${weight} kg
+Taille habituelle du haut : ${topSize}
+Taille habituelle du bas : ${bottomSize}
+Pointure habituelle : ${shoeSize} EU
+
+IMPORTANT :
+
+Les tailles fournies par l'utilisateur sont les tailles
+réelles qu'il porte habituellement.
+
+Utilise-les pour :
+
+* adapter les coupes proposées
+* éviter les vêtements qui ne correspondent pas
+* rendre les recherches produits plus précises
+* intégrer les tailles dans les recherches lorsque cela
+  est pertinent.
 
 Ne donne aucune analyse ou appréciation du corps.
 
 ==========================================
-INFORMATIONS VESTIMENTAIRES FOURNIES
-==========================================
-
-Taille haut : ${topSize}
-
-Taille bas : ${bottomSize}
-
-Pointure : ${shoeSize}
-
-Coupe préférée : ${fitPreference}
-
-Style vestimentaire préféré : ${stylePreference}
-
-Ces informations sont importantes.
-
-Utilise-les pour :
-
-- choisir des coupes cohérentes
-- respecter les préférences de silhouette
-- choisir des vêtements réalistes
-- adapter les proportions
-- améliorer la pertinence des recherches produits.
-
-Ne mentionne jamais le poids dans le résultat final.
-
-Ne fais aucune remarque sur le corps.
-
-==========================================
 TYPE DE PERSONNAGE
-==========================================
+==================
 
 ${
-  characterType === "villain"
-    ? "Choisis un MÉCHANT Disney."
-    : "Choisis un PERSONNAGE DISNEY GENTIL."
+characterType === "villain"
+? "Choisis un MÉCHANT Disney."
+: "Choisis un PERSONNAGE DISNEY GENTIL."
 }
 
 Choisis UN personnage Disney correspondant :
 
-- au style observé
-- aux couleurs observées
-- au type demandé
-- au style vestimentaire préféré
-- à une tenue portable au quotidien.
+* au style observé
+* aux couleurs observées
+* au type demandé
+* à une tenue portable au quotidien.
 
 Évite de choisir systématiquement le même personnage.
 
 ==========================================
 PRINCIPE DISNEYBOUND
-==========================================
+====================
 
 Inspire-toi du personnage sans reproduire son costume.
 
 La tenue doit être portable dans la vie quotidienne.
 
-Le résultat doit évoquer le personnage grâce :
-
-- aux couleurs
-- aux matières
-- aux formes
-- aux associations
-- aux détails subtils.
-
 ==========================================
 INTERDIT
-==========================================
+========
 
-- cosplay
-- déguisement
-- costume
-- reproduction exacte
-- oreilles de personnage
-- imprimés représentant le personnage
-- logos du personnage
-- accessoires cosplay
-- vêtements extravagants
-- tenue de convention.
+* cosplay
+* déguisement
+* costume
+* reproduction exacte
+* oreilles de personnage
+* imprimés représentant le personnage
+* logos du personnage
+* accessoires cosplay
+* vêtements extravagants
+* tenue de convention.
 
 ==========================================
 PRIVILÉGIER
-==========================================
+===========
 
-- vêtements classiques
-- couleurs inspirées du personnage
-- palette cohérente
-- matières
-- silhouettes modernes
-- détails subtils
-- accessoires discrets
-- vêtements trouvables en boutique classique.
+* vêtements classiques
+* couleurs inspirées du personnage
+* palette cohérente
+* matières
+* silhouettes modernes
+* détails subtils
+* accessoires discrets
+* vêtements trouvables en boutique classique.
 
 ==========================================
 COHERENCE STYLE
-==========================================
+===============
 
 Conserve une partie importante du style observé.
-
-Le style préféré fourni par l'utilisateur doit également
-être pris en compte.
 
 Casual = casual.
 
@@ -333,113 +293,105 @@ Chic = chic.
 
 Sportif = sportif et moderne.
 
-Si le style observé et le style préféré sont différents,
-trouve un compromis naturel plutôt que d'ignorer complètement
-l'un des deux.
-
-==========================================
-TAILLES ET COUPES
-==========================================
-
-Respecte les tailles fournies :
-
-Haut : ${topSize}
-
-Bas : ${bottomSize}
-
-Pointure : ${shoeSize}
-
-Coupe préférée : ${fitPreference}
-
-Ne mets PAS automatiquement les tailles dans les
-descriptions des vêtements.
-
-Les tailles servent principalement à choisir des coupes
-et des proportions adaptées.
-
 ==========================================
 CHAUSSURES
-==========================================
+==========
 
 Privilégie :
 
-- baskets
-- sneakers
-- bottines
-- mocassins
-- chaussures plates
-- chaussures casual.
+* baskets
+* sneakers
+* bottines
+* mocassins
+* chaussures plates
+* chaussures casual.
 
 Les talons sont autorisés uniquement s'ils sont cohérents
-avec le style observé et le style préféré.
+avec le style observé.
 
-La pointure fournie est ${shoeSize}.
+Respecte la pointure ${shoeSize} EU dans la recherche.
 
 ==========================================
 TENUE
-==========================================
+=====
 
 Propose :
 
-- 1 haut
-- 1 bas
-- 1 veste ou couche extérieure
-- 1 paire de chaussures
-- 2 à 4 accessoires.
+* 1 haut
+* 1 bas
+* 1 veste ou couche extérieure
+* 1 paire de chaussures
+* 2 à 4 accessoires.
 
 ==========================================
 RECHERCHES PRODUITS
-==========================================
+===================
 
 Pour chaque pièce, crée une recherche permettant de trouver
 un véritable produit de mode en ligne.
 
-La description et la recherche doivent être différentes.
+Les recherches doivent tenir compte des tailles fournies.
 
-Les recherches doivent être suffisamment précises pour
-correspondre au vêtement proposé.
+Lorsque cela est pertinent, ajoute la taille à la recherche.
 
-Exemple :
+Exemples :
 
 haut :
 "Top noir ajusté à fines bretelles"
 
 recherches.haut :
-"top noir fines bretelles femme"
+"top noir fines bretelles L femme"
+
+bas :
+"Jupe longue fluide violette"
+
+recherches.bas :
+"jupe longue violette taille 42"
+
+chaussures :
+"Sandales plates dorées à brides"
+
+recherches.chaussures :
+"sandales plates dorées pointure 43"
+
+IMPORTANT :
+
+La description et la recherche doivent être différentes.
 
 ==========================================
 REGLES RECHERCHES
-==========================================
+=================
 
-- maximum 8 mots
-- mots-clés uniquement
-- aucune phrase
-- aucun guillemet
-- aucun nom de personnage
-- aucune marque obligatoire
-- aucune répétition
-- une seule recherche par champ.
-
-Les recherches doivent être naturelles pour une recherche
-sur une boutique de mode en ligne.
+* maximum 8 mots
+* mots-clés uniquement
+* aucune phrase complète
+* aucun guillemet
+* aucun nom de personnage
+* aucune marque obligatoire
+* aucune répétition
+* une seule recherche par champ
+* inclure la taille lorsqu'elle améliore réellement
+  la recherche
+* utiliser la pointure pour les chaussures
+* utiliser la taille du bas pour les vêtements du bas
+* utiliser la taille du haut pour les hauts et vestes
+  lorsque pertinent.
 
 ==========================================
 ACCESSOIRES
-==========================================
+===========
 
 Propose entre 2 et 4 accessoires maximum.
 
-Chaque accessoire doit être court et réaliste.
-
 ==========================================
 COULEURS
-==========================================
+========
 
 Indique entre 3 et 5 couleurs principales.
 
 ==========================================
 JSON
-==========================================
+====
 
 Réponds UNIQUEMENT avec le JSON.
 
@@ -450,494 +402,446 @@ Aucun texte après.
 Structure exacte :
 
 {
-  "personnage": "",
-  "haut": "",
-  "bas": "",
-  "veste": "",
-  "chaussures": "",
-  "accessoires": [],
-  "couleurs": [],
-  "recherches": {
-    "haut": "",
-    "bas": "",
-    "veste": "",
-    "chaussures": "",
-    "accessoires": ""
-  }
+"personnage": "",
+"haut": "",
+"bas": "",
+"veste": "",
+"chaussures": "",
+"accessoires": [],
+"couleurs": [],
+"recherches": {
+"haut": "",
+"bas": "",
+"veste": "",
+"chaussures": "",
+"accessoires": ""
+}
 }
 
 `;
 
-    /*
-     * ==========================================
-     * 6. MODELE
-     * ==========================================
-     *
-     * NE PAS CHANGER.
-     *
-     * Gemini 3.5 Flash-Lite
-     *
-     */
+```
+/*
+ * ==========================================
+ * MODELE
+ * ==========================================
+ */
 
-    const model =
-      "gemini-3.5-flash-lite";
+const model =
+  "gemini-3.5-flash-lite";
 
-    /*
-     * ==========================================
-     * 7. URL GEMINI
-     * ==========================================
-     */
 
-    const url =
-      "https://generativelanguage.googleapis.com/v1beta/models/" +
-      model +
-      ":generateContent?key=" +
-      encodeURIComponent(apiKey);
+/*
+ * ==========================================
+ * URL GEMINI
+ * ==========================================
+ */
 
-    /*
-     * ==========================================
-     * 8. APPEL GEMINI
-     * ==========================================
-     */
+const url =
+  "https://generativelanguage.googleapis.com/v1beta/models/" +
+  model +
+  ":generateContent?key=" +
+  encodeURIComponent(apiKey);
 
-    console.log(
-      "DisneyBound → Gemini :",
-      model
-    );
 
-    const geminiResponse =
-      await fetch(
-        url,
-        {
-          method:
-            "POST",
+/*
+ * ==========================================
+ * APPEL GEMINI
+ * ==========================================
+ */
 
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
+console.log(
+  "DisneyBound → Gemini :",
+  model
+);
 
-          body:
-            JSON.stringify({
+const geminiResponse =
+  await fetch(
+    url,
+    {
 
-              contents: [
+      method: "POST",
+
+      headers: {
+        "Content-Type":
+          "application/json"
+      },
+
+      body:
+        JSON.stringify({
+
+          contents: [
+
+            {
+
+              role: "user",
+
+              parts: [
 
                 {
+                  text:
+                    prompt
+                },
 
-                  role:
-                    "user",
+                {
+                  inline_data: {
 
-                  parts: [
+                    mime_type:
+                      mimeType,
 
-                    {
-                      text:
-                        prompt
-                    },
+                    data:
+                      image
 
-                    {
-                      inline_data: {
-
-                        mime_type:
-                          mimeType,
-
-                        data:
-                          image
-
-                      }
-
-                    }
-
-                  ]
-
+                  }
                 }
 
-              ],
+              ]
 
-              generationConfig: {
+            }
 
-                responseMimeType:
-                  "application/json",
+          ],
 
-                temperature:
-                  0.8
+          generationConfig: {
 
-              }
+            responseMimeType:
+              "application/json",
 
-            })
+            temperature:
+              0.8
 
-        }
+          }
+
+        })
+
+    }
+  );
+
+
+/*
+ * ==========================================
+ * REPONSE GEMINI
+ * ==========================================
+ */
+
+const geminiText =
+  await geminiResponse.text();
+
+console.log(
+  "Gemini HTTP :",
+  geminiResponse.status
+);
+
+
+/*
+ * ==========================================
+ * ERREUR GEMINI
+ * ==========================================
+ */
+
+if (!geminiResponse.ok) {
+
+  console.error(
+    "Gemini error:",
+    geminiText
+  );
+
+  let errorData = null;
+
+  try {
+
+    errorData =
+      JSON.parse(
+        geminiText
       );
 
-    /*
-     * ==========================================
-     * 9. REPONSE GEMINI
-     * ==========================================
-     */
+  } catch {
 
-    const geminiText =
-      await geminiResponse.text();
+    errorData = null;
 
-    console.log(
-      "Gemini HTTP :",
-      geminiResponse.status
-    );
+  }
 
-    console.log(
-      "Gemini réponse reçue :",
+  const message =
+    errorData?.error?.message ||
+    errorData?.message ||
+    geminiText ||
+    "Erreur inconnue Gemini.";
+
+  return res.status(500).json({
+
+    success: false,
+
+    error:
+      "Erreur Gemini : " +
+      message
+
+  });
+
+}
+
+
+/*
+ * ==========================================
+ * JSON GEMINI API
+ * ==========================================
+ */
+
+let geminiData;
+
+try {
+
+  geminiData =
+    JSON.parse(
       geminiText
     );
 
-    /*
-     * ==========================================
-     * 10. ERREUR GEMINI
-     * ==========================================
-     */
+} catch {
 
-    if (!geminiResponse.ok) {
+  console.error(
+    "Gemini API non JSON:",
+    geminiText
+  );
 
-      console.error(
-        "Gemini error:",
-        geminiText
-      );
+  return res.status(500).json({
 
-      let errorData =
-        null;
+    success: false,
 
-      try {
+    error:
+      "Gemini a renvoyé une réponse API invalide."
 
-        errorData =
-          JSON.parse(
-            geminiText
-          );
+  });
 
-      } catch {
+}
 
-        errorData =
-          null;
 
-      }
+/*
+ * ==========================================
+ * TEXTE RESULTAT
+ * ==========================================
+ */
 
-      const message =
-        errorData?.error?.message ||
-        errorData?.message ||
-        geminiText ||
-        "Erreur inconnue Gemini.";
+const resultText =
+  geminiData
+    ?.candidates?.[0]
+    ?.content?.parts?.[0]
+    ?.text;
 
-      return res.status(500).json({
+if (!resultText) {
 
-        success:
-          false,
-
-        error:
-          "Erreur Gemini : " +
-          message
-
-      });
-
-    }
-
-    /*
-     * ==========================================
-     * 11. JSON GEMINI API
-     * ==========================================
-     */
-
-    let geminiData;
-
-    try {
-
-      geminiData =
-        JSON.parse(
-          geminiText
-        );
-
-    } catch {
-
-      console.error(
-        "Gemini API non JSON:",
-        geminiText
-      );
-
-      return res.status(500).json({
-
-        success:
-          false,
-
-        error:
-          "Gemini a renvoyé une réponse API invalide."
-
-      });
-
-    }
-
-    /*
-     * ==========================================
-     * 12. TEXTE RESULTAT
-     * ==========================================
-     */
-
-    const resultText =
+  console.error(
+    "Gemini sans texte:",
+    JSON.stringify(
       geminiData
-        ?.candidates?.[0]
-        ?.content?.parts?.[0]
-        ?.text;
+    )
+  );
 
-    if (!resultText) {
+  return res.status(500).json({
 
-      console.error(
-        "Gemini sans texte:",
-        JSON.stringify(
-          geminiData
-        )
-      );
+    success: false,
 
-      return res.status(500).json({
+    error:
+      "Gemini n'a pas renvoyé de résultat."
 
-        success:
-          false,
+  });
 
-        error:
-          "Gemini n'a pas renvoyé de résultat."
+}
 
-      });
 
-    }
+/*
+ * ==========================================
+ * JSON DISNEYBOUND
+ * ==========================================
+ */
 
-    /*
-     * ==========================================
-     * 13. JSON DISNEYBOUND
-     * ==========================================
-     */
+let disneyBound;
 
-    let disneyBound;
+try {
 
-    try {
-
-      disneyBound =
-        JSON.parse(
-          resultText
-        );
-
-    } catch {
-
-      console.error(
-        "JSON DisneyBound invalide:",
-        resultText
-      );
-
-      return res.status(500).json({
-
-        success:
-          false,
-
-        error:
-          "Le résultat Gemini n'est pas un JSON DisneyBound valide."
-
-      });
-
-    }
-
-    /*
-     * ==========================================
-     * 14. NORMALISATION
-     * ==========================================
-     */
-
-    if (
-      typeof disneyBound !==
-        "object" ||
-      disneyBound === null
-    ) {
-
-      return res.status(500).json({
-
-        success:
-          false,
-
-        error:
-          "Le résultat DisneyBound est invalide."
-
-      });
-
-    }
-
-    /*
-     * ==========================================
-     * 15. VERIFICATION
-     * ==========================================
-     */
-
-    const requiredFields = [
-
-      "personnage",
-      "haut",
-      "bas",
-      "veste",
-      "chaussures"
-
-    ];
-
-    for (
-      const field of
-      requiredFields
-    ) {
-
-      if (
-        typeof disneyBound[field] !==
-          "string" ||
-        !disneyBound[field].trim()
-      ) {
-
-        return res.status(500).json({
-
-          success:
-            false,
-
-          error:
-            `Le champ "${field}" est manquant.`
-
-        });
-
-      }
-
-    }
-
-    if (
-      !Array.isArray(
-        disneyBound.accessoires
-      )
-    ) {
-
-      return res.status(500).json({
-
-        success:
-          false,
-
-        error:
-          "Les accessoires sont invalides."
-
-      });
-
-    }
-
-    if (
-      !Array.isArray(
-        disneyBound.couleurs
-      )
-    ) {
-
-      return res.status(500).json({
-
-        success:
-          false,
-
-        error:
-          "Les couleurs sont invalides."
-
-      });
-
-    }
-
-    if (
-      !disneyBound.recherches ||
-      typeof disneyBound.recherches !==
-        "object"
-    ) {
-
-      return res.status(500).json({
-
-        success:
-          false,
-
-        error:
-          "Les recherches produits sont invalides."
-
-      });
-
-    }
-
-    /*
-     * ==========================================
-     * 16. NORMALISATION RECHERCHES
-     * ==========================================
-     */
-
-    const searchFields = [
-
-      "haut",
-      "bas",
-      "veste",
-      "chaussures",
-      "accessoires"
-
-    ];
-
-    for (
-      const field of
-      searchFields
-    ) {
-
-      if (
-        typeof disneyBound.recherches[field] !==
-          "string"
-      ) {
-
-        disneyBound.recherches[field] =
-          "";
-
-      }
-
-      disneyBound.recherches[field] =
-        disneyBound.recherches[field]
-          .trim();
-
-    }
-
-    /*
-     * ==========================================
-     * 17. REPONSE
-     * ==========================================
-     */
-
-    console.log(
-      "DisneyBound réussi :",
-      disneyBound.personnage
+  disneyBound =
+    JSON.parse(
+      resultText
     );
 
-    return res.status(200).json({
+} catch {
 
-      success:
-        true,
+  console.error(
+    "JSON DisneyBound invalide:",
+    resultText
+  );
 
-      result:
-        disneyBound
+  return res.status(500).json({
 
-    });
+    success: false,
 
-  } catch (error) {
+    error:
+      "Le résultat Gemini n'est pas un JSON DisneyBound valide."
 
-    /*
-     * ==========================================
-     * 18. ERREUR GENERALE
-     * ==========================================
-     */
+  });
 
-    console.error(
-      "Erreur API DisneyBound:",
-      error
-    );
+}
+
+
+/*
+ * ==========================================
+ * NORMALISATION
+ * ==========================================
+ */
+
+if (
+  typeof disneyBound !==
+  "object" ||
+  disneyBound === null
+) {
+
+  return res.status(500).json({
+
+    success: false,
+
+    error:
+      "Le résultat DisneyBound est invalide."
+
+  });
+
+}
+
+
+/*
+ * ==========================================
+ * VERIFICATION
+ * ==========================================
+ */
+
+const requiredFields = [
+
+  "personnage",
+  "haut",
+  "bas",
+  "veste",
+  "chaussures"
+
+];
+
+for (
+  const field of requiredFields
+) {
+
+  if (
+    !disneyBound[field]
+  ) {
 
     return res.status(500).json({
 
-      success:
-        false,
+      success: false,
 
       error:
-        error?.message ||
-        "Erreur interne du serveur."
+        `Le champ "${field}" est manquant.`
 
     });
 
   }
+
+}
+
+
+if (
+  !Array.isArray(
+    disneyBound.accessoires
+  )
+) {
+
+  return res.status(500).json({
+
+    success: false,
+
+    error:
+      "Les accessoires sont invalides."
+
+  });
+
+}
+
+
+if (
+  !Array.isArray(
+    disneyBound.couleurs
+  )
+) {
+
+  return res.status(500).json({
+
+    success: false,
+
+    error:
+      "Les couleurs sont invalides."
+
+  });
+
+}
+
+
+if (
+  !disneyBound.recherches ||
+  typeof disneyBound.recherches !==
+    "object"
+) {
+
+  return res.status(500).json({
+
+    success: false,
+
+    error:
+      "Les recherches produits sont invalides."
+
+  });
+
+}
+
+
+/*
+ * ==========================================
+ * REPONSE
+ * ==========================================
+ */
+
+console.log(
+  "DisneyBound réussi :",
+  disneyBound.personnage
+);
+
+return res.status(200).json({
+
+  success: true,
+
+  result:
+    disneyBound
+
+});
+```
+
+} catch (error) {
+
+```
+/*
+ * ==========================================
+ * ERREUR GENERALE
+ * ==========================================
+ */
+
+console.error(
+  "Erreur API DisneyBound:",
+  error
+);
+
+return res.status(500).json({
+
+  success: false,
+
+  error:
+    error?.message ||
+    "Erreur interne du serveur."
+
+});
+```
+
+}
 
 }
