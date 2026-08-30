@@ -4,10 +4,8 @@ export default async function handler(req, res) {
    * ==========================================
    * DISNEYBOUND AI
    * GEMINI 3.5 FLASH-LITE
-   * VERSION AVEC TAILLES ET PREFERENCES
    * ==========================================
    */
-
 
   /*
    * ==========================================
@@ -19,14 +17,13 @@ export default async function handler(req, res) {
 
     return res.status(405).json({
       success: false,
-      error: "Méthode non autorisée."
+      error:
+        "Méthode non autorisée."
     });
 
   }
 
-
   try {
-
 
     /*
      * ==========================================
@@ -37,47 +34,35 @@ export default async function handler(req, res) {
     const body =
       req.body || {};
 
-
     const characterType =
       body.characterType;
-
 
     const height =
       body.height;
 
-
     const weight =
       body.weight;
 
-
-    const clothingSize =
-      body.clothingSize;
-
+    const topSize =
+      body.topSize;
 
     const bottomSize =
       body.bottomSize;
 
-
     const shoeSize =
       body.shoeSize;
 
+    const fitPreference =
+      body.fitPreference;
 
-    const preferredFit =
-      body.preferredFit;
-
-
-    const shoppingSection =
-      body.shoppingSection;
-
+    const stylePreference =
+      body.stylePreference;
 
     const image =
       body.image;
 
-
     const mimeType =
       body.mimeType;
-
-
 
     /*
      * ==========================================
@@ -95,7 +80,6 @@ export default async function handler(req, res) {
 
     }
 
-
     if (!height || !weight) {
 
       return res.status(400).json({
@@ -106,28 +90,15 @@ export default async function handler(req, res) {
 
     }
 
-
-    if (!clothingSize) {
-
-      return res.status(400).json({
-        success: false,
-        error:
-          "La taille de haut est manquante."
-      });
-
-    }
-
-
-    if (!bottomSize) {
+    if (!topSize || !bottomSize) {
 
       return res.status(400).json({
         success: false,
         error:
-          "La taille de bas est manquante."
+          "La taille de haut ou de bas est manquante."
       });
 
     }
-
 
     if (!shoeSize) {
 
@@ -139,8 +110,7 @@ export default async function handler(req, res) {
 
     }
 
-
-    if (!preferredFit) {
+    if (!fitPreference) {
 
       return res.status(400).json({
         success: false,
@@ -150,17 +120,15 @@ export default async function handler(req, res) {
 
     }
 
-
-    if (!shoppingSection) {
+    if (!stylePreference) {
 
       return res.status(400).json({
         success: false,
         error:
-          "Le rayon shopping est manquant."
+          "Le style vestimentaire est manquant."
       });
 
     }
-
 
     if (!image) {
 
@@ -172,7 +140,6 @@ export default async function handler(req, res) {
 
     }
 
-
     if (!mimeType) {
 
       return res.status(400).json({
@@ -183,8 +150,6 @@ export default async function handler(req, res) {
 
     }
 
-
-
     /*
      * ==========================================
      * 4. GEMINI API KEY
@@ -194,13 +159,11 @@ export default async function handler(req, res) {
     const apiKey =
       process.env.gemini_api_key;
 
-
     if (!apiKey) {
 
       console.error(
         "gemini_api_key absente."
       );
-
 
       return res.status(500).json({
         success: false,
@@ -209,8 +172,6 @@ export default async function handler(req, res) {
       });
 
     }
-
-
 
     /*
      * ==========================================
@@ -258,46 +219,38 @@ Ne déduis jamais :
 La personne mesure ${height} cm et pèse ${weight} kg.
 
 Utilise ces informations uniquement pour déterminer
-des proportions générales de vêtements et proposer
-des coupes adaptées.
+des proportions générales de vêtements et proposer des
+coupes adaptées.
 
 Ne donne aucune analyse ou appréciation du corps.
 
-
 ==========================================
-INFORMATIONS SHOPPING
+INFORMATIONS VESTIMENTAIRES FOURNIES
 ==========================================
 
-Taille de haut :
-${clothingSize}
+Taille haut : ${topSize}
 
-Taille de bas :
-${bottomSize}
+Taille bas : ${bottomSize}
 
-Pointure :
-${shoeSize}
+Pointure : ${shoeSize}
 
-Coupe préférée :
-${preferredFit}
+Coupe préférée : ${fitPreference}
 
-Rayon shopping :
-${shoppingSection}
+Style vestimentaire préféré : ${stylePreference}
 
+Ces informations sont importantes.
 
-IMPORTANT :
+Utilise-les pour :
 
-Les tailles fournies par l'utilisateur sont des tailles
-qu'il porte habituellement.
+- choisir des coupes cohérentes
+- respecter les préférences de silhouette
+- choisir des vêtements réalistes
+- adapter les proportions
+- améliorer la pertinence des recherches produits.
 
-Utilise-les principalement pour construire des recherches
-produits réalistes et adaptées.
+Ne mentionne jamais le poids dans le résultat final.
 
-Ne critique jamais les tailles.
-
-Ne commente jamais le corps de la personne.
-
-Ne transforme jamais les tailles en jugement physique.
-
+Ne fais aucune remarque sur le corps.
 
 ==========================================
 TYPE DE PERSONNAGE
@@ -314,10 +267,10 @@ Choisis UN personnage Disney correspondant :
 - au style observé
 - aux couleurs observées
 - au type demandé
+- au style vestimentaire préféré
 - à une tenue portable au quotidien.
 
 Évite de choisir systématiquement le même personnage.
-
 
 ==========================================
 PRINCIPE DISNEYBOUND
@@ -327,9 +280,13 @@ Inspire-toi du personnage sans reproduire son costume.
 
 La tenue doit être portable dans la vie quotidienne.
 
-Le résultat doit ressembler à une vraie tenue de mode
-et non à un déguisement.
+Le résultat doit évoquer le personnage grâce :
 
+- aux couleurs
+- aux matières
+- aux formes
+- aux associations
+- aux détails subtils.
 
 ==========================================
 INTERDIT
@@ -346,7 +303,6 @@ INTERDIT
 - vêtements extravagants
 - tenue de convention.
 
-
 ==========================================
 PRIVILÉGIER
 ==========================================
@@ -360,12 +316,14 @@ PRIVILÉGIER
 - accessoires discrets
 - vêtements trouvables en boutique classique.
 
-
 ==========================================
 COHERENCE STYLE
 ==========================================
 
 Conserve une partie importante du style observé.
+
+Le style préféré fourni par l'utilisateur doit également
+être pris en compte.
 
 Casual = casual.
 
@@ -375,27 +333,29 @@ Chic = chic.
 
 Sportif = sportif et moderne.
 
-La coupe préférée de l'utilisateur doit également être
-respectée autant que possible :
-
-${preferredFit}
-
+Si le style observé et le style préféré sont différents,
+trouve un compromis naturel plutôt que d'ignorer complètement
+l'un des deux.
 
 ==========================================
-RAYON SHOPPING
+TAILLES ET COUPES
 ==========================================
 
-Le résultat doit correspondre au rayon choisi :
+Respecte les tailles fournies :
 
-${shoppingSection}
+Haut : ${topSize}
 
-Utilise ce choix pour adapter :
+Bas : ${bottomSize}
 
-- les vêtements
-- les coupes
-- les recherches produits
-- les termes utilisés dans les recherches.
+Pointure : ${shoeSize}
 
+Coupe préférée : ${fitPreference}
+
+Ne mets PAS automatiquement les tailles dans les
+descriptions des vêtements.
+
+Les tailles servent principalement à choisir des coupes
+et des proportions adaptées.
 
 ==========================================
 CHAUSSURES
@@ -411,11 +371,9 @@ Privilégie :
 - chaussures casual.
 
 Les talons sont autorisés uniquement s'ils sont cohérents
-avec le style observé et avec la tenue proposée.
+avec le style observé et le style préféré.
 
-La recherche chaussures doit prendre en compte la pointure
-${shoeSize} lorsque cela est pertinent.
-
+La pointure fournie est ${shoeSize}.
 
 ==========================================
 TENUE
@@ -429,48 +387,6 @@ Propose :
 - 1 paire de chaussures
 - 2 à 4 accessoires.
 
-
-==========================================
-TAILLES DES PRODUITS
-==========================================
-
-Lorsque tu crées les recherches produits :
-
-Le haut doit être recherché avec la taille habituelle :
-
-${clothingSize}
-
-Le bas doit être recherché avec la taille habituelle :
-
-${bottomSize}
-
-Les chaussures doivent correspondre à :
-
-${shoeSize}
-
-Cependant, ne mets PAS obligatoirement la taille dans
-chaque recherche si cela rend la recherche moins naturelle.
-
-La recherche doit surtout permettre de trouver le bon type
-de produit.
-
-Exemple :
-
-Taille haut :
-M
-
-Bonne recherche :
-
-"body noir fines bretelles femme"
-
-Mauvaise recherche :
-
-"body noir fines bretelles femme taille M"
-
-La taille peut être utilisée lorsque cela améliore réellement
-la recherche.
-
-
 ==========================================
 RECHERCHES PRODUITS
 ==========================================
@@ -480,16 +396,16 @@ un véritable produit de mode en ligne.
 
 La description et la recherche doivent être différentes.
 
+Les recherches doivent être suffisamment précises pour
+correspondre au vêtement proposé.
+
 Exemple :
 
 haut :
-
-"Body noir ajusté à fines bretelles"
+"Top noir ajusté à fines bretelles"
 
 recherches.haut :
-
-"body noir fines bretelles femme"
-
+"top noir fines bretelles femme"
 
 ==========================================
 REGLES RECHERCHES
@@ -502,11 +418,10 @@ REGLES RECHERCHES
 - aucun nom de personnage
 - aucune marque obligatoire
 - aucune répétition
-- une seule recherche par champ
-- recherche naturelle permettant de trouver un vrai produit
-- recherche adaptée au rayon shopping
-- recherche adaptée au style observé.
+- une seule recherche par champ.
 
+Les recherches doivent être naturelles pour une recherche
+sur une boutique de mode en ligne.
 
 ==========================================
 ACCESSOIRES
@@ -514,37 +429,13 @@ ACCESSOIRES
 
 Propose entre 2 et 4 accessoires maximum.
 
-Les accessoires doivent être courts.
-
-Ils doivent rester portables au quotidien.
-
+Chaque accessoire doit être court et réaliste.
 
 ==========================================
 COULEURS
 ==========================================
 
 Indique entre 3 et 5 couleurs principales.
-
-Les couleurs doivent correspondre à l'inspiration DisneyBound
-et à la tenue proposée.
-
-
-==========================================
-QUALITE DU RESULTAT
-==========================================
-
-Le résultat doit être cohérent de la tête aux pieds.
-
-Le haut, le bas, la veste, les chaussures et les accessoires
-doivent former une véritable tenue.
-
-Évite les associations incohérentes.
-
-Évite les pièces impossibles à porter ensemble.
-
-Le résultat doit pouvoir être acheté dans des boutiques
-de mode classiques.
-
 
 ==========================================
 JSON
@@ -577,21 +468,23 @@ Structure exacte :
 
 `;
 
-
     /*
      * ==========================================
      * 6. MODELE
      * ==========================================
+     *
+     * NE PAS CHANGER.
+     *
+     * Gemini 3.5 Flash-Lite
+     *
      */
 
     const model =
       "gemini-3.5-flash-lite";
 
-
-
     /*
      * ==========================================
-     * 7. URL
+     * 7. URL GEMINI
      * ==========================================
      */
 
@@ -600,8 +493,6 @@ Structure exacte :
       model +
       ":generateContent?key=" +
       encodeURIComponent(apiKey);
-
-
 
     /*
      * ==========================================
@@ -614,12 +505,12 @@ Structure exacte :
       model
     );
 
-
     const geminiResponse =
       await fetch(
         url,
         {
-          method: "POST",
+          method:
+            "POST",
 
           headers: {
             "Content-Type":
@@ -632,6 +523,7 @@ Structure exacte :
               contents: [
 
                 {
+
                   role:
                     "user",
 
@@ -652,6 +544,7 @@ Structure exacte :
                           image
 
                       }
+
                     }
 
                   ]
@@ -675,8 +568,6 @@ Structure exacte :
         }
       );
 
-
-
     /*
      * ==========================================
      * 9. REPONSE GEMINI
@@ -686,19 +577,15 @@ Structure exacte :
     const geminiText =
       await geminiResponse.text();
 
-
     console.log(
       "Gemini HTTP :",
       geminiResponse.status
     );
 
-
     console.log(
-      "Gemini response :",
+      "Gemini réponse reçue :",
       geminiText
     );
-
-
 
     /*
      * ==========================================
@@ -713,9 +600,8 @@ Structure exacte :
         geminiText
       );
 
-
-      let errorData = null;
-
+      let errorData =
+        null;
 
       try {
 
@@ -726,10 +612,10 @@ Structure exacte :
 
       } catch {
 
-        errorData = null;
+        errorData =
+          null;
 
       }
-
 
       const message =
         errorData?.error?.message ||
@@ -737,10 +623,10 @@ Structure exacte :
         geminiText ||
         "Erreur inconnue Gemini.";
 
-
       return res.status(500).json({
 
-        success: false,
+        success:
+          false,
 
         error:
           "Erreur Gemini : " +
@@ -750,8 +636,6 @@ Structure exacte :
 
     }
 
-
-
     /*
      * ==========================================
      * 11. JSON GEMINI API
@@ -759,7 +643,6 @@ Structure exacte :
      */
 
     let geminiData;
-
 
     try {
 
@@ -775,10 +658,10 @@ Structure exacte :
         geminiText
       );
 
-
       return res.status(500).json({
 
-        success: false,
+        success:
+          false,
 
         error:
           "Gemini a renvoyé une réponse API invalide."
@@ -786,8 +669,6 @@ Structure exacte :
       });
 
     }
-
-
 
     /*
      * ==========================================
@@ -801,7 +682,6 @@ Structure exacte :
         ?.content?.parts?.[0]
         ?.text;
 
-
     if (!resultText) {
 
       console.error(
@@ -811,10 +691,10 @@ Structure exacte :
         )
       );
 
-
       return res.status(500).json({
 
-        success: false,
+        success:
+          false,
 
         error:
           "Gemini n'a pas renvoyé de résultat."
@@ -823,8 +703,6 @@ Structure exacte :
 
     }
 
-
-
     /*
      * ==========================================
      * 13. JSON DISNEYBOUND
@@ -832,7 +710,6 @@ Structure exacte :
      */
 
     let disneyBound;
-
 
     try {
 
@@ -848,10 +725,10 @@ Structure exacte :
         resultText
       );
 
-
       return res.status(500).json({
 
-        success: false,
+        success:
+          false,
 
         error:
           "Le résultat Gemini n'est pas un JSON DisneyBound valide."
@@ -860,8 +737,6 @@ Structure exacte :
 
     }
 
-
-
     /*
      * ==========================================
      * 14. NORMALISATION
@@ -869,14 +744,15 @@ Structure exacte :
      */
 
     if (
-      typeof disneyBound !== "object" ||
-      disneyBound === null ||
-      Array.isArray(disneyBound)
+      typeof disneyBound !==
+        "object" ||
+      disneyBound === null
     ) {
 
       return res.status(500).json({
 
-        success: false,
+        success:
+          false,
 
         error:
           "Le résultat DisneyBound est invalide."
@@ -884,8 +760,6 @@ Structure exacte :
       });
 
     }
-
-
 
     /*
      * ==========================================
@@ -903,19 +777,21 @@ Structure exacte :
 
     ];
 
-
     for (
-      const field of requiredFields
+      const field of
+      requiredFields
     ) {
 
       if (
-        typeof disneyBound[field] !== "string" ||
+        typeof disneyBound[field] !==
+          "string" ||
         !disneyBound[field].trim()
       ) {
 
         return res.status(500).json({
 
-          success: false,
+          success:
+            false,
 
           error:
             `Le champ "${field}" est manquant.`
@@ -926,8 +802,6 @@ Structure exacte :
 
     }
 
-
-
     if (
       !Array.isArray(
         disneyBound.accessoires
@@ -936,7 +810,8 @@ Structure exacte :
 
       return res.status(500).json({
 
-        success: false,
+        success:
+          false,
 
         error:
           "Les accessoires sont invalides."
@@ -944,8 +819,6 @@ Structure exacte :
       });
 
     }
-
-
 
     if (
       !Array.isArray(
@@ -955,7 +828,8 @@ Structure exacte :
 
       return res.status(500).json({
 
-        success: false,
+        success:
+          false,
 
         error:
           "Les couleurs sont invalides."
@@ -964,17 +838,16 @@ Structure exacte :
 
     }
 
-
-
     if (
       !disneyBound.recherches ||
-      typeof disneyBound.recherches !== "object" ||
-      Array.isArray(disneyBound.recherches)
+      typeof disneyBound.recherches !==
+        "object"
     ) {
 
       return res.status(500).json({
 
-        success: false,
+        success:
+          false,
 
         error:
           "Les recherches produits sont invalides."
@@ -983,11 +856,9 @@ Structure exacte :
 
     }
 
-
-
     /*
      * ==========================================
-     * 16. VERIFICATION RECHERCHES
+     * 16. NORMALISATION RECHERCHES
      * ==========================================
      */
 
@@ -1001,30 +872,26 @@ Structure exacte :
 
     ];
 
-
     for (
-      const field of searchFields
+      const field of
+      searchFields
     ) {
 
       if (
-        typeof disneyBound.recherches[field] !== "string" ||
-        !disneyBound.recherches[field].trim()
+        typeof disneyBound.recherches[field] !==
+          "string"
       ) {
 
-        return res.status(500).json({
-
-          success: false,
-
-          error:
-            `La recherche "${field}" est manquante.`
-
-        });
+        disneyBound.recherches[field] =
+          "";
 
       }
 
+      disneyBound.recherches[field] =
+        disneyBound.recherches[field]
+          .trim();
+
     }
-
-
 
     /*
      * ==========================================
@@ -1037,20 +904,17 @@ Structure exacte :
       disneyBound.personnage
     );
 
-
     return res.status(200).json({
 
-      success: true,
+      success:
+        true,
 
       result:
         disneyBound
 
     });
 
-
-
   } catch (error) {
-
 
     /*
      * ==========================================
@@ -1063,10 +927,10 @@ Structure exacte :
       error
     );
 
-
     return res.status(500).json({
 
-      success: false,
+      success:
+        false,
 
       error:
         error?.message ||
