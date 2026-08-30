@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -287,46 +286,33 @@
       gap: 10px;
     }
 
-    .input-wrapper input {
+    .input-wrapper input,
+    .input-wrapper select {
       width: 100%;
       background: transparent;
       border: none;
       outline: none;
       color: white;
-      font-size: 28px;
+      font-size: 22px;
       font-weight: bold;
+    }
+
+    .input-wrapper select option {
+      background: #1d1d2b;
+      color: white;
     }
 
     .input-wrapper span {
       color: var(--pink);
       font-weight: bold;
+      white-space: nowrap;
     }
 
-    .size-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .select-wrapper {
-      position: relative;
-    }
-
-    .select-wrapper select {
-      width: 100%;
-      background: var(--card-light);
-      color: white;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 15px;
-      outline: none;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    .select-wrapper select:focus {
-      border-color: var(--pink);
+    .size-help {
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: 12px;
+      line-height: 1.4;
     }
 
     .generate-button {
@@ -531,7 +517,6 @@
 
       .character-grid,
       .body-grid,
-      .size-grid,
       .look-list {
         grid-template-columns: 1fr;
       }
@@ -562,7 +547,6 @@
       }
     }
   </style>
-
 </head>
 
 <body>
@@ -583,446 +567,444 @@
 
   <section class="hero">
 
-```
-<h1>
-  Trouve ton
-  <span class="gradient-text">
-    DisneyBound
-  </span>
-</h1>
+    <h1>
+      Trouve ton
+      <span class="gradient-text">
+        DisneyBound
+      </span>
+    </h1>
 
-<p>
-  Télécharge ta photo, choisis ton univers et laisse
-  l'intelligence artificielle imaginer ton prochain look.
-</p>
-```
+    <p>
+      Télécharge ta photo, choisis ton univers et laisse
+      l'intelligence artificielle imaginer ton prochain look.
+    </p>
 
   </section>
 
   <section class="generator">
 
-```
-<div class="step">
+    <!-- PHOTO -->
 
-  <div class="step-title">
+    <div class="step">
 
-    <div class="step-number">
-      1
+      <div class="step-title">
+        <div class="step-number">1</div>
+
+        <h2>
+          Ajoute ta photo
+        </h2>
+      </div>
+
+      <label
+        class="upload-zone"
+        for="photoInput"
+      >
+
+        <div
+          class="upload-content"
+          id="uploadContent"
+        >
+
+          <div class="upload-icon">
+            📸
+          </div>
+
+          <h3>
+            Choisis une photo
+          </h3>
+
+          <p>
+            Une photo en pied donnera un meilleur résultat.
+          </p>
+
+          <div class="upload-button">
+            Importer une photo
+          </div>
+
+        </div>
+
+        <img
+          id="preview"
+          alt="Aperçu de votre photo"
+        >
+
+      </label>
+
+      <input
+        type="file"
+        id="photoInput"
+        accept="image/jpeg,image/png,image/webp"
+      >
+
     </div>
 
-    <h2>
-      Ajoute ta photo
-    </h2>
+    <!-- CHARACTER -->
 
-  </div>
+    <div class="step">
 
-  <label
-    class="upload-zone"
-    for="photoInput"
-  >
+      <div class="step-title">
+
+        <div class="step-number">
+          2
+        </div>
+
+        <h2>
+          Choisis ton univers
+        </h2>
+
+      </div>
+
+      <div class="character-grid">
+
+        <button
+          type="button"
+          class="character-option"
+          data-type="hero"
+        >
+
+          <span class="emoji">
+            😊
+          </span>
+
+          <h3>
+            Gentil
+          </h3>
+
+          <p>
+            Héros, princesses et personnages iconiques.
+          </p>
+
+        </button>
+
+        <button
+          type="button"
+          class="character-option"
+          data-type="villain"
+        >
+
+          <span class="emoji">
+            😈
+          </span>
+
+          <h3>
+            Méchant
+          </h3>
+
+          <p>
+            Villains, styles sombres et looks puissants.
+          </p>
+
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- MORPHOLOGIE -->
+
+    <div class="step">
+
+      <div class="step-title">
+
+        <div class="step-number">
+          3
+        </div>
+
+        <h2>
+          Tes informations
+        </h2>
+
+      </div>
+
+      <div class="body-grid">
+
+        <div class="input-card">
+
+          <label for="height">
+            Taille
+          </label>
+
+          <div class="input-wrapper">
+
+            <input
+              type="number"
+              id="height"
+              placeholder="175"
+              min="100"
+              max="250"
+            >
+
+            <span>
+              cm
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="input-card">
+
+          <label for="weight">
+            Poids
+          </label>
+
+          <div class="input-wrapper">
+
+            <input
+              type="number"
+              id="weight"
+              placeholder="75"
+              min="30"
+              max="300"
+            >
+
+            <span>
+              kg
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="input-card">
+
+          <label for="topSize">
+            Taille habituelle du haut
+          </label>
+
+          <div class="input-wrapper">
+
+            <select id="topSize">
+
+              <option value="">
+                Choisir
+              </option>
+
+              <option value="XS / 34-36">
+                XS / 34-36
+              </option>
+
+              <option value="S / 36-38">
+                S / 36-38
+              </option>
+
+              <option value="M / 38-40">
+                M / 38-40
+              </option>
+
+              <option value="L / 40-42">
+                L / 40-42
+              </option>
+
+              <option value="XL / 42-44">
+                XL / 42-44
+              </option>
+
+              <option value="XXL / 44-46">
+                XXL / 44-46
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="size-help">
+            Les deux formats sont envoyés à l'IA pour affiner les recherches.
+          </div>
+
+        </div>
+
+        <div class="input-card">
+
+          <label for="bottomSize">
+            Taille habituelle du bas
+          </label>
+
+          <div class="input-wrapper">
+
+            <select id="bottomSize">
+
+              <option value="">
+                Choisir
+              </option>
+
+              <option value="XS / 34-36">
+                XS / 34-36
+              </option>
+
+              <option value="S / 36-38">
+                S / 36-38
+              </option>
+
+              <option value="M / 38-40">
+                M / 38-40
+              </option>
+
+              <option value="L / 40-42">
+                L / 40-42
+              </option>
+
+              <option value="XL / 42-44">
+                XL / 42-44
+              </option>
+
+              <option value="XXL / 44-46">
+                XXL / 44-46
+              </option>
+
+            </select>
+
+          </div>
+
+          <div class="size-help">
+            La taille chiffrée est importante pour les recherches de pantalons et jupes.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      class="generate-button"
+      id="generateButton"
+    >
+      ✨ Générer mon DisneyBound
+    </button>
 
     <div
-      class="upload-content"
-      id="uploadContent"
+      class="loading"
+      id="loading"
     >
 
-      <div class="upload-icon">
-        📸
-      </div>
-
-      <h3>
-        Choisis une photo
-      </h3>
+      <div class="spinner"></div>
 
       <p>
-        Une photo en pied donnera un meilleur résultat.
+        L'IA analyse ta photo et recherche ton style idéal...
       </p>
 
-      <div class="upload-button">
-        Importer une photo
-      </div>
-
     </div>
-
-    <img
-      id="preview"
-      alt="Aperçu de votre photo"
-    >
-
-  </label>
-
-  <input
-    type="file"
-    id="photoInput"
-    accept="image/jpeg,image/png,image/webp"
-  >
-
-</div>
-
-<div class="step">
-
-  <div class="step-title">
-
-    <div class="step-number">
-      2
-    </div>
-
-    <h2>
-      Choisis ton univers
-    </h2>
-
-  </div>
-
-  <div class="character-grid">
-
-    <button
-      type="button"
-      class="character-option"
-      data-type="hero"
-    >
-
-      <span class="emoji">
-        😊
-      </span>
-
-      <h3>
-        Gentil
-      </h3>
-
-      <p>
-        Héros, princesses et personnages iconiques.
-      </p>
-
-    </button>
-
-    <button
-      type="button"
-      class="character-option"
-      data-type="villain"
-    >
-
-      <span class="emoji">
-        😈
-      </span>
-
-      <h3>
-        Méchant
-      </h3>
-
-      <p>
-        Villains, styles sombres et looks puissants.
-      </p>
-
-    </button>
-
-  </div>
-
-</div>
-
-<div class="step">
-
-  <div class="step-title">
-
-    <div class="step-number">
-      3
-    </div>
-
-    <h2>
-      Tes mensurations et tailles habituelles
-    </h2>
-
-  </div>
-
-  <div class="body-grid">
-
-    <div class="input-card">
-
-      <label for="height">
-        Taille
-      </label>
-
-      <div class="input-wrapper">
-
-        <input
-          type="number"
-          id="height"
-          placeholder="175"
-          min="100"
-          max="250"
-        >
-
-        <span>
-          cm
-        </span>
-
-      </div>
-
-    </div>
-
-    <div class="input-card">
-
-      <label for="weight">
-        Poids
-      </label>
-
-      <div class="input-wrapper">
-
-        <input
-          type="number"
-          id="weight"
-          placeholder="75"
-          min="30"
-          max="300"
-        >
-
-        <span>
-          kg
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="size-grid">
-
-    <div class="input-card">
-
-      <label for="topSize">
-        Taille habituelle du haut
-      </label>
-
-      <div class="select-wrapper">
-
-        <select id="topSize">
-
-          <option value="">
-            Sélectionner
-          </option>
-
-          <option value="XS">XS</option>
-          <option value="S">S</option>
-          <option value="M">M</option>
-          <option value="L">L</option>
-          <option value="XL">XL</option>
-          <option value="XXL">XXL</option>
-
-        </select>
-
-      </div>
-
-    </div>
-
-    <div class="input-card">
-
-      <label for="bottomSize">
-        Taille habituelle du bas
-      </label>
-
-      <div class="select-wrapper">
-
-        <select id="bottomSize">
-
-          <option value="">
-            Sélectionner
-          </option>
-
-          <option value="32">32</option>
-          <option value="34">34</option>
-          <option value="36">36</option>
-          <option value="38">38</option>
-          <option value="40">40</option>
-          <option value="42">42</option>
-          <option value="44">44</option>
-          <option value="46">46</option>
-          <option value="48">48</option>
-          <option value="50">50</option>
-          <option value="52">52</option>
-          <option value="54">54</option>
-          <option value="56">56</option>
-          <option value="58">58</option>
-          <option value="60">60</option>
-
-        </select>
-
-      </div>
-
-    </div>
-
-    <div class="input-card">
-
-      <label for="shoeSize">
-        Pointure habituelle
-      </label>
-
-      <div class="select-wrapper">
-
-        <select id="shoeSize">
-
-          <option value="">
-            Sélectionner
-          </option>
-
-          <option value="35">35</option>
-          <option value="36">36</option>
-          <option value="37">37</option>
-          <option value="38">38</option>
-          <option value="39">39</option>
-          <option value="40">40</option>
-          <option value="41">41</option>
-          <option value="42">42</option>
-          <option value="43">43</option>
-          <option value="44">44</option>
-          <option value="45">45</option>
-          <option value="46">46</option>
-          <option value="47">47</option>
-          <option value="48">48</option>
-          <option value="49">49</option>
-          <option value="50">50</option>
-
-        </select>
-
-      </div>
-
-    </div>
-
-  </div>
-
-</div>
-
-<button
-  type="button"
-  class="generate-button"
-  id="generateButton"
->
-  ✨ Générer mon DisneyBound
-</button>
-
-<div
-  class="loading"
-  id="loading"
->
-
-  <div class="spinner"></div>
-
-  <p>
-    L'IA analyse ta photo et recherche ton style idéal...
-  </p>
-
-</div>
-```
 
   </section>
 
+  <!-- RESULT -->
+
   <section id="result">
 
-```
-<div class="result-card">
+    <div class="result-card">
 
-  <div class="result-header">
+      <div class="result-header">
 
-    <div
-      class="result-character"
-      id="resultEmoji"
-    >
-      ✨
+        <div
+          class="result-character"
+          id="resultEmoji"
+        >
+          ✨
+        </div>
+
+        <h2 id="resultTitle">
+          Ton look est prêt !
+        </h2>
+
+        <p id="resultSubtitle">
+          Voici les pièces à rechercher pour créer ton look.
+        </p>
+
+      </div>
+
+      <div class="look-list">
+
+        <div class="look-item">
+
+          <strong>
+            👕 Haut
+          </strong>
+
+          <span id="resultTop"></span>
+
+        </div>
+
+        <div class="look-item">
+
+          <strong>
+            👖 Bas
+          </strong>
+
+          <span id="resultBottom"></span>
+
+        </div>
+
+        <div class="look-item">
+
+          <strong>
+            🧥 Veste
+          </strong>
+
+          <span id="resultJacket"></span>
+
+        </div>
+
+        <div class="look-item">
+
+          <strong>
+            👟 Chaussures
+          </strong>
+
+          <span id="resultShoes"></span>
+
+        </div>
+
+        <div class="look-item">
+
+          <strong>
+            ✨ Accessoires
+          </strong>
+
+          <span id="resultAccessory"></span>
+
+        </div>
+
+        <div class="look-item">
+
+          <strong>
+            📏 Tailles
+          </strong>
+
+          <span id="resultSizes"></span>
+
+        </div>
+
+      </div>
+
+      <div class="colors-section">
+
+        <h3>
+          🎨 Palette de couleurs
+        </h3>
+
+        <div
+          class="colors-list"
+          id="resultColors"
+        ></div>
+
+      </div>
+
+      <div class="search-section">
+
+        <h3>
+          🔎 Recherches produits
+        </h3>
+
+        <div
+          class="search-list"
+          id="searchList"
+        ></div>
+
+      </div>
+
     </div>
-
-    <h2 id="resultTitle">
-      Ton look est prêt !
-    </h2>
-
-    <p id="resultSubtitle">
-      Voici les pièces à rechercher pour créer ton look.
-    </p>
-
-  </div>
-
-  <div class="look-list">
-
-    <div class="look-item">
-
-      <strong>
-        👕 Haut
-      </strong>
-
-      <span id="resultTop"></span>
-
-    </div>
-
-    <div class="look-item">
-
-      <strong>
-        👖 Bas
-      </strong>
-
-      <span id="resultBottom"></span>
-
-    </div>
-
-    <div class="look-item">
-
-      <strong>
-        🧥 Veste
-      </strong>
-
-      <span id="resultJacket"></span>
-
-    </div>
-
-    <div class="look-item">
-
-      <strong>
-        👟 Chaussures
-      </strong>
-
-      <span id="resultShoes"></span>
-
-    </div>
-
-    <div class="look-item">
-
-      <strong>
-        ✨ Accessoires
-      </strong>
-
-      <span id="resultAccessory"></span>
-
-    </div>
-
-  </div>
-
-  <div class="colors-section">
-
-    <h3>
-      🎨 Palette de couleurs
-    </h3>
-
-    <div
-      class="colors-list"
-      id="resultColors"
-    >
-    </div>
-
-  </div>
-
-  <div class="search-section">
-
-    <h3>
-      🔎 Recherches produits
-    </h3>
-
-    <div
-      class="search-list"
-      id="searchList"
-    >
-    </div>
-
-  </div>
-
-</div>
-```
 
   </section>
 
@@ -1052,6 +1034,10 @@
     document.getElementById("result");
 
   let selectedType = null;
+
+  /* =========================
+     PHOTO
+  ========================== */
 
   photoInput.addEventListener(
     "change",
@@ -1104,6 +1090,10 @@
     }
   );
 
+  /* =========================
+     CHARACTER
+  ========================== */
+
   characterButtons.forEach(
     button => {
 
@@ -1133,6 +1123,10 @@
 
     }
   );
+
+  /* =========================
+     COPY
+  ========================== */
 
   async function copySearch(text, button) {
 
@@ -1166,6 +1160,10 @@
     }
 
   }
+
+  /* =========================
+     COULEURS
+  ========================== */
 
   function displayColors(colors) {
 
@@ -1208,6 +1206,10 @@
 
   }
 
+  /* =========================
+     RECHERCHES
+  ========================== */
+
   function displaySearches(searches) {
 
     const container =
@@ -1218,7 +1220,10 @@
     container.innerHTML =
       "";
 
-    if (!searches || typeof searches !== "object") {
+    if (
+      !searches ||
+      typeof searches !== "object"
+    ) {
 
       container.innerHTML =
         "<p style='color:#a1a1aa;'>Aucune recherche disponible.</p>";
@@ -1307,26 +1312,20 @@
           }
         );
 
-        item.appendChild(
-          label
-        );
+        item.appendChild(label);
+        item.appendChild(search);
+        item.appendChild(button);
 
-        item.appendChild(
-          search
-        );
-
-        item.appendChild(
-          button
-        );
-
-        container.appendChild(
-          item
-        );
+        container.appendChild(item);
 
       }
     );
 
   }
+
+  /* =========================
+     GENERATION
+  ========================== */
 
   generateButton.addEventListener(
     "click",
@@ -1350,11 +1349,6 @@
       const bottomSize =
         document.getElementById(
           "bottomSize"
-        ).value;
-
-      const shoeSize =
-        document.getElementById(
-          "shoeSize"
         ).value;
 
       const file =
@@ -1390,30 +1384,10 @@
 
       }
 
-      if (!topSize) {
+      if (!topSize || !bottomSize) {
 
         alert(
-          "Sélectionne ta taille habituelle du haut."
-        );
-
-        return;
-
-      }
-
-      if (!bottomSize) {
-
-        alert(
-          "Sélectionne ta taille habituelle du bas."
-        );
-
-        return;
-
-      }
-
-      if (!shoeSize) {
-
-        alert(
-          "Sélectionne ta pointure habituelle."
+          "Indique ta taille habituelle pour le haut et le bas."
         );
 
         return;
@@ -1494,9 +1468,7 @@
 
                 };
 
-              reader.readAsDataURL(
-                file
-              );
+              reader.readAsDataURL(file);
 
             }
           );
@@ -1531,9 +1503,6 @@
                   bottomSize:
                     bottomSize,
 
-                  shoeSize:
-                    shoeSize,
-
                   image:
                     imageBase64,
 
@@ -1548,6 +1517,16 @@
         const rawText =
           await response.text();
 
+        console.log(
+          "HTTP API :",
+          response.status
+        );
+
+        console.log(
+          "Réponse API :",
+          rawText
+        );
+
         let data;
 
         try {
@@ -1557,15 +1536,12 @@
               rawText
             );
 
-        } catch (jsonError) {
-
-          console.error(
-            "Réponse serveur non JSON :",
-            rawText
-          );
+        } catch {
 
           throw new Error(
-            "Le serveur n'a pas renvoyé de JSON valide."
+            response.ok
+              ? "La réponse de l'IA n'est pas un JSON valide."
+              : `Le serveur a renvoyé une erreur HTTP ${response.status}.`
           );
 
         }
@@ -1573,13 +1549,14 @@
         if (!response.ok) {
 
           throw new Error(
-            data.error ||
+            data?.error ||
             `Erreur serveur ${response.status}`
           );
 
         }
 
         if (
+          !data ||
           !data.result ||
           typeof data.result !== "object"
         ) {
@@ -1638,24 +1615,39 @@
         const accessories =
           disneyBound.accessoires;
 
-        if (
+        document.getElementById(
+          "resultAccessory"
+        ).textContent =
           Array.isArray(accessories) &&
           accessories.length > 0
+            ? accessories.join(" • ")
+            : "Aucun accessoire renseigné";
+
+        const sizes =
+          disneyBound.tailles;
+
+        if (
+          sizes &&
+          typeof sizes === "object"
         ) {
 
           document.getElementById(
-            "resultAccessory"
+            "resultSizes"
           ).textContent =
-            accessories.join(
-              " • "
-            );
+            `Haut : ${
+              sizes.haut ||
+              topSize
+            } • Bas : ${
+              sizes.bas ||
+              bottomSize
+            }`;
 
         } else {
 
           document.getElementById(
-            "resultAccessory"
+            "resultSizes"
           ).textContent =
-            "Aucun accessoire renseigné";
+            `Haut : ${topSize} • Bas : ${bottomSize}`;
 
         }
 
@@ -1683,8 +1675,11 @@
         );
 
         alert(
-          "Impossible de contacter l'IA : " +
-          error.message
+          "⚠️ Impossible de contacter l'IA : " +
+          (
+            error?.message ||
+            "Erreur inconnue."
+          )
         );
 
       } finally {
