@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -18,7 +17,6 @@
       --text: #ffffff;
       --text-muted: #a1a1aa;
       --border: rgba(255,255,255,0.1);
-      --error: #ef4444;
     }
 
     * {
@@ -490,26 +488,20 @@
       background: rgba(124,58,237,0.5);
     }
 
-    /* MESSAGE D'ERREUR */
+    /* =========================
+       MESSAGE D'ERREUR
+    ========================== */
 
     .error-box {
       display: none;
       margin-top: 20px;
-      padding: 18px;
-      border-radius: 15px;
+      padding: 16px 18px;
+      border-radius: 14px;
       background: rgba(239,68,68,0.12);
-      border: 1px solid rgba(239,68,68,0.4);
+      border: 1px solid rgba(239,68,68,0.35);
       color: #fecaca;
       line-height: 1.5;
       font-size: 14px;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
-
-    .error-box strong {
-      display: block;
-      margin-bottom: 8px;
-      color: #fca5a5;
     }
 
     @media (max-width: 700px) {
@@ -801,13 +793,7 @@
     <div
       class="error-box"
       id="errorBox"
-    >
-      <strong>
-        ⚠️ Erreur
-      </strong>
-
-      <span id="errorMessage"></span>
-    </div>
+    ></div>
 
   </section>
 
@@ -842,8 +828,7 @@
             👕 Haut
           </strong>
 
-          <span id="resultTop">
-          </span>
+          <span id="resultTop"></span>
 
         </div>
 
@@ -853,8 +838,7 @@
             👖 Bas
           </strong>
 
-          <span id="resultBottom">
-          </span>
+          <span id="resultBottom"></span>
 
         </div>
 
@@ -864,8 +848,7 @@
             🧥 Veste
           </strong>
 
-          <span id="resultJacket">
-          </span>
+          <span id="resultJacket"></span>
 
         </div>
 
@@ -875,8 +858,7 @@
             👟 Chaussures
           </strong>
 
-          <span id="resultShoes">
-          </span>
+          <span id="resultShoes"></span>
 
         </div>
 
@@ -886,8 +868,7 @@
             ✨ Accessoires
           </strong>
 
-          <span id="resultAccessory">
-          </span>
+          <span id="resultAccessory"></span>
 
         </div>
 
@@ -902,8 +883,7 @@
         <div
           class="colors-list"
           id="resultColors"
-        >
-        </div>
+        ></div>
 
       </div>
 
@@ -916,8 +896,7 @@
         <div
           class="search-list"
           id="searchList"
-        >
-        </div>
+        ></div>
 
       </div>
 
@@ -957,38 +936,85 @@
   const errorBox =
     document.getElementById("errorBox");
 
-  const errorMessage =
-    document.getElementById("errorMessage");
-
   let selectedType = null;
 
 
   /* =========================
-     AFFICHER ERREUR
+     AFFICHAGE ERREUR
   ========================== */
 
   function showError(message) {
 
-    errorMessage.textContent =
-      message || "Une erreur inconnue est survenue.";
+    let cleanMessage = "Une erreur est survenue.";
+
+    if (typeof message === "string") {
+
+      cleanMessage =
+        message.trim() ||
+        cleanMessage;
+
+    } else if (
+      message &&
+      typeof message === "object"
+    ) {
+
+      if (
+        typeof message.message === "string"
+      ) {
+
+        cleanMessage =
+          message.message;
+
+      } else if (
+        typeof message.error === "string"
+      ) {
+
+        cleanMessage =
+          message.error;
+
+      } else {
+
+        try {
+
+          cleanMessage =
+            JSON.stringify(
+              message,
+              null,
+              2
+            );
+
+        } catch {
+
+          cleanMessage =
+            "Erreur inconnue.";
+
+        }
+
+      }
+
+    }
+
+    errorBox.textContent =
+      "⚠️ " + cleanMessage;
 
     errorBox.style.display =
       "block";
 
+    errorBox.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest"
+    });
+
   }
 
 
-  /* =========================
-     CACHER ERREUR
-  ========================== */
-
   function hideError() {
+
+    errorBox.textContent =
+      "";
 
     errorBox.style.display =
       "none";
-
-    errorMessage.textContent =
-      "";
 
   }
 
@@ -1008,10 +1034,12 @@
         return;
       }
 
+      hideError();
+
       if (!file.type.startsWith("image/")) {
 
         showError(
-          "Merci de sélectionner une image valide."
+          "Merci de sélectionner une image."
         );
 
         photoInput.value =
@@ -1020,8 +1048,6 @@
         return;
 
       }
-
-      hideError();
 
       const reader =
         new FileReader();
@@ -1066,6 +1092,8 @@
         "click",
         function() {
 
+          hideError();
+
           characterButtons.forEach(
             item => {
 
@@ -1083,8 +1111,6 @@
           selectedType =
             this.dataset.type;
 
-          hideError();
-
         }
       );
 
@@ -1093,14 +1119,19 @@
 
 
   /* =========================
-     COPY
+     COPIE
   ========================== */
 
-  async function copySearch(text, button) {
+  async function copySearch(
+    text,
+    button
+  ) {
 
     try {
 
-      await navigator.clipboard.writeText(text);
+      await navigator.clipboard.writeText(
+        text
+      );
 
       const originalText =
         button.textContent;
@@ -1309,122 +1340,92 @@
 
 
   /* =========================
-     LECTURE DE LA REPONSE API
+     EXTRACTION MESSAGE ERREUR
   ========================== */
 
-  async function readApiResponse(response) {
-
-    const contentType =
-      response.headers.get(
-        "content-type"
-      ) || "";
-
-    const rawText =
-      await response.text();
-
-    console.log(
-      "HTTP status:",
-      response.status
-    );
-
-    console.log(
-      "Content-Type:",
-      contentType
-    );
-
-    console.log(
-      "Réponse serveur:",
-      rawText
-    );
-
-
-    if (!rawText.trim()) {
-
-      throw new Error(
-        `Le serveur a renvoyé une réponse vide (HTTP ${response.status}).`
-      );
-
-    }
-
-
-    let data;
-
+  function extractErrorMessage(
+    data,
+    rawText,
+    status
+  ) {
 
     if (
-      contentType.includes(
-        "application/json"
-      )
+      data &&
+      typeof data === "object"
     ) {
 
-      try {
+      if (
+        typeof data.error === "string"
+      ) {
 
-        data =
-          JSON.parse(
-            rawText
-          );
-
-      } catch (error) {
-
-        throw new Error(
-          "Le serveur a annoncé du JSON mais a renvoyé un JSON invalide."
-        );
+        return data.error;
 
       }
 
-    } else {
+      if (
+        data.error &&
+        typeof data.error === "object"
+      ) {
 
-      /*
-       * Certains serveurs peuvent renvoyer du JSON
-       * sans définir correctement Content-Type.
-       */
+        if (
+          typeof data.error.message ===
+          "string"
+        ) {
 
-      try {
+          return data.error.message;
 
-        data =
-          JSON.parse(
-            rawText
+        }
+
+        try {
+
+          return JSON.stringify(
+            data.error
           );
 
-      } catch {
+        } catch {
 
-        /*
-         * Si Vercel renvoie une page HTML,
-         * on affiche le contenu utile.
-         */
+          return "Erreur API.";
 
-        const cleanText =
-          rawText
-            .replace(
-              /<[^>]*>/g,
-              " "
-            )
-            .replace(
-              /\s+/g,
-              " "
-            )
-            .trim();
+        }
 
-        throw new Error(
-          `Le serveur n'a pas renvoyé de JSON. HTTP ${response.status}. Réponse : ${cleanText.slice(0, 500)}`
-        );
+      }
+
+      if (
+        typeof data.message === "string"
+      ) {
+
+        return data.message;
 
       }
 
     }
 
+    if (
+      typeof rawText === "string" &&
+      rawText.trim()
+    ) {
 
-    return data;
+      return rawText;
+
+    }
+
+    return (
+      "Erreur serveur " +
+      status
+    );
 
   }
 
 
   /* =========================
-     GENERATION
+     GÉNÉRATION
   ========================== */
 
   generateButton.addEventListener(
     "click",
     async function() {
+
+      hideError();
 
       const height =
         document.getElementById(
@@ -1440,11 +1441,8 @@
         photoInput.files[0];
 
 
-      hideError();
-
-
       /* =========================
-         VALIDATION PHOTO
+         VALIDATION
       ========================== */
 
       if (!file) {
@@ -1457,11 +1455,6 @@
 
       }
 
-
-      /* =========================
-         VALIDATION TYPE
-      ========================== */
-
       if (!selectedType) {
 
         showError(
@@ -1472,45 +1465,10 @@
 
       }
 
-
-      /* =========================
-         VALIDATION TAILLE
-      ========================== */
-
-      if (!height) {
+      if (!height || !weight) {
 
         showError(
-          "Entre ta taille."
-        );
-
-        return;
-
-      }
-
-
-      /* =========================
-         VALIDATION POIDS
-      ========================== */
-
-      if (!weight) {
-
-        showError(
-          "Entre ton poids."
-        );
-
-        return;
-
-      }
-
-
-      /* =========================
-         VALIDATION FICHIER
-      ========================== */
-
-      if (!file.type.startsWith("image/")) {
-
-        showError(
-          "Le fichier sélectionné n'est pas une image."
+          "Entre ta taille et ton poids."
         );
 
         return;
@@ -1573,8 +1531,7 @@
                     dataUrl.split(",");
 
                   if (
-                    parts.length < 2 ||
-                    !parts[1]
+                    parts.length < 2
                   ) {
 
                     reject(
@@ -1624,13 +1581,8 @@
               method: "POST",
 
               headers: {
-
                 "Content-Type":
-                  "application/json",
-
-                "Accept":
                   "application/json"
-
               },
 
               body:
@@ -1640,10 +1592,10 @@
                     selectedType,
 
                   height:
-                    Number(height),
+                    height,
 
                   weight:
-                    Number(weight),
+                    weight,
 
                   image:
                     imageBase64,
@@ -1661,10 +1613,46 @@
            LECTURE REPONSE
         ========================== */
 
-        const data =
-          await readApiResponse(
-            response
-          );
+        const rawText =
+          await response.text();
+
+        console.log(
+          "Statut API :",
+          response.status
+        );
+
+        console.log(
+          "Réponse API brute :",
+          rawText
+        );
+
+
+        let data = null;
+
+
+        if (rawText) {
+
+          try {
+
+            data =
+              JSON.parse(
+                rawText
+              );
+
+          } catch (jsonError) {
+
+            console.error(
+              "Réponse non JSON :",
+              rawText
+            );
+
+            throw new Error(
+              "Le serveur a renvoyé une réponse invalide. Vérifie la fonction /api/generate."
+            );
+
+          }
+
+        }
 
 
         /* =========================
@@ -1674,30 +1662,43 @@
         if (!response.ok) {
 
           throw new Error(
-            data?.error ||
-            `Erreur serveur HTTP ${response.status}.`
+            extractErrorMessage(
+              data,
+              rawText,
+              response.status
+            )
           );
 
         }
 
 
         /* =========================
-           VERIFICATION RESULTAT
+           VALIDATION REPONSE
         ========================== */
 
         if (
           !data ||
+          typeof data !== "object"
+        ) {
+
+          throw new Error(
+            "Le serveur a renvoyé une réponse vide ou invalide."
+          );
+
+        }
+
+
+        if (
           !data.result ||
           typeof data.result !== "object"
         ) {
 
-          console.error(
-            "Réponse API incorrecte :",
-            data
-          );
-
           throw new Error(
-            "La réponse de l'IA ne contient pas de résultat DisneyBound valide."
+            extractErrorMessage(
+              data,
+              rawText,
+              response.status
+            )
           );
 
         }
@@ -1774,9 +1775,9 @@
           document.getElementById(
             "resultAccessory"
           ).textContent =
-            accessories
-              .filter(Boolean)
-              .join(" • ");
+            accessories.join(
+              " • "
+            );
 
         } else {
 
@@ -1807,7 +1808,7 @@
 
 
         /* =========================
-           AFFICHER RESULTAT
+           AFFICHAGE
         ========================== */
 
         result.style.display =
@@ -1828,7 +1829,7 @@
 
         showError(
           error?.message ||
-          "Une erreur inconnue est survenue."
+          "Impossible de contacter l'IA."
         );
 
 
@@ -1852,4 +1853,3 @@
 
 </body>
 </html>
-```
