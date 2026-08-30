@@ -347,6 +347,20 @@
       }
     }
 
+    .error-box {
+      display: none;
+      margin-top: 20px;
+      padding: 16px 18px;
+      border-radius: 14px;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.35);
+      color: #fecaca;
+      line-height: 1.5;
+      font-size: 14px;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
     #result {
       display: none;
       margin-top: 40px;
@@ -486,22 +500,6 @@
 
     .copy-button:hover {
       background: rgba(124,58,237,0.5);
-    }
-
-    /* =========================
-       MESSAGE D'ERREUR
-    ========================== */
-
-    .error-box {
-      display: none;
-      margin-top: 20px;
-      padding: 16px 18px;
-      border-radius: 14px;
-      background: rgba(239,68,68,0.12);
-      border: 1px solid rgba(239,68,68,0.35);
-      color: #fecaca;
-      line-height: 1.5;
-      font-size: 14px;
     }
 
     @media (max-width: 700px) {
@@ -908,10 +906,6 @@
 
 <script>
 
-  /* =========================
-     VARIABLES
-  ========================== */
-
   const photoInput =
     document.getElementById("photoInput");
 
@@ -940,43 +934,49 @@
 
 
   /* =========================
-     AFFICHAGE ERREUR
+     ERREURS
   ========================== */
 
   function showError(message) {
 
-    let cleanMessage = "Une erreur est survenue.";
+    let text =
+      "Une erreur est survenue.";
 
-    if (typeof message === "string") {
+    if (
+      typeof message ===
+      "string"
+    ) {
 
-      cleanMessage =
-        message.trim() ||
-        cleanMessage;
+      text =
+        message;
 
     } else if (
       message &&
-      typeof message === "object"
+      typeof message ===
+      "object"
     ) {
 
       if (
-        typeof message.message === "string"
+        typeof message.message ===
+        "string"
       ) {
 
-        cleanMessage =
+        text =
           message.message;
 
       } else if (
-        typeof message.error === "string"
+        typeof message.error ===
+        "string"
       ) {
 
-        cleanMessage =
+        text =
           message.error;
 
       } else {
 
         try {
 
-          cleanMessage =
+          text =
             JSON.stringify(
               message,
               null,
@@ -985,7 +985,7 @@
 
         } catch {
 
-          cleanMessage =
+          text =
             "Erreur inconnue.";
 
         }
@@ -995,15 +995,10 @@
     }
 
     errorBox.textContent =
-      "⚠️ " + cleanMessage;
+      "⚠️ " + text;
 
     errorBox.style.display =
       "block";
-
-    errorBox.scrollIntoView({
-      behavior: "smooth",
-      block: "nearest"
-    });
 
   }
 
@@ -1036,14 +1031,15 @@
 
       hideError();
 
-      if (!file.type.startsWith("image/")) {
+      if (
+        !file.type.startsWith(
+          "image/"
+        )
+      ) {
 
         showError(
           "Merci de sélectionner une image."
         );
-
-        photoInput.value =
-          "";
 
         return;
 
@@ -1075,14 +1071,16 @@
 
         };
 
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(
+        file
+      );
 
     }
   );
 
 
   /* =========================
-     CHARACTER
+     PERSONNAGE
   ========================== */
 
   characterButtons.forEach(
@@ -1133,31 +1131,26 @@
         text
       );
 
-      const originalText =
+      const original =
         button.textContent;
 
       button.textContent =
         "✓ Copié";
 
       setTimeout(
-        function() {
+        () => {
 
           button.textContent =
-            originalText;
+            original;
 
         },
         1500
       );
 
-    } catch (error) {
-
-      console.error(
-        "Erreur copie :",
-        error
-      );
+    } catch {
 
       showError(
-        "Impossible de copier la recherche."
+        "Impossible de copier cette recherche."
       );
 
     }
@@ -1169,7 +1162,9 @@
      COULEURS
   ========================== */
 
-  function displayColors(colors) {
+  function displayColors(
+    colors
+  ) {
 
     const container =
       document.getElementById(
@@ -1179,8 +1174,12 @@
     container.innerHTML =
       "";
 
-    if (!Array.isArray(colors)) {
+    if (
+      !Array.isArray(colors)
+    ) {
+
       return;
+
     }
 
     colors.forEach(
@@ -1215,7 +1214,9 @@
      RECHERCHES
   ========================== */
 
-  function displaySearches(searches) {
+  function displaySearches(
+    searches
+  ) {
 
     const container =
       document.getElementById(
@@ -1224,18 +1225,6 @@
 
     container.innerHTML =
       "";
-
-    if (
-      !searches ||
-      typeof searches !== "object"
-    ) {
-
-      container.innerHTML =
-        "<p style='color:#a1a1aa;'>Aucune recherche disponible.</p>";
-
-      return;
-
-    }
 
     const labels = {
 
@@ -1251,11 +1240,12 @@
 
     };
 
+
     Object.keys(labels).forEach(
       key => {
 
         const value =
-          searches[key];
+          searches?.[key];
 
         if (!value) {
           return;
@@ -1269,6 +1259,7 @@
         item.className =
           "search-item";
 
+
         const label =
           document.createElement(
             "div"
@@ -1280,6 +1271,7 @@
         label.textContent =
           labels[key];
 
+
         const search =
           document.createElement(
             "div"
@@ -1290,6 +1282,7 @@
 
         search.textContent =
           value;
+
 
         const button =
           document.createElement(
@@ -1305,9 +1298,10 @@
         button.textContent =
           "Copier";
 
+
         button.addEventListener(
           "click",
-          function() {
+          () => {
 
             copySearch(
               value,
@@ -1316,6 +1310,7 @@
 
           }
         );
+
 
         item.appendChild(
           label
@@ -1329,89 +1324,12 @@
           button
         );
 
+
         container.appendChild(
           item
         );
 
       }
-    );
-
-  }
-
-
-  /* =========================
-     EXTRACTION MESSAGE ERREUR
-  ========================== */
-
-  function extractErrorMessage(
-    data,
-    rawText,
-    status
-  ) {
-
-    if (
-      data &&
-      typeof data === "object"
-    ) {
-
-      if (
-        typeof data.error === "string"
-      ) {
-
-        return data.error;
-
-      }
-
-      if (
-        data.error &&
-        typeof data.error === "object"
-      ) {
-
-        if (
-          typeof data.error.message ===
-          "string"
-        ) {
-
-          return data.error.message;
-
-        }
-
-        try {
-
-          return JSON.stringify(
-            data.error
-          );
-
-        } catch {
-
-          return "Erreur API.";
-
-        }
-
-      }
-
-      if (
-        typeof data.message === "string"
-      ) {
-
-        return data.message;
-
-      }
-
-    }
-
-    if (
-      typeof rawText === "string" &&
-      rawText.trim()
-    ) {
-
-      return rawText;
-
-    }
-
-    return (
-      "Erreur serveur " +
-      status
     );
 
   }
@@ -1441,10 +1359,6 @@
         photoInput.files[0];
 
 
-      /* =========================
-         VALIDATION
-      ========================== */
-
       if (!file) {
 
         showError(
@@ -1454,6 +1368,7 @@
         return;
 
       }
+
 
       if (!selectedType) {
 
@@ -1465,6 +1380,7 @@
 
       }
 
+
       if (!height || !weight) {
 
         showError(
@@ -1475,10 +1391,6 @@
 
       }
 
-
-      /* =========================
-         LOADING
-      ========================== */
 
       generateButton.disabled =
         true;
@@ -1495,10 +1407,6 @@
 
       try {
 
-        /* =========================
-           LECTURE PHOTO
-        ========================== */
-
         const imageBase64 =
           await new Promise(
             (resolve, reject) => {
@@ -1507,7 +1415,7 @@
                 new FileReader();
 
               reader.onload =
-                function() {
+                () => {
 
                   const dataUrl =
                     reader.result;
@@ -1527,11 +1435,11 @@
 
                   }
 
-                  const parts =
-                    dataUrl.split(",");
+                  const comma =
+                    dataUrl.indexOf(",");
 
                   if (
-                    parts.length < 2
+                    comma === -1
                   ) {
 
                     reject(
@@ -1545,13 +1453,15 @@
                   }
 
                   resolve(
-                    parts[1]
+                    dataUrl.substring(
+                      comma + 1
+                    )
                   );
 
                 };
 
               reader.onerror =
-                function() {
+                () => {
 
                   reject(
                     new Error(
@@ -1568,10 +1478,6 @@
             }
           );
 
-
-        /* =========================
-           APPEL API
-        ========================== */
 
         const response =
           await fetch(
@@ -1609,20 +1515,17 @@
           );
 
 
-        /* =========================
-           LECTURE REPONSE
-        ========================== */
-
         const rawText =
           await response.text();
 
+
         console.log(
-          "Statut API :",
+          "API status:",
           response.status
         );
 
         console.log(
-          "Réponse API brute :",
+          "API réponse:",
           rawText
         );
 
@@ -1630,75 +1533,67 @@
         let data = null;
 
 
-        if (rawText) {
+        try {
 
-          try {
+          data =
+            rawText
+              ? JSON.parse(
+                  rawText
+                )
+              : null;
 
-            data =
-              JSON.parse(
-                rawText
-              );
+        } catch {
 
-          } catch (jsonError) {
-
-            console.error(
-              "Réponse non JSON :",
-              rawText
-            );
-
-            throw new Error(
-              "Le serveur a renvoyé une réponse invalide. Vérifie la fonction /api/generate."
-            );
-
-          }
+          throw new Error(
+            "Le serveur /api/generate ne renvoie pas de JSON. Vérifie les logs Vercel."
+          );
 
         }
 
-
-        /* =========================
-           ERREUR SERVEUR
-        ========================== */
 
         if (!response.ok) {
 
+          let serverError =
+            "Erreur serveur " +
+            response.status;
+
+
+          if (
+            data &&
+            typeof data.error ===
+            "string"
+          ) {
+
+            serverError =
+              data.error;
+
+          } else if (
+            data &&
+            data.error &&
+            typeof data.error.message ===
+            "string"
+          ) {
+
+            serverError =
+              data.error.message;
+
+          }
+
+
           throw new Error(
-            extractErrorMessage(
-              data,
-              rawText,
-              response.status
-            )
+            serverError
           );
 
         }
 
-
-        /* =========================
-           VALIDATION REPONSE
-        ========================== */
 
         if (
           !data ||
-          typeof data !== "object"
+          !data.result
         ) {
 
           throw new Error(
-            "Le serveur a renvoyé une réponse vide ou invalide."
-          );
-
-        }
-
-
-        if (
-          !data.result ||
-          typeof data.result !== "object"
-        ) {
-
-          throw new Error(
-            extractErrorMessage(
-              data,
-              rawText,
-              response.status
-            )
+            "Le serveur a répondu sans résultat DisneyBound."
           );
 
         }
@@ -1708,22 +1603,19 @@
           data.result;
 
 
-        /* =========================
-           PERSONNAGE
-        ========================== */
-
         document.getElementById(
           "resultEmoji"
         ).textContent =
           "✨";
 
+
         document.getElementById(
           "resultTitle"
         ).textContent =
           `DisneyBound inspiré de ${
-            disneyBound.personnage ||
-            "ton personnage Disney"
+            disneyBound.personnage
           }`;
+
 
         document.getElementById(
           "resultSubtitle"
@@ -1731,15 +1623,12 @@
           "Voici les pièces à rechercher pour créer ton look.";
 
 
-        /* =========================
-           VÊTEMENTS
-        ========================== */
-
         document.getElementById(
           "resultTop"
         ).textContent =
           disneyBound.haut ||
           "Non renseigné";
+
 
         document.getElementById(
           "resultBottom"
@@ -1747,11 +1636,13 @@
           disneyBound.bas ||
           "Non renseigné";
 
+
         document.getElementById(
           "resultJacket"
         ).textContent =
           disneyBound.veste ||
           "Non renseigné";
+
 
         document.getElementById(
           "resultShoes"
@@ -1760,72 +1651,52 @@
           "Non renseigné";
 
 
-        /* =========================
-           ACCESSOIRES
-        ========================== */
-
         const accessories =
           disneyBound.accessoires;
 
-        if (
-          Array.isArray(accessories) &&
-          accessories.length > 0
-        ) {
 
-          document.getElementById(
-            "resultAccessory"
-          ).textContent =
-            accessories.join(
-              " • "
-            );
+        document.getElementById(
+          "resultAccessory"
+        ).textContent =
+          Array.isArray(
+            accessories
+          ) &&
+          accessories.length
+            ? accessories.join(
+                " • "
+              )
+            : "Aucun accessoire renseigné";
 
-        } else {
-
-          document.getElementById(
-            "resultAccessory"
-          ).textContent =
-            "Aucun accessoire renseigné";
-
-        }
-
-
-        /* =========================
-           COULEURS
-        ========================== */
 
         displayColors(
           disneyBound.couleurs
         );
 
 
-        /* =========================
-           RECHERCHES
-        ========================== */
-
         displaySearches(
           disneyBound.recherches
         );
 
 
-        /* =========================
-           AFFICHAGE
-        ========================== */
-
         result.style.display =
           "block";
 
+
         result.scrollIntoView({
-          behavior: "smooth",
-          block: "start"
+          behavior:
+            "smooth",
+          block:
+            "start"
         });
 
 
       } catch (error) {
 
         console.error(
-          "Erreur DisneyBound :",
+          "Erreur DisneyBound:",
           error
         );
+
 
         showError(
           error?.message ||
