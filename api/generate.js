@@ -7,43 +7,61 @@ export default async function handler(req, res) {
    * ==========================================
    */
 
+  /*
+   * ==========================================
+   * 1. METHOD
+   * ==========================================
+   */
+
   if (req.method !== "POST") {
 
     return res.status(405).json({
+
       success: false,
-      error: "Méthode non autorisée."
+
+      error:
+        "Méthode non autorisée."
+
     });
 
   }
+
 
   try {
 
     /*
      * ==========================================
-     * 1. BODY
+     * 2. BODY
      * ==========================================
      */
 
     const body =
       req.body || {};
 
+
     const characterType =
       body.characterType;
+
 
     const height =
       body.height;
 
+
     const weight =
       body.weight;
+
 
     const topSize =
       body.topSize;
 
+
     const bottomSize =
       body.bottomSize;
 
+
     const image =
       body.image;
+
 
     const mimeType =
       body.mimeType;
@@ -51,66 +69,89 @@ export default async function handler(req, res) {
 
     /*
      * ==========================================
-     * 2. VALIDATION
+     * 3. VALIDATION
      * ==========================================
      */
 
     if (!characterType) {
 
       return res.status(400).json({
+
         success: false,
+
         error:
           "Le type de personnage est manquant."
+
       });
 
     }
+
 
     if (!height || !weight) {
 
       return res.status(400).json({
+
         success: false,
+
         error:
           "La taille ou le poids est manquant."
+
       });
 
     }
+
 
     if (!topSize) {
 
       return res.status(400).json({
+
         success: false,
+
         error:
-          "La taille habituelle du haut est manquante."
+          "La taille du haut est manquante."
+
       });
 
     }
+
 
     if (!bottomSize) {
 
       return res.status(400).json({
+
         success: false,
+
         error:
-          "La taille habituelle du bas est manquante."
+          "La taille du bas est manquante."
+
       });
 
     }
+
 
     if (!image) {
 
       return res.status(400).json({
+
         success: false,
+
         error:
           "La photo est manquante."
+
       });
 
     }
 
+
     if (!mimeType) {
 
       return res.status(400).json({
+
         success: false,
+
         error:
           "Le type d'image est manquant."
+
       });
 
     }
@@ -118,12 +159,13 @@ export default async function handler(req, res) {
 
     /*
      * ==========================================
-     * 3. CLE GEMINI
+     * 4. GEMINI API KEY
      * ==========================================
      */
 
     const apiKey =
       process.env.gemini_api_key;
+
 
     if (!apiKey) {
 
@@ -131,23 +173,17 @@ export default async function handler(req, res) {
         "gemini_api_key absente."
       );
 
+
       return res.status(500).json({
+
         success: false,
+
         error:
           "La clé Gemini n'est pas configurée dans Vercel."
+
       });
 
     }
-
-
-    /*
-     * ==========================================
-     * 4. MODELE
-     * ==========================================
-     */
-
-    const model =
-      "gemini-3.5-flash-lite";
 
 
     /*
@@ -193,26 +229,30 @@ Ne déduis jamais :
 - situation sociale
 - information personnelle sensible.
 
-INFORMATIONS FOURNIES PAR L'UTILISATEUR :
+La personne mesure ${height} cm et pèse ${weight} kg.
 
-Taille : ${height} cm
-Poids : ${weight} kg
-Taille habituelle du haut : ${topSize}
-Taille habituelle du bas : ${bottomSize}
+Sa taille de haut est :
 
-Utilise ces informations uniquement pour choisir des
-proportions et des tailles de vêtements cohérentes.
+${topSize}
 
-IMPORTANT :
+Sa taille de bas est :
 
-Les tailles habituelles fournies par l'utilisateur sont
-des informations de référence.
+${bottomSize}
 
-Ne tente PAS de calculer une taille de vêtement à partir
-du poids ou de la taille de la personne.
+Utilise la taille, le poids et les tailles de vêtements
+UNIQUEMENT pour déterminer des proportions générales,
+des coupes et des volumes de vêtements adaptés.
 
-Utilise en priorité les tailles de vêtements indiquées
-par l'utilisateur.
+La taille de haut ${topSize} doit être respectée pour
+la sélection et la description du haut.
+
+La taille de bas ${bottomSize} doit être respectée pour
+la sélection et la description du bas.
+
+Si la taille du bas est numérique, il s'agit d'une taille
+française/européenne de vêtement.
+
+Ne donne aucune analyse ou appréciation du corps.
 
 ==========================================
 TYPE DE PERSONNAGE
@@ -284,6 +324,32 @@ Chic = chic.
 Sportif = sportif et moderne.
 
 ==========================================
+TAILLES
+==========================================
+
+La taille du haut sélectionnée est :
+
+${topSize}
+
+La taille du bas sélectionnée est :
+
+${bottomSize}
+
+IMPORTANT :
+
+Ne remplace jamais ces tailles par une autre taille.
+
+Adapte les descriptions des vêtements à ces tailles.
+
+Pour le haut, choisis une coupe compatible avec la taille
+${topSize}.
+
+Pour le bas, choisis une coupe compatible avec la taille
+${bottomSize}.
+
+Ne mentionne pas le poids de la personne dans le résultat.
+
+==========================================
 CHAUSSURES
 ==========================================
 
@@ -312,31 +378,6 @@ Propose :
 - 2 à 4 accessoires.
 
 ==========================================
-TAILLES
-==========================================
-
-Indique les tailles utilisées pour la tenue.
-
-Pour le haut :
-
-Conserve la taille habituelle fournie par l'utilisateur :
-${topSize}
-
-Pour le bas :
-
-Conserve la taille habituelle fournie par l'utilisateur :
-${bottomSize}
-
-IMPORTANT :
-
-Lorsque cela est pertinent, indique les deux systèmes :
-
-- taille en lettres : XS, S, M, L, XL, XXL
-- taille française chiffrée : 34, 36, 38, 40, 42, 44, etc.
-
-Ne supprime jamais la taille chiffrée.
-
-==========================================
 RECHERCHES PRODUITS
 ==========================================
 
@@ -345,8 +386,8 @@ un véritable produit de mode en ligne.
 
 La description et la recherche doivent être différentes.
 
-Les recherches doivent intégrer la taille uniquement lorsque
-cela permet réellement d'obtenir de meilleurs résultats.
+Les recherches doivent rester suffisamment générales pour
+permettre de trouver des produits disponibles en ligne.
 
 Exemple :
 
@@ -356,7 +397,7 @@ haut :
 
 recherches.haut :
 
-"top noir fines bretelles femme 38"
+"top noir fines bretelles femme"
 
 ==========================================
 REGLES RECHERCHES
@@ -370,6 +411,13 @@ REGLES RECHERCHES
 - aucune marque obligatoire
 - aucune répétition
 - une seule recherche par champ.
+
+IMPORTANT :
+
+Ne mets pas la taille dans les recherches produits.
+
+La taille est déjà utilisée pour déterminer la coupe et
+le vêtement adapté.
 
 ==========================================
 ACCESSOIRES
@@ -393,7 +441,7 @@ Aucun texte avant.
 
 Aucun texte après.
 
-Utilise exactement cette structure :
+Structure exacte :
 
 {
   "personnage": "",
@@ -403,10 +451,6 @@ Utilise exactement cette structure :
   "chaussures": "",
   "accessoires": [],
   "couleurs": [],
-  "tailles": {
-    "haut": "",
-    "bas": ""
-  },
   "recherches": {
     "haut": "",
     "bas": "",
@@ -421,7 +465,20 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 6. URL GEMINI
+     * 6. MODELE
+     * ==========================================
+     *
+     * Gemini 3.5 Flash-Lite
+     *
+     */
+
+    const model =
+      "gemini-3.5-flash-lite";
+
+
+    /*
+     * ==========================================
+     * 7. URL
      * ==========================================
      */
 
@@ -434,7 +491,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 7. APPEL GEMINI
+     * 8. APPEL GEMINI
      * ==========================================
      */
 
@@ -443,15 +500,20 @@ Utilise exactement cette structure :
       model
     );
 
+
     const geminiResponse =
       await fetch(
         url,
         {
-          method: "POST",
+
+          method:
+            "POST",
 
           headers: {
+
             "Content-Type":
               "application/json"
+
           },
 
           body:
@@ -467,11 +529,14 @@ Utilise exactement cette structure :
                   parts: [
 
                     {
+
                       text:
                         prompt
+
                     },
 
                     {
+
                       inline_data: {
 
                         mime_type:
@@ -508,12 +573,13 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 8. REPONSE GEMINI
+     * 9. REPONSE GEMINI
      * ==========================================
      */
 
     const geminiText =
       await geminiResponse.text();
+
 
     console.log(
       "Gemini HTTP :",
@@ -523,7 +589,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 9. ERREUR GEMINI
+     * 10. ERREUR GEMINI
      * ==========================================
      */
 
@@ -534,7 +600,9 @@ Utilise exactement cette structure :
         geminiText
       );
 
+
       let errorData = null;
+
 
       try {
 
@@ -549,11 +617,13 @@ Utilise exactement cette structure :
 
       }
 
+
       const message =
         errorData?.error?.message ||
         errorData?.message ||
         geminiText ||
         "Erreur inconnue Gemini.";
+
 
       return res.status(500).json({
 
@@ -570,11 +640,12 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 10. JSON API GEMINI
+     * 11. JSON GEMINI API
      * ==========================================
      */
 
     let geminiData;
+
 
     try {
 
@@ -590,6 +661,7 @@ Utilise exactement cette structure :
         geminiText
       );
 
+
       return res.status(500).json({
 
         success: false,
@@ -604,7 +676,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 11. EXTRACTION TEXTE
+     * 12. TEXTE RESULTAT
      * ==========================================
      */
 
@@ -624,6 +696,7 @@ Utilise exactement cette structure :
         )
       );
 
+
       return res.status(500).json({
 
         success: false,
@@ -638,11 +711,12 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 12. JSON DISNEYBOUND
+     * 13. JSON DISNEYBOUND
      * ==========================================
      */
 
     let disneyBound;
+
 
     try {
 
@@ -658,6 +732,7 @@ Utilise exactement cette structure :
         resultText
       );
 
+
       return res.status(500).json({
 
         success: false,
@@ -672,13 +747,13 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 13. VALIDATION STRUCTURE
+     * 14. NORMALISATION
      * ==========================================
      */
 
     if (
       typeof disneyBound !==
-        "object" ||
+      "object" ||
       disneyBound === null
     ) {
 
@@ -694,12 +769,22 @@ Utilise exactement cette structure :
     }
 
 
+    /*
+     * ==========================================
+     * 15. VERIFICATION
+     * ==========================================
+     */
+
     const requiredFields = [
 
       "personnage",
+
       "haut",
+
       "bas",
+
       "veste",
+
       "chaussures"
 
     ];
@@ -764,24 +849,6 @@ Utilise exactement cette structure :
 
 
     if (
-      !disneyBound.tailles ||
-      typeof disneyBound.tailles !==
-        "object"
-    ) {
-
-      return res.status(500).json({
-
-        success: false,
-
-        error:
-          "Les tailles sont invalides."
-
-      });
-
-    }
-
-
-    if (
       !disneyBound.recherches ||
       typeof disneyBound.recherches !==
         "object"
@@ -801,7 +868,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 14. REPONSE
+     * 16. REPONSE
      * ==========================================
      */
 
@@ -809,6 +876,7 @@ Utilise exactement cette structure :
       "DisneyBound réussi :",
       disneyBound.personnage
     );
+
 
     return res.status(200).json({
 
@@ -824,7 +892,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 15. ERREUR GENERALE
+     * 17. ERREUR GENERALE
      * ==========================================
      */
 
@@ -832,6 +900,7 @@ Utilise exactement cette structure :
       "Erreur API DisneyBound:",
       error
     );
+
 
     return res.status(500).json({
 
