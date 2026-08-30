@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -28,16 +29,8 @@
     body {
       font-family: Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(
-          circle at top left,
-          rgba(124, 58, 237, 0.25),
-          transparent 30%
-        ),
-        radial-gradient(
-          circle at bottom right,
-          rgba(236, 72, 153, 0.18),
-          transparent 30%
-        ),
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.25), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.18), transparent 30%),
         var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -103,12 +96,7 @@
     }
 
     .gradient-text {
-      background: linear-gradient(
-        90deg,
-        var(--purple),
-        var(--pink),
-        var(--gold)
-      );
+      background: linear-gradient(90deg, var(--purple), var(--pink), var(--gold));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -147,11 +135,8 @@
       display: grid;
       place-items: center;
       font-weight: bold;
-      background: linear-gradient(
-        135deg,
-        var(--purple),
-        var(--pink)
-      );
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      flex-shrink: 0;
     }
 
     .step-title h2 {
@@ -286,33 +271,76 @@
       gap: 10px;
     }
 
-    .input-wrapper input,
-    .input-wrapper select {
+    .input-wrapper input {
       width: 100%;
       background: transparent;
       border: none;
       outline: none;
       color: white;
-      font-size: 22px;
+      font-size: 28px;
       font-weight: bold;
-    }
-
-    .input-wrapper select option {
-      background: #1d1d2b;
-      color: white;
     }
 
     .input-wrapper span {
       color: var(--pink);
       font-weight: bold;
-      white-space: nowrap;
     }
 
-    .size-help {
-      margin-top: 8px;
+    .style-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+    }
+
+    .style-card {
+      background: var(--card-light);
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+    }
+
+    .style-card label {
+      display: block;
       color: var(--text-muted);
-      font-size: 12px;
-      line-height: 1.4;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .style-card select,
+    .size-card select {
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: #11111b;
+      color: white;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .style-card select:focus,
+    .size-card select:focus {
+      border-color: var(--pink);
+    }
+
+    .size-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .size-card {
+      background: var(--card-light);
+      padding: 20px;
+      border-radius: 18px;
+      border: 1px solid var(--border);
+    }
+
+    .size-card label {
+      display: block;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+      font-size: 14px;
     }
 
     .generate-button {
@@ -322,11 +350,7 @@
       font-size: 18px;
       font-weight: bold;
       color: white;
-      background: linear-gradient(
-        90deg,
-        var(--purple),
-        var(--pink)
-      );
+      background: linear-gradient(90deg, var(--purple), var(--pink));
       box-shadow: 0 15px 35px rgba(124,58,237,0.3);
       transition: 0.3s;
     }
@@ -381,11 +405,7 @@
     }
 
     .result-card {
-      background: linear-gradient(
-        145deg,
-        rgba(124,58,237,0.18),
-        rgba(236,72,153,0.1)
-      );
+      background: linear-gradient(145deg, rgba(124,58,237,0.18), rgba(236,72,153,0.1));
       border: 1px solid rgba(255,255,255,0.12);
       border-radius: 30px;
       padding: 35px;
@@ -517,7 +537,12 @@
 
       .character-grid,
       .body-grid,
+      .size-grid,
       .look-list {
+        grid-template-columns: 1fr;
+      }
+
+      .style-grid {
         grid-template-columns: 1fr;
       }
 
@@ -552,7 +577,6 @@
 <body>
 
 <header>
-
   <div class="logo">
     DISNEY<span>BOUND</span> AI ✨
   </div>
@@ -560,7 +584,6 @@
   <div class="badge">
     AI STYLE GENERATOR
   </div>
-
 </header>
 
 <main>
@@ -595,15 +618,9 @@
         </h2>
       </div>
 
-      <label
-        class="upload-zone"
-        for="photoInput"
-      >
+      <label class="upload-zone" for="photoInput">
 
-        <div
-          class="upload-content"
-          id="uploadContent"
-        >
+        <div class="upload-content" id="uploadContent">
 
           <div class="upload-icon">
             📸
@@ -638,20 +655,16 @@
 
     </div>
 
-    <!-- CHARACTER -->
+    <!-- UNIVERS -->
 
     <div class="step">
 
       <div class="step-title">
-
-        <div class="step-number">
-          2
-        </div>
+        <div class="step-number">2</div>
 
         <h2>
           Choisis ton univers
         </h2>
-
       </div>
 
       <div class="character-grid">
@@ -705,15 +718,11 @@
     <div class="step">
 
       <div class="step-title">
-
-        <div class="step-number">
-          3
-        </div>
+        <div class="step-number">3</div>
 
         <h2>
-          Tes informations
+          Tes mensurations
         </h2>
-
       </div>
 
       <div class="body-grid">
@@ -766,105 +775,282 @@
 
         </div>
 
-        <div class="input-card">
+      </div>
+
+    </div>
+
+    <!-- TAILLES -->
+
+    <div class="step">
+
+      <div class="step-title">
+        <div class="step-number">4</div>
+
+        <h2>
+          Tes tailles de vêtements
+        </h2>
+      </div>
+
+      <div class="size-grid">
+
+        <div class="size-card">
 
           <label for="topSize">
-            Taille habituelle du haut
+            Taille du haut
           </label>
 
-          <div class="input-wrapper">
+          <select id="topSize">
 
-            <select id="topSize">
+            <option value="">
+              Choisir une taille
+            </option>
 
-              <option value="">
-                Choisir
-              </option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+            <option value="3XL">3XL</option>
+            <option value="4XL">4XL</option>
 
-              <option value="XS / 34-36">
-                XS / 34-36
-              </option>
-
-              <option value="S / 36-38">
-                S / 36-38
-              </option>
-
-              <option value="M / 38-40">
-                M / 38-40
-              </option>
-
-              <option value="L / 40-42">
-                L / 40-42
-              </option>
-
-              <option value="XL / 42-44">
-                XL / 42-44
-              </option>
-
-              <option value="XXL / 44-46">
-                XXL / 44-46
-              </option>
-
-            </select>
-
-          </div>
-
-          <div class="size-help">
-            Les deux formats sont envoyés à l'IA pour affiner les recherches.
-          </div>
+          </select>
 
         </div>
 
-        <div class="input-card">
+        <div class="size-card">
 
           <label for="bottomSize">
-            Taille habituelle du bas
+            Taille du bas
           </label>
 
-          <div class="input-wrapper">
+          <select id="bottomSize">
 
-            <select id="bottomSize">
+            <option value="">
+              Choisir une taille
+            </option>
 
-              <option value="">
-                Choisir
-              </option>
+            <!-- LETTRES -->
 
-              <option value="XS / 34-36">
-                XS / 34-36
-              </option>
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+            <option value="3XL">3XL</option>
+            <option value="4XL">4XL</option>
 
-              <option value="S / 36-38">
-                S / 36-38
-              </option>
+            <!-- TAILLES CHIFFRÉES -->
 
-              <option value="M / 38-40">
-                M / 38-40
-              </option>
+            <option value="34">34</option>
+            <option value="36">36</option>
+            <option value="38">38</option>
+            <option value="40">40</option>
+            <option value="42">42</option>
+            <option value="44">44</option>
+            <option value="46">46</option>
+            <option value="48">48</option>
+            <option value="50">50</option>
+            <option value="52">52</option>
+            <option value="54">54</option>
+            <option value="56">56</option>
 
-              <option value="L / 40-42">
-                L / 40-42
-              </option>
-
-              <option value="XL / 42-44">
-                XL / 42-44
-              </option>
-
-              <option value="XXL / 44-46">
-                XXL / 44-46
-              </option>
-
-            </select>
-
-          </div>
-
-          <div class="size-help">
-            La taille chiffrée est importante pour les recherches de pantalons et jupes.
-          </div>
+          </select>
 
         </div>
 
       </div>
 
     </div>
+
+    <!-- COUPES -->
+
+    <div class="step">
+
+      <div class="step-title">
+        <div class="step-number">5</div>
+
+        <h2>
+          Tes préférences de coupe
+        </h2>
+      </div>
+
+      <div class="style-grid">
+
+        <div class="style-card">
+
+          <label for="topStyle">
+            Coupe du haut
+          </label>
+
+          <select id="topStyle">
+
+            <option value="libre">
+              Laisser l'IA choisir
+            </option>
+
+            <option value="ajusté">
+              Ajusté
+            </option>
+
+            <option value="slim">
+              Slim
+            </option>
+
+            <option value="oversize">
+              Oversize
+            </option>
+
+            <option value="large">
+              Large
+            </option>
+
+            <option value="streetwear">
+              Streetwear
+            </option>
+
+            <option value="casual">
+              Casual
+            </option>
+
+            <option value="chic">
+              Chic
+            </option>
+
+            <option value="sexy">
+              Sexy
+            </option>
+
+            <option value="sportif">
+              Sportif
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="style-card">
+
+          <label for="bottomStyle">
+            Coupe du bas
+          </label>
+
+          <select id="bottomStyle">
+
+            <option value="libre">
+              Laisser l'IA choisir
+            </option>
+
+            <option value="ajusté">
+              Ajusté
+            </option>
+
+            <option value="slim">
+              Slim
+            </option>
+
+            <option value="droit">
+              Droit
+            </option>
+
+            <option value="large">
+              Large
+            </option>
+
+            <option value="oversize">
+              Oversize
+            </option>
+
+            <option value="évasé">
+              Évasé
+            </option>
+
+            <option value="fluide">
+              Fluide
+            </option>
+
+            <option value="bootcut">
+              Bootcut
+            </option>
+
+            <option value="streetwear">
+              Streetwear
+            </option>
+
+            <option value="casual">
+              Casual
+            </option>
+
+            <option value="chic">
+              Chic
+            </option>
+
+            <option value="sexy">
+              Sexy
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="style-card">
+
+          <label for="jacketStyle">
+            Coupe de la veste
+          </label>
+
+          <select id="jacketStyle">
+
+            <option value="libre">
+              Laisser l'IA choisir
+            </option>
+
+            <option value="ajustée">
+              Ajustée
+            </option>
+
+            <option value="courte">
+              Courte
+            </option>
+
+            <option value="longue">
+              Longue
+            </option>
+
+            <option value="oversize">
+              Oversize
+            </option>
+
+            <option value="large">
+              Large
+            </option>
+
+            <option value="cintrée">
+              Cintrée
+            </option>
+
+            <option value="streetwear">
+              Streetwear
+            </option>
+
+            <option value="casual">
+              Casual
+            </option>
+
+            <option value="chic">
+              Chic
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- GENERATION -->
 
     <button
       type="button"
@@ -882,14 +1068,14 @@
       <div class="spinner"></div>
 
       <p>
-        L'IA analyse ta photo et recherche ton style idéal...
+        L'IA analyse ta photo et crée ton DisneyBound...
       </p>
 
     </div>
 
   </section>
 
-  <!-- RESULT -->
+  <!-- RESULTAT -->
 
   <section id="result">
 
@@ -917,63 +1103,28 @@
       <div class="look-list">
 
         <div class="look-item">
-
-          <strong>
-            👕 Haut
-          </strong>
-
+          <strong>👕 Haut</strong>
           <span id="resultTop"></span>
-
         </div>
 
         <div class="look-item">
-
-          <strong>
-            👖 Bas
-          </strong>
-
+          <strong>👖 Bas</strong>
           <span id="resultBottom"></span>
-
         </div>
 
         <div class="look-item">
-
-          <strong>
-            🧥 Veste
-          </strong>
-
+          <strong>🧥 Veste</strong>
           <span id="resultJacket"></span>
-
         </div>
 
         <div class="look-item">
-
-          <strong>
-            👟 Chaussures
-          </strong>
-
+          <strong>👟 Chaussures</strong>
           <span id="resultShoes"></span>
-
         </div>
 
         <div class="look-item">
-
-          <strong>
-            ✨ Accessoires
-          </strong>
-
+          <strong>✨ Accessoires</strong>
           <span id="resultAccessory"></span>
-
-        </div>
-
-        <div class="look-item">
-
-          <strong>
-            📏 Tailles
-          </strong>
-
-          <span id="resultSizes"></span>
-
         </div>
 
       </div>
@@ -1125,7 +1276,7 @@
   );
 
   /* =========================
-     COPY
+     COPIE
   ========================== */
 
   async function copySearch(text, button) {
@@ -1235,13 +1386,9 @@
     const labels = {
 
       haut: "👕 Haut",
-
       bas: "👖 Bas",
-
       veste: "🧥 Veste",
-
       chaussures: "👟 Chaussures",
-
       accessoires: "✨ Accessoires"
 
     };
@@ -1351,6 +1498,21 @@
           "bottomSize"
         ).value;
 
+      const topStyle =
+        document.getElementById(
+          "topStyle"
+        ).value;
+
+      const bottomStyle =
+        document.getElementById(
+          "bottomStyle"
+        ).value;
+
+      const jacketStyle =
+        document.getElementById(
+          "jacketStyle"
+        ).value;
+
       const file =
         photoInput.files[0];
 
@@ -1384,10 +1546,20 @@
 
       }
 
-      if (!topSize || !bottomSize) {
+      if (!topSize) {
 
         alert(
-          "Indique ta taille habituelle pour le haut et le bas."
+          "Choisis ta taille de haut."
+        );
+
+        return;
+
+      }
+
+      if (!bottomSize) {
+
+        alert(
+          "Choisis ta taille de bas."
         );
 
         return;
@@ -1473,6 +1645,14 @@
             }
           );
 
+        console.log(
+          "Photo envoyée :",
+          Math.round(
+            imageBase64.length / 1024
+          ),
+          "KB"
+        );
+
         const response =
           await fetch(
             "/api/generate",
@@ -1503,6 +1683,15 @@
                   bottomSize:
                     bottomSize,
 
+                  topStyle:
+                    topStyle,
+
+                  bottomStyle:
+                    bottomStyle,
+
+                  jacketStyle:
+                    jacketStyle,
+
                   image:
                     imageBase64,
 
@@ -1532,16 +1721,12 @@
         try {
 
           data =
-            JSON.parse(
-              rawText
-            );
+            JSON.parse(rawText);
 
         } catch {
 
           throw new Error(
-            response.ok
-              ? "La réponse de l'IA n'est pas un JSON valide."
-              : `Le serveur a renvoyé une erreur HTTP ${response.status}.`
+            "Le serveur n'a pas renvoyé de JSON valide."
           );
 
         }
@@ -1556,7 +1741,6 @@
         }
 
         if (
-          !data ||
           !data.result ||
           typeof data.result !== "object"
         ) {
@@ -1615,39 +1799,24 @@
         const accessories =
           disneyBound.accessoires;
 
-        document.getElementById(
-          "resultAccessory"
-        ).textContent =
+        if (
           Array.isArray(accessories) &&
           accessories.length > 0
-            ? accessories.join(" • ")
-            : "Aucun accessoire renseigné";
-
-        const sizes =
-          disneyBound.tailles;
-
-        if (
-          sizes &&
-          typeof sizes === "object"
         ) {
 
           document.getElementById(
-            "resultSizes"
+            "resultAccessory"
           ).textContent =
-            `Haut : ${
-              sizes.haut ||
-              topSize
-            } • Bas : ${
-              sizes.bas ||
-              bottomSize
-            }`;
+            accessories.join(
+              " • "
+            );
 
         } else {
 
           document.getElementById(
-            "resultSizes"
+            "resultAccessory"
           ).textContent =
-            `Haut : ${topSize} • Bas : ${bottomSize}`;
+            "Aucun accessoire renseigné";
 
         }
 
@@ -1675,7 +1844,7 @@
         );
 
         alert(
-          "⚠️ Impossible de contacter l'IA : " +
+          "Impossible de contacter l'IA : " +
           (
             error?.message ||
             "Erreur inconnue."
@@ -1702,3 +1871,4 @@
 
 </body>
 </html>
+```
