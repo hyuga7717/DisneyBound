@@ -1,600 +1,1090 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>DisneyBound AI</title>
 
+
   <style>
+
     :root {
+
       --bg: #09090f;
+
       --card: #141420;
+
       --card-light: #1d1d2b;
+
       --purple: #7c3aed;
+
       --pink: #ec4899;
+
       --gold: #fbbf24;
+
       --text: #ffffff;
+
       --text-muted: #a1a1aa;
+
       --border: rgba(255,255,255,0.1);
+
     }
+
 
     * {
+
       box-sizing: border-box;
+
       margin: 0;
+
       padding: 0;
+
     }
 
+
     body {
-      font-family: Arial, Helvetica, sans-serif;
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
       background:
+
         radial-gradient(
           circle at top left,
-          rgba(124, 58, 237, 0.25),
+          rgba(124,58,237,0.25),
           transparent 30%
         ),
+
         radial-gradient(
           circle at bottom right,
-          rgba(236, 72, 153, 0.18),
+          rgba(236,72,153,0.18),
           transparent 30%
         ),
+
         var(--bg);
+
       color: var(--text);
+
       min-height: 100vh;
+
     }
+
 
     button,
     input {
+
       font: inherit;
+
     }
+
 
     button {
+
       cursor: pointer;
+
       border: none;
+
     }
+
 
     header {
+
       width: 100%;
+
       padding: 20px 5%;
+
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      background: rgba(9, 9, 15, 0.8);
-      backdrop-filter: blur(10px);
+
+      border-bottom:
+        1px solid var(--border);
+
+      background:
+        rgba(9,9,15,0.8);
+
+      backdrop-filter:
+        blur(10px);
+
     }
+
 
     .logo {
+
       font-size: 24px;
+
       font-weight: 800;
+
       letter-spacing: -1px;
+
     }
+
 
     .logo span {
+
       color: var(--pink);
+
     }
+
 
     .badge {
+
       font-size: 13px;
+
       padding: 8px 12px;
+
       border-radius: 50px;
-      background: rgba(124, 58, 237, 0.2);
-      border: 1px solid rgba(124, 58, 237, 0.5);
+
+      background:
+        rgba(124,58,237,0.2);
+
+      border:
+        1px solid rgba(124,58,237,0.5);
+
       color: #ddd6fe;
+
     }
+
 
     main {
-      width: min(1100px, 90%);
+
+      width:
+        min(1100px,90%);
+
       margin: 0 auto;
+
       padding: 60px 0;
+
     }
+
 
     .hero {
+
       text-align: center;
+
       margin-bottom: 45px;
+
     }
+
 
     .hero h1 {
-      font-size: clamp(38px, 6vw, 70px);
+
+      font-size:
+        clamp(38px,6vw,70px);
+
       line-height: 1;
+
       margin-bottom: 20px;
+
       letter-spacing: -3px;
+
     }
+
 
     .gradient-text {
-      background: linear-gradient(
-        90deg,
-        var(--purple),
-        var(--pink),
-        var(--gold)
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--purple),
+          var(--pink),
+          var(--gold)
+        );
+
+      -webkit-background-clip:
+        text;
+
+      -webkit-text-fill-color:
+        transparent;
+
     }
+
 
     .hero p {
+
       color: var(--text-muted);
+
       max-width: 600px;
+
       margin: auto;
+
       font-size: 18px;
+
       line-height: 1.6;
+
     }
+
 
     .generator {
-      background: rgba(20, 20, 32, 0.9);
-      border: 1px solid var(--border);
+
+      background:
+        rgba(20,20,32,0.9);
+
+      border:
+        1px solid var(--border);
+
       border-radius: 30px;
+
       padding: 35px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+
+      box-shadow:
+        0 30px 80px rgba(0,0,0,0.4);
+
     }
+
 
     .step {
+
       margin-bottom: 35px;
+
     }
+
 
     .step-title {
+
       display: flex;
+
       align-items: center;
+
       gap: 12px;
+
       margin-bottom: 18px;
+
     }
+
 
     .step-number {
+
       width: 34px;
+
       height: 34px;
+
       border-radius: 50%;
+
       display: grid;
+
       place-items: center;
+
       font-weight: bold;
-      background: linear-gradient(
-        135deg,
-        var(--purple),
-        var(--pink)
-      );
+
+      background:
+        linear-gradient(
+          135deg,
+          var(--purple),
+          var(--pink)
+        );
+
     }
+
 
     .step-title h2 {
+
       font-size: 20px;
+
     }
+
 
     .upload-zone {
+
       min-height: 220px;
-      border: 2px dashed rgba(255,255,255,0.18);
+
+      border:
+        2px dashed rgba(255,255,255,0.18);
+
       border-radius: 22px;
+
       display: flex;
+
       align-items: center;
+
       justify-content: center;
+
       text-align: center;
+
       padding: 25px;
+
       transition: 0.3s;
-      background: rgba(255,255,255,0.02);
+
+      background:
+        rgba(255,255,255,0.02);
+
       cursor: pointer;
+
     }
+
 
     .upload-zone:hover {
+
       border-color: var(--pink);
-      background: rgba(236,72,153,0.05);
+
+      background:
+        rgba(236,72,153,0.05);
+
     }
+
 
     .upload-content {
+
       display: flex;
+
       flex-direction: column;
+
       align-items: center;
+
       gap: 12px;
+
     }
+
 
     .upload-icon {
+
       font-size: 45px;
+
     }
+
 
     .upload-zone h3 {
+
       font-size: 18px;
+
     }
+
 
     .upload-zone p {
+
       color: var(--text-muted);
+
       font-size: 14px;
+
     }
+
 
     .upload-button {
+
       padding: 12px 20px;
+
       border-radius: 12px;
-      background: var(--card-light);
+
+      background:
+        var(--card-light);
+
       color: white;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
+
     }
+
 
     #photoInput {
+
       display: none;
+
     }
+
 
     #preview {
+
       display: none;
+
       width: 180px;
+
       height: 220px;
+
       border-radius: 20px;
+
       object-fit: cover;
-      border: 3px solid var(--purple);
+
+      border:
+        3px solid var(--purple);
+
     }
+
 
     .character-grid {
+
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+
+      grid-template-columns:
+        repeat(2,1fr);
+
       gap: 20px;
+
     }
+
 
     .character-option {
+
       min-height: 150px;
+
       padding: 25px;
+
       border-radius: 20px;
-      background: var(--card-light);
-      border: 2px solid transparent;
+
+      background:
+        var(--card-light);
+
+      border:
+        2px solid transparent;
+
       color: white;
+
       text-align: left;
+
       transition: 0.3s;
+
     }
+
 
     .character-option:hover {
-      transform: translateY(-4px);
+
+      transform:
+        translateY(-4px);
+
     }
+
 
     .character-option.selected {
-      border-color: var(--pink);
-      box-shadow: 0 0 30px rgba(236,72,153,0.25);
+
+      border-color:
+        var(--pink);
+
+      box-shadow:
+        0 0 30px
+        rgba(236,72,153,0.25);
+
     }
+
 
     .character-option .emoji {
+
       font-size: 40px;
+
       display: block;
+
       margin-bottom: 12px;
+
     }
+
 
     .character-option h3 {
+
       margin-bottom: 8px;
+
       font-size: 20px;
+
     }
+
 
     .character-option p {
+
       color: var(--text-muted);
+
       font-size: 14px;
+
     }
+
 
     .body-grid {
+
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+
+      grid-template-columns:
+        repeat(2,1fr);
+
       gap: 20px;
+
     }
+
 
     .input-card {
-      background: var(--card-light);
+
+      background:
+        var(--card-light);
+
       padding: 20px;
+
       border-radius: 18px;
-      border: 1px solid var(--border);
+
+      border:
+        1px solid var(--border);
+
     }
+
 
     .input-card label {
+
       display: block;
+
       color: var(--text-muted);
+
       margin-bottom: 10px;
+
       font-size: 14px;
+
     }
+
 
     .input-wrapper {
+
       display: flex;
+
       align-items: center;
+
       gap: 10px;
+
     }
+
 
     .input-wrapper input {
+
       width: 100%;
+
       background: transparent;
+
       border: none;
+
       outline: none;
+
       color: white;
+
       font-size: 28px;
+
       font-weight: bold;
+
     }
+
 
     .input-wrapper span {
+
       color: var(--pink);
+
       font-weight: bold;
+
     }
+
 
     .generate-button {
+
       width: 100%;
+
       padding: 20px;
+
       border-radius: 18px;
+
       font-size: 18px;
+
       font-weight: bold;
+
       color: white;
-      background: linear-gradient(
-        90deg,
-        var(--purple),
-        var(--pink)
-      );
-      box-shadow: 0 15px 35px rgba(124,58,237,0.3);
+
+      background:
+        linear-gradient(
+          90deg,
+          var(--purple),
+          var(--pink)
+        );
+
+      box-shadow:
+        0 15px 35px
+        rgba(124,58,237,0.3);
+
       transition: 0.3s;
+
     }
+
 
     .generate-button:hover {
-      transform: scale(1.02);
+
+      transform:
+        scale(1.02);
+
     }
+
 
     .generate-button:disabled {
+
       opacity: 0.5;
+
       cursor: not-allowed;
+
     }
+
 
     .loading {
+
       display: none;
+
       text-align: center;
+
       padding: 25px;
+
     }
+
 
     .spinner {
+
       width: 45px;
+
       height: 45px;
-      border: 4px solid rgba(255,255,255,0.1);
-      border-top-color: var(--pink);
+
+      border:
+        4px solid rgba(255,255,255,0.1);
+
+      border-top-color:
+        var(--pink);
+
       border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 15px;
+
+      animation:
+        spin 1s linear infinite;
+
+      margin:
+        0 auto 15px;
+
     }
+
 
     @keyframes spin {
+
       to {
-        transform: rotate(360deg);
+
+        transform:
+          rotate(360deg);
+
       }
+
     }
 
-    .error-box {
-      display: none;
-      margin-top: 20px;
-      padding: 16px 18px;
-      border-radius: 14px;
-      background: rgba(239,68,68,0.12);
-      border: 1px solid rgba(239,68,68,0.35);
-      color: #fecaca;
-      line-height: 1.5;
-      font-size: 14px;
-      white-space: pre-wrap;
-      word-break: break-word;
-    }
 
     #result {
+
       display: none;
+
       margin-top: 40px;
-      animation: appear 0.6s ease;
+
+      animation:
+        appear 0.6s ease;
+
     }
 
+
     @keyframes appear {
+
       from {
+
         opacity: 0;
-        transform: translateY(20px);
+
+        transform:
+          translateY(20px);
+
       }
 
       to {
+
         opacity: 1;
-        transform: translateY(0);
+
+        transform:
+          translateY(0);
+
       }
+
     }
+
 
     .result-card {
-      background: linear-gradient(
-        145deg,
-        rgba(124,58,237,0.18),
-        rgba(236,72,153,0.1)
-      );
-      border: 1px solid rgba(255,255,255,0.12);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(124,58,237,0.18),
+          rgba(236,72,153,0.1)
+        );
+
+      border:
+        1px solid rgba(255,255,255,0.12);
+
       border-radius: 30px;
+
       padding: 35px;
+
     }
+
 
     .result-header {
+
       text-align: center;
+
       margin-bottom: 30px;
+
     }
+
 
     .result-character {
+
       font-size: 65px;
+
       margin-bottom: 10px;
+
     }
+
 
     .result-card h2 {
+
       font-size: 32px;
+
       margin-bottom: 8px;
+
     }
+
 
     .result-card > .result-header p {
+
       color: var(--text-muted);
+
     }
+
 
     .look-list {
+
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+
+      grid-template-columns:
+        repeat(2,1fr);
+
       gap: 15px;
+
     }
+
 
     .look-item {
-      background: rgba(0,0,0,0.25);
-      border: 1px solid var(--border);
+
+      background:
+        rgba(0,0,0,0.25);
+
+      border:
+        1px solid var(--border);
+
       padding: 20px;
+
       border-radius: 15px;
+
     }
+
 
     .look-item strong {
+
       display: block;
+
       margin-bottom: 8px;
+
       font-size: 16px;
+
     }
+
 
     .look-item span {
+
       color: #d4d4d8;
+
       font-size: 15px;
+
       line-height: 1.5;
+
     }
 
+
     .colors-section {
+
       margin-top: 25px;
+
     }
+
 
     .colors-section h3,
     .search-section h3 {
+
       margin-bottom: 15px;
+
       font-size: 18px;
+
     }
+
 
     .colors-list {
+
       display: flex;
+
       flex-wrap: wrap;
+
       gap: 10px;
+
     }
+
 
     .color-tag {
+
       padding: 8px 14px;
+
       border-radius: 50px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid var(--border);
+
+      background:
+        rgba(255,255,255,0.08);
+
+      border:
+        1px solid var(--border);
+
       font-size: 14px;
+
     }
+
 
     .search-section {
+
       margin-top: 30px;
+
     }
+
 
     .search-list {
+
       display: grid;
+
       gap: 10px;
+
     }
+
 
     .search-item {
+
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
+
       gap: 15px;
+
       padding: 14px 16px;
+
       border-radius: 12px;
-      background: rgba(0,0,0,0.25);
-      border: 1px solid var(--border);
+
+      background:
+        rgba(0,0,0,0.25);
+
+      border:
+        1px solid var(--border);
+
     }
+
 
     .search-label {
+
       min-width: 100px;
+
       font-weight: bold;
+
     }
+
 
     .search-value {
+
       flex: 1;
+
       color: #d4d4d8;
+
       font-size: 14px;
+
     }
+
 
     .copy-button {
+
       padding: 7px 11px;
+
       border-radius: 8px;
-      background: rgba(124,58,237,0.25);
+
+      background:
+        rgba(124,58,237,0.25);
+
       color: white;
-      border: 1px solid rgba(124,58,237,0.4);
+
+      border:
+        1px solid rgba(124,58,237,0.4);
+
       font-size: 12px;
+
     }
+
 
     .copy-button:hover {
-      background: rgba(124,58,237,0.5);
+
+      background:
+        rgba(124,58,237,0.5);
+
     }
 
-    @media (max-width: 700px) {
+
+    @media (max-width:700px) {
 
       main {
+
         width: 92%;
+
         padding: 40px 0;
+
       }
+
 
       .generator,
       .result-card {
+
         padding: 20px;
+
       }
+
 
       .character-grid,
       .body-grid,
       .look-list {
+
         grid-template-columns: 1fr;
+
       }
+
 
       .search-item {
+
         flex-direction: column;
+
         align-items: flex-start;
+
       }
+
 
       .copy-button {
+
         width: 100%;
+
       }
+
 
       .hero h1 {
+
         letter-spacing: -2px;
+
       }
+
 
       header {
+
         padding: 15px 4%;
+
       }
+
 
       .logo {
+
         font-size: 19px;
+
       }
+
 
       .badge {
+
         display: none;
+
       }
+
     }
+
   </style>
+
 </head>
 
+
 <body>
+
 
 <header>
 
   <div class="logo">
+
     DISNEY<span>BOUND</span> AI ✨
+
   </div>
 
+
   <div class="badge">
+
     AI STYLE GENERATOR
+
   </div>
 
 </header>
 
+
 <main>
+
 
   <section class="hero">
 
     <h1>
+
       Trouve ton
+
       <span class="gradient-text">
+
         DisneyBound
+
       </span>
+
     </h1>
 
+
     <p>
+
       Télécharge ta photo, choisis ton univers et laisse
       l'intelligence artificielle imaginer ton prochain look.
+
     </p>
 
   </section>
 
+
   <section class="generator">
+
 
     <div class="step">
 
       <div class="step-title">
 
         <div class="step-number">
+
           1
+
         </div>
 
         <h2>
+
           Ajoute ta photo
+
         </h2>
 
       </div>
+
 
       <label
         class="upload-zone"
@@ -607,22 +1097,34 @@
         >
 
           <div class="upload-icon">
+
             📸
+
           </div>
 
+
           <h3>
+
             Choisis une photo
+
           </h3>
 
+
           <p>
+
             Une photo en pied donnera un meilleur résultat.
+
           </p>
 
+
           <div class="upload-button">
+
             Importer une photo
+
           </div>
 
         </div>
+
 
         <img
           id="preview"
@@ -630,6 +1132,7 @@
         >
 
       </label>
+
 
       <input
         type="file"
@@ -639,21 +1142,29 @@
 
     </div>
 
+
     <div class="step">
 
       <div class="step-title">
 
         <div class="step-number">
+
           2
+
         </div>
 
+
         <h2>
+
           Choisis ton univers
+
         </h2>
 
       </div>
 
+
       <div class="character-grid">
+
 
         <button
           type="button"
@@ -662,18 +1173,27 @@
         >
 
           <span class="emoji">
+
             😊
+
           </span>
 
+
           <h3>
+
             Gentil
+
           </h3>
 
+
           <p>
+
             Héros, princesses et personnages iconiques.
+
           </p>
 
         </button>
+
 
         <button
           type="button"
@@ -682,44 +1202,64 @@
         >
 
           <span class="emoji">
+
             😈
+
           </span>
 
+
           <h3>
+
             Méchant
+
           </h3>
 
+
           <p>
+
             Villains, styles sombres et looks puissants.
+
           </p>
 
         </button>
 
+
       </div>
 
     </div>
+
 
     <div class="step">
 
       <div class="step-title">
 
         <div class="step-number">
+
           3
+
         </div>
 
+
         <h2>
+
           Ta morphologie
+
         </h2>
 
       </div>
 
+
       <div class="body-grid">
+
 
         <div class="input-card">
 
           <label for="height">
+
             Taille
+
           </label>
+
 
           <div class="input-wrapper">
 
@@ -731,19 +1271,26 @@
               max="250"
             >
 
+
             <span>
+
               cm
+
             </span>
 
           </div>
 
         </div>
 
+
         <div class="input-card">
 
           <label for="weight">
+
             Poids
+
           </label>
+
 
           <div class="input-wrapper">
 
@@ -755,25 +1302,33 @@
               max="300"
             >
 
+
             <span>
+
               kg
+
             </span>
 
           </div>
 
         </div>
 
+
       </div>
 
     </div>
+
 
     <button
       type="button"
       class="generate-button"
       id="generateButton"
     >
+
       ✨ Générer mon DisneyBound
+
     </button>
+
 
     <div
       class="loading"
@@ -782,101 +1337,139 @@
 
       <div class="spinner"></div>
 
+
       <p>
+
         L'IA analyse ta photo et recherche ton style idéal...
+
       </p>
 
     </div>
 
-    <div
-      class="error-box"
-      id="errorBox"
-    ></div>
 
   </section>
 
+
   <section id="result">
+
 
     <div class="result-card">
 
+
       <div class="result-header">
+
 
         <div
           class="result-character"
           id="resultEmoji"
         >
+
           ✨
+
         </div>
 
+
         <h2 id="resultTitle">
+
           Ton look est prêt !
+
         </h2>
 
+
         <p id="resultSubtitle">
+
           Voici les pièces à rechercher pour créer ton look.
+
         </p>
+
 
       </div>
 
+
       <div class="look-list">
+
 
         <div class="look-item">
 
           <strong>
+
             👕 Haut
+
           </strong>
+
 
           <span id="resultTop"></span>
 
         </div>
 
+
         <div class="look-item">
 
           <strong>
+
             👖 Bas
+
           </strong>
+
 
           <span id="resultBottom"></span>
 
         </div>
 
+
         <div class="look-item">
 
           <strong>
+
             🧥 Veste
+
           </strong>
+
 
           <span id="resultJacket"></span>
 
         </div>
 
+
         <div class="look-item">
 
           <strong>
+
             👟 Chaussures
+
           </strong>
+
 
           <span id="resultShoes"></span>
 
         </div>
 
+
         <div class="look-item">
 
           <strong>
+
             ✨ Accessoires
+
           </strong>
+
 
           <span id="resultAccessory"></span>
 
         </div>
 
+
       </div>
+
 
       <div class="colors-section">
 
         <h3>
+
           🎨 Palette de couleurs
+
         </h3>
+
 
         <div
           class="colors-list"
@@ -885,11 +1478,15 @@
 
       </div>
 
+
       <div class="search-section">
 
         <h3>
+
           🔎 Recherches produits
+
         </h3>
+
 
         <div
           class="search-list"
@@ -898,125 +1495,64 @@
 
       </div>
 
+
     </div>
 
   </section>
 
+
 </main>
 
+
 <script>
+
+
+  /*
+   * ==========================================
+   * VARIABLES
+   * ==========================================
+   */
 
   const photoInput =
     document.getElementById("photoInput");
 
+
   const preview =
     document.getElementById("preview");
+
 
   const uploadContent =
     document.getElementById("uploadContent");
 
+
   const characterButtons =
-    document.querySelectorAll(".character-option");
+    document.querySelectorAll(
+      ".character-option"
+    );
+
 
   const generateButton =
-    document.getElementById("generateButton");
+    document.getElementById(
+      "generateButton"
+    );
+
 
   const loading =
     document.getElementById("loading");
 
+
   const result =
     document.getElementById("result");
 
-  const errorBox =
-    document.getElementById("errorBox");
 
   let selectedType = null;
 
 
-  /* =========================
-     ERREURS
-  ========================== */
-
-  function showError(message) {
-
-    let text =
-      "Une erreur est survenue.";
-
-    if (
-      typeof message ===
-      "string"
-    ) {
-
-      text =
-        message;
-
-    } else if (
-      message &&
-      typeof message ===
-      "object"
-    ) {
-
-      if (
-        typeof message.message ===
-        "string"
-      ) {
-
-        text =
-          message.message;
-
-      } else if (
-        typeof message.error ===
-        "string"
-      ) {
-
-        text =
-          message.error;
-
-      } else {
-
-        try {
-
-          text =
-            JSON.stringify(
-              message,
-              null,
-              2
-            );
-
-        } catch {
-
-          text =
-            "Erreur inconnue.";
-
-        }
-
-      }
-
-    }
-
-    errorBox.textContent =
-      "⚠️ " + text;
-
-    errorBox.style.display =
-      "block";
-
-  }
-
-
-  function hideError() {
-
-    errorBox.textContent =
-      "";
-
-    errorBox.style.display =
-      "none";
-
-  }
-
-
-  /* =========================
-     PHOTO
-  ========================== */
+  /*
+   * ==========================================
+   * PHOTO PREVIEW
+   * ==========================================
+   */
 
   photoInput.addEventListener(
     "change",
@@ -1025,28 +1561,30 @@
       const file =
         event.target.files[0];
 
+
       if (!file) {
+
         return;
+
       }
 
-      hideError();
 
-      if (
-        !file.type.startsWith(
-          "image/"
-        )
-      ) {
+      if (!file.type.startsWith("image/")) {
 
-        showError(
+        alert(
           "Merci de sélectionner une image."
         );
 
+        photoInput.value = "";
+
         return;
 
       }
 
+
       const reader =
         new FileReader();
+
 
       reader.onload =
         function(e) {
@@ -1062,26 +1600,28 @@
 
         };
 
+
       reader.onerror =
         function() {
 
-          showError(
+          alert(
             "Impossible de lire cette photo."
           );
 
         };
 
-      reader.readAsDataURL(
-        file
-      );
+
+      reader.readAsDataURL(file);
 
     }
   );
 
 
-  /* =========================
-     PERSONNAGE
-  ========================== */
+  /*
+   * ==========================================
+   * SELECTION PERSONNAGE
+   * ==========================================
+   */
 
   characterButtons.forEach(
     button => {
@@ -1089,8 +1629,6 @@
       button.addEventListener(
         "click",
         function() {
-
-          hideError();
 
           characterButtons.forEach(
             item => {
@@ -1102,9 +1640,11 @@
             }
           );
 
+
           this.classList.add(
             "selected"
           );
+
 
           selectedType =
             this.dataset.type;
@@ -1116,9 +1656,192 @@
   );
 
 
-  /* =========================
-     COPIE
-  ========================== */
+  /*
+   * ==========================================
+   * COMPRESSION PHOTO
+   * ==========================================
+   *
+   * Important :
+   * La photo est réduite avant l'envoi.
+   *
+   * Cela évite les requêtes trop lourdes
+   * vers Vercel.
+   */
+
+  async function compressImage(file) {
+
+    return new Promise(
+      (resolve, reject) => {
+
+        const reader =
+          new FileReader();
+
+
+        reader.onload =
+          function(event) {
+
+            const image =
+              new Image();
+
+
+            image.onload =
+              function() {
+
+                const maxSize =
+                  1600;
+
+
+                let width =
+                  image.width;
+
+                let height =
+                  image.height;
+
+
+                if (
+                  width > maxSize ||
+                  height > maxSize
+                ) {
+
+                  if (width > height) {
+
+                    height =
+                      Math.round(
+                        height *
+                        maxSize /
+                        width
+                      );
+
+                    width =
+                      maxSize;
+
+                  } else {
+
+                    width =
+                      Math.round(
+                        width *
+                        maxSize /
+                        height
+                      );
+
+                    height =
+                      maxSize;
+
+                  }
+
+                }
+
+
+                const canvas =
+                  document.createElement(
+                    "canvas"
+                  );
+
+
+                canvas.width =
+                  width;
+
+                canvas.height =
+                  height;
+
+
+                const context =
+                  canvas.getContext(
+                    "2d"
+                  );
+
+
+                context.drawImage(
+                  image,
+                  0,
+                  0,
+                  width,
+                  height
+                );
+
+
+                const dataUrl =
+                  canvas.toDataURL(
+                    "image/jpeg",
+                    0.78
+                  );
+
+
+                const parts =
+                  dataUrl.split(",");
+
+
+                if (
+                  parts.length < 2
+                ) {
+
+                  reject(
+                    new Error(
+                      "Impossible de compresser la photo."
+                    )
+                  );
+
+                  return;
+
+                }
+
+
+                resolve({
+
+                  base64:
+                    parts[1],
+
+                  mimeType:
+                    "image/jpeg"
+
+                });
+
+              };
+
+
+            image.onerror =
+              function() {
+
+                reject(
+                  new Error(
+                    "Impossible de charger la photo."
+                  )
+                );
+
+              };
+
+
+            image.src =
+              event.target.result;
+
+          };
+
+
+        reader.onerror =
+          function() {
+
+            reject(
+              new Error(
+                "Impossible de lire la photo."
+              )
+            );
+
+          };
+
+
+        reader.readAsDataURL(file);
+
+      }
+    );
+
+  }
+
+
+  /*
+   * ==========================================
+   * COPIE
+   * ==========================================
+   */
 
   async function copySearch(
     text,
@@ -1127,30 +1850,34 @@
 
     try {
 
-      await navigator.clipboard.writeText(
-        text
-      );
+      await navigator.clipboard
+        .writeText(text);
 
-      const original =
+
+      const originalText =
         button.textContent;
+
 
       button.textContent =
         "✓ Copié";
 
+
       setTimeout(
-        () => {
+        function() {
 
           button.textContent =
-            original;
+            originalText;
 
         },
         1500
       );
 
-    } catch {
 
-      showError(
-        "Impossible de copier cette recherche."
+    } catch (error) {
+
+      console.error(
+        "Erreur copie :",
+        error
       );
 
     }
@@ -1158,9 +1885,11 @@
   }
 
 
-  /* =========================
-     COULEURS
-  ========================== */
+  /*
+   * ==========================================
+   * COULEURS
+   * ==========================================
+   */
 
   function displayColors(
     colors
@@ -1171,34 +1900,41 @@
         "resultColors"
       );
 
+
     container.innerHTML =
       "";
 
-    if (
-      !Array.isArray(colors)
-    ) {
+
+    if (!Array.isArray(colors)) {
 
       return;
 
     }
 
+
     colors.forEach(
       color => {
 
         if (!color) {
+
           return;
+
         }
+
 
         const tag =
           document.createElement(
             "span"
           );
 
+
         tag.className =
           "color-tag";
 
+
         tag.textContent =
           color;
+
 
         container.appendChild(
           tag
@@ -1210,9 +1946,11 @@
   }
 
 
-  /* =========================
-     RECHERCHES
-  ========================== */
+  /*
+   * ==========================================
+   * RECHERCHES
+   * ==========================================
+   */
 
   function displaySearches(
     searches
@@ -1223,8 +1961,23 @@
         "searchList"
       );
 
+
     container.innerHTML =
       "";
+
+
+    if (
+      !searches ||
+      typeof searches !== "object"
+    ) {
+
+      container.innerHTML =
+        "<p style='color:#a1a1aa;'>Aucune recherche disponible.</p>";
+
+      return;
+
+    }
+
 
     const labels = {
 
@@ -1241,127 +1994,148 @@
     };
 
 
-    Object.keys(labels).forEach(
-      key => {
+    Object.keys(labels)
+      .forEach(
+        key => {
 
-        const value =
-          searches?.[key];
-
-        if (!value) {
-          return;
-        }
-
-        const item =
-          document.createElement(
-            "div"
-          );
-
-        item.className =
-          "search-item";
+          const value =
+            searches[key];
 
 
-        const label =
-          document.createElement(
-            "div"
-          );
+          if (!value) {
 
-        label.className =
-          "search-label";
-
-        label.textContent =
-          labels[key];
-
-
-        const search =
-          document.createElement(
-            "div"
-          );
-
-        search.className =
-          "search-value";
-
-        search.textContent =
-          value;
-
-
-        const button =
-          document.createElement(
-            "button"
-          );
-
-        button.type =
-          "button";
-
-        button.className =
-          "copy-button";
-
-        button.textContent =
-          "Copier";
-
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            copySearch(
-              value,
-              button
-            );
+            return;
 
           }
-        );
 
 
-        item.appendChild(
-          label
-        );
-
-        item.appendChild(
-          search
-        );
-
-        item.appendChild(
-          button
-        );
+          const item =
+            document.createElement(
+              "div"
+            );
 
 
-        container.appendChild(
-          item
-        );
+          item.className =
+            "search-item";
 
-      }
-    );
+
+          const label =
+            document.createElement(
+              "div"
+            );
+
+
+          label.className =
+            "search-label";
+
+
+          label.textContent =
+            labels[key];
+
+
+          const search =
+            document.createElement(
+              "div"
+            );
+
+
+          search.className =
+            "search-value";
+
+
+          search.textContent =
+            value;
+
+
+          const button =
+            document.createElement(
+              "button"
+            );
+
+
+          button.type =
+            "button";
+
+
+          button.className =
+            "copy-button";
+
+
+          button.textContent =
+            "Copier";
+
+
+          button.addEventListener(
+            "click",
+            function() {
+
+              copySearch(
+                value,
+                button
+              );
+
+            }
+          );
+
+
+          item.appendChild(
+            label
+          );
+
+
+          item.appendChild(
+            search
+          );
+
+
+          item.appendChild(
+            button
+          );
+
+
+          container.appendChild(
+            item
+          );
+
+        }
+      );
 
   }
 
 
-  /* =========================
-     GÉNÉRATION
-  ========================== */
+  /*
+   * ==========================================
+   * GENERATION
+   * ==========================================
+   */
 
   generateButton.addEventListener(
     "click",
     async function() {
 
-      hideError();
-
       const height =
         document.getElementById(
           "height"
-        ).value.trim();
+        ).value;
+
 
       const weight =
         document.getElementById(
           "weight"
-        ).value.trim();
+        ).value;
+
 
       const file =
         photoInput.files[0];
 
 
+      /*
+       * VALIDATION
+       */
+
       if (!file) {
 
-        showError(
+        alert(
           "Ajoute d'abord une photo."
         );
 
@@ -1372,7 +2146,7 @@
 
       if (!selectedType) {
 
-        showError(
+        alert(
           "Choisis Gentil ou Méchant."
         );
 
@@ -1383,7 +2157,7 @@
 
       if (!height || !weight) {
 
-        showError(
+        alert(
           "Entre ta taille et ton poids."
         );
 
@@ -1392,14 +2166,21 @@
       }
 
 
+      /*
+       * LOADING
+       */
+
       generateButton.disabled =
         true;
+
 
       generateButton.style.display =
         "none";
 
+
       loading.style.display =
         "block";
+
 
       result.style.display =
         "none";
@@ -1407,77 +2188,43 @@
 
       try {
 
-        const imageBase64 =
-          await new Promise(
-            (resolve, reject) => {
 
-              const reader =
-                new FileReader();
+        /*
+         * ==================================
+         * COMPRESSION PHOTO
+         * ==================================
+         */
 
-              reader.onload =
-                () => {
-
-                  const dataUrl =
-                    reader.result;
-
-                  if (
-                    typeof dataUrl !==
-                    "string"
-                  ) {
-
-                    reject(
-                      new Error(
-                        "Format de photo invalide."
-                      )
-                    );
-
-                    return;
-
-                  }
-
-                  const comma =
-                    dataUrl.indexOf(",");
-
-                  if (
-                    comma === -1
-                  ) {
-
-                    reject(
-                      new Error(
-                        "Impossible de convertir la photo."
-                      )
-                    );
-
-                    return;
-
-                  }
-
-                  resolve(
-                    dataUrl.substring(
-                      comma + 1
-                    )
-                  );
-
-                };
-
-              reader.onerror =
-                () => {
-
-                  reject(
-                    new Error(
-                      "Impossible de lire la photo."
-                    )
-                  );
-
-                };
-
-              reader.readAsDataURL(
-                file
-              );
-
-            }
+        const compressed =
+          await compressImage(
+            file
           );
 
+
+        /*
+         * DEBUG TAILLE
+         */
+
+        const approximateSize =
+          Math.round(
+            compressed.base64.length *
+            0.75 /
+            1024
+          );
+
+
+        console.log(
+          "Photo envoyée :",
+          approximateSize,
+          "KB"
+        );
+
+
+        /*
+         * ==================================
+         * APPEL API
+         * ==================================
+         */
 
         const response =
           await fetch(
@@ -1487,8 +2234,13 @@
               method: "POST",
 
               headers: {
+
                 "Content-Type":
+                  "application/json",
+
+                "Accept":
                   "application/json"
+
               },
 
               body:
@@ -1504,10 +2256,10 @@
                     weight,
 
                   image:
-                    imageBase64,
+                    compressed.base64,
 
                   mimeType:
-                    file.type
+                    compressed.mimeType
 
                 })
 
@@ -1515,17 +2267,24 @@
           );
 
 
+        /*
+         * ==================================
+         * LECTURE REPONSE
+         * ==================================
+         */
+
         const rawText =
           await response.text();
 
 
         console.log(
-          "API status:",
+          "HTTP API :",
           response.status
         );
 
+
         console.log(
-          "API réponse:",
+          "Réponse API :",
           rawText
         );
 
@@ -1536,64 +2295,76 @@
         try {
 
           data =
-            rawText
-              ? JSON.parse(
-                  rawText
-                )
-              : null;
+            JSON.parse(
+              rawText
+            );
 
         } catch {
 
           throw new Error(
-            "Le serveur /api/generate ne renvoie pas de JSON. Vérifie les logs Vercel."
+            "Le serveur /api/generate ne renvoie pas de JSON. " +
+            "Code HTTP : " +
+            response.status
           );
 
         }
 
 
+        /*
+         * ==================================
+         * ERREUR SERVEUR
+         * ==================================
+         */
+
         if (!response.ok) {
 
-          let serverError =
-            "Erreur serveur " +
-            response.status;
-
+          let errorMessage =
+            "Erreur serveur.";
 
           if (
-            data &&
             typeof data.error ===
             "string"
           ) {
 
-            serverError =
+            errorMessage =
               data.error;
 
           } else if (
-            data &&
             data.error &&
-            typeof data.error.message ===
-            "string"
+            typeof data.error ===
+              "object"
           ) {
 
-            serverError =
-              data.error.message;
+            errorMessage =
+              data.error.message ||
+              JSON.stringify(
+                data.error
+              );
 
           }
 
 
           throw new Error(
-            serverError
+            errorMessage
           );
 
         }
 
 
+        /*
+         * ==================================
+         * RESULTAT
+         * ==================================
+         */
+
         if (
-          !data ||
-          !data.result
+          !data.result ||
+          typeof data.result !==
+            "object"
         ) {
 
           throw new Error(
-            "Le serveur a répondu sans résultat DisneyBound."
+            "La réponse de l'IA est invalide."
           );
 
         }
@@ -1602,6 +2373,10 @@
         const disneyBound =
           data.result;
 
+
+        /*
+         * PERSONNAGE
+         */
 
         document.getElementById(
           "resultEmoji"
@@ -1613,7 +2388,8 @@
           "resultTitle"
         ).textContent =
           `DisneyBound inspiré de ${
-            disneyBound.personnage
+            disneyBound.personnage ||
+            "ton personnage Disney"
           }`;
 
 
@@ -1622,6 +2398,10 @@
         ).textContent =
           "Voici les pièces à rechercher pour créer ton look.";
 
+
+        /*
+         * VETEMENTS
+         */
 
         document.getElementById(
           "resultTop"
@@ -1651,66 +2431,101 @@
           "Non renseigné";
 
 
+        /*
+         * ACCESSOIRES
+         */
+
         const accessories =
           disneyBound.accessoires;
 
 
-        document.getElementById(
-          "resultAccessory"
-        ).textContent =
-          Array.isArray(
-            accessories
-          ) &&
-          accessories.length
-            ? accessories.join(
-                " • "
-              )
-            : "Aucun accessoire renseigné";
+        if (
+          Array.isArray(accessories) &&
+          accessories.length > 0
+        ) {
 
+          document.getElementById(
+            "resultAccessory"
+          ).textContent =
+            accessories.join(
+              " • "
+            );
+
+        } else {
+
+          document.getElementById(
+            "resultAccessory"
+          ).textContent =
+            "Aucun accessoire renseigné";
+
+        }
+
+
+        /*
+         * COULEURS
+         */
 
         displayColors(
           disneyBound.couleurs
         );
 
 
+        /*
+         * RECHERCHES
+         */
+
         displaySearches(
           disneyBound.recherches
         );
 
+
+        /*
+         * AFFICHAGE
+         */
 
         result.style.display =
           "block";
 
 
         result.scrollIntoView({
+
           behavior:
             "smooth",
+
           block:
             "start"
+
         });
 
 
       } catch (error) {
 
+
         console.error(
-          "Erreur DisneyBound:",
+          "Erreur DisneyBound :",
           error
         );
 
 
-        showError(
-          error?.message ||
-          "Impossible de contacter l'IA."
+        alert(
+          "⚠️ " +
+          (
+            error?.message ||
+            "Une erreur est survenue."
+          )
         );
 
 
       } finally {
 
+
         loading.style.display =
           "none";
 
+
         generateButton.style.display =
           "block";
+
 
         generateButton.disabled =
           false;
@@ -1722,5 +2537,8 @@
 
 </script>
 
+
 </body>
+
 </html>
+```
