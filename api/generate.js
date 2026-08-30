@@ -4,21 +4,26 @@ export default async function handler(req, res) {
   /*
    * ==========================================
    * DISNEYBOUND AI
-   * API GEMINI 3.5 FLASH-LITE
+   * GEMINI 3.5 FLASH-LITE
    * ==========================================
    */
 
+
   /*
    * ==========================================
-   * 1. VERIFICATION DE LA METHODE
+   * 1. METHOD
    * ==========================================
    */
 
   if (req.method !== "POST") {
 
     return res.status(405).json({
+
       success: false,
-      error: "Méthode non autorisée."
+
+      error:
+        "Méthode non autorisée."
+
     });
 
   }
@@ -26,19 +31,35 @@ export default async function handler(req, res) {
 
   try {
 
+
     /*
      * ==========================================
-     * 2. RECUPERATION DES DONNEES
+     * 2. BODY
      * ==========================================
      */
 
-    const body = req.body || {};
+    const body =
+      req.body || {};
 
-    const characterType = body.characterType;
-    const height = body.height;
-    const weight = body.weight;
-    const image = body.image;
-    const mimeType = body.mimeType;
+
+    const characterType =
+      body.characterType;
+
+
+    const height =
+      body.height;
+
+
+    const weight =
+      body.weight;
+
+
+    const image =
+      body.image;
+
+
+    const mimeType =
+      body.mimeType;
 
 
     /*
@@ -50,8 +71,12 @@ export default async function handler(req, res) {
     if (!characterType) {
 
       return res.status(400).json({
+
         success: false,
-        error: "Le type de personnage est manquant."
+
+        error:
+          "Le type de personnage est manquant."
+
       });
 
     }
@@ -60,8 +85,12 @@ export default async function handler(req, res) {
     if (!height || !weight) {
 
       return res.status(400).json({
+
         success: false,
-        error: "La taille ou le poids est manquant."
+
+        error:
+          "La taille ou le poids est manquant."
+
       });
 
     }
@@ -70,8 +99,12 @@ export default async function handler(req, res) {
     if (!image) {
 
       return res.status(400).json({
+
         success: false,
-        error: "La photo est manquante."
+
+        error:
+          "La photo est manquante."
+
       });
 
     }
@@ -80,8 +113,12 @@ export default async function handler(req, res) {
     if (!mimeType) {
 
       return res.status(400).json({
+
         success: false,
-        error: "Le type de fichier image est manquant."
+
+        error:
+          "Le type d'image est manquant."
+
       });
 
     }
@@ -89,7 +126,7 @@ export default async function handler(req, res) {
 
     /*
      * ==========================================
-     * 4. CLE GEMINI
+     * 4. GEMINI API KEY
      * ==========================================
      */
 
@@ -100,13 +137,17 @@ export default async function handler(req, res) {
     if (!apiKey) {
 
       console.error(
-        "ERREUR : gemini_api_key absente."
+        "gemini_api_key absente."
       );
 
+
       return res.status(500).json({
+
         success: false,
+
         error:
           "La clé Gemini n'est pas configurée dans Vercel."
+
       });
 
     }
@@ -114,7 +155,7 @@ export default async function handler(req, res) {
 
     /*
      * ==========================================
-     * 5. PROMPT DISNEYBOUND
+     * 5. PROMPT
      * ==========================================
      */
 
@@ -125,10 +166,6 @@ Tu es l'IA officielle de DisneyBound.
 Ta mission est de créer une tenue DisneyBound moderne,
 élégante, réaliste et portable au quotidien à partir
 de la photo fournie.
-
-==========================================
-ANALYSE DE LA PHOTO
-==========================================
 
 Analyse uniquement les éléments visuels utiles à la
 création d'une tenue :
@@ -143,7 +180,7 @@ création d'une tenue :
 - style chic
 - style sportif
 - harmonie générale
-- accessoires déjà visibles
+- accessoires visibles
 
 Ne cherche jamais à identifier la personne.
 
@@ -157,7 +194,7 @@ Ne déduis jamais :
 - état de santé
 - personnalité
 - situation sociale
-- toute autre information personnelle sensible.
+- information personnelle sensible.
 
 La personne mesure ${height} cm et pèse ${weight} kg.
 
@@ -173,17 +210,15 @@ TYPE DE PERSONNAGE
 
 ${
   characterType === "villain"
-    ? "Le personnage doit être un MÉCHANT Disney."
-    : "Le personnage doit être un PERSONNAGE DISNEY GENTIL."
+    ? "Choisis un MÉCHANT Disney."
+    : "Choisis un PERSONNAGE DISNEY GENTIL."
 }
 
-Choisis UN personnage Disney.
+Choisis UN personnage Disney correspondant :
 
-Le personnage choisi doit correspondre :
-
-- au style vestimentaire observé
+- au style observé
 - aux couleurs observées
-- à l'univers demandé
+- au type demandé
 - à une tenue portable au quotidien.
 
 Évite de choisir systématiquement le même personnage.
@@ -192,72 +227,51 @@ Le personnage choisi doit correspondre :
 PRINCIPE DISNEYBOUND
 ==========================================
 
-Le résultat doit être un véritable DisneyBound.
+Inspire-toi du personnage sans reproduire son costume.
 
-Le personnage sert uniquement d'inspiration.
-
-NE REPRODUIS PAS son costume.
-
-La tenue doit pouvoir être portée dans la vie quotidienne.
+La tenue doit être portable dans la vie quotidienne.
 
 ==========================================
-INTERDICTIONS
+INTERDIT
 ==========================================
-
-INTERDIT :
 
 - cosplay
 - déguisement
 - costume
-- reproduction exacte du personnage
+- reproduction exacte
 - oreilles de personnage
 - imprimés représentant le personnage
 - logos du personnage
-- accessoires de cosplay
+- accessoires cosplay
 - vêtements extravagants
-- tenue de convention
-- reproduction exacte d'une tenue Disney.
+- tenue de convention.
 
 ==========================================
-PRIVILEGIER
+PRIVILÉGIER
 ==========================================
 
-Privilégie :
-
-- vêtements de mode classiques
+- vêtements classiques
 - couleurs inspirées du personnage
-- palette de couleurs
+- palette cohérente
 - matières
-- silhouettes
-- coupes modernes
+- silhouettes modernes
 - détails subtils
 - accessoires discrets
-- vêtements trouvables dans des boutiques classiques.
+- vêtements trouvables en boutique classique.
 
 ==========================================
-COHERENCE AVEC LA PHOTO
+COHERENCE STYLE
 ==========================================
 
 Conserve une partie importante du style observé.
 
-Si le style observé est casual :
+Casual = casual.
 
-reste casual.
+Streetwear = majoritairement streetwear.
 
-Si le style observé est streetwear :
+Chic = chic.
 
-reste majoritairement streetwear.
-
-Si le style observé est chic :
-
-reste chic.
-
-Si le style observé est sportif :
-
-reste sportif et moderne.
-
-Le résultat ne doit jamais sembler complètement déconnecté
-du style de la personne photographiée.
+Sportif = sportif et moderne.
 
 ==========================================
 CHAUSSURES
@@ -270,7 +284,7 @@ Privilégie :
 - bottines
 - mocassins
 - chaussures plates
-- chaussures casual
+- chaussures casual.
 
 Les talons sont autorisés uniquement s'ils sont cohérents
 avec le style observé.
@@ -279,25 +293,22 @@ avec le style observé.
 TENUE
 ==========================================
 
-Propose exactement :
+Propose :
 
 - 1 haut
 - 1 bas
 - 1 veste ou couche extérieure
 - 1 paire de chaussures
-- 2 à 4 accessoires
-
-Chaque pièce doit être réaliste et achetable dans une
-boutique de mode classique.
+- 2 à 4 accessoires.
 
 ==========================================
 RECHERCHES PRODUITS
 ==========================================
 
 Pour chaque pièce, crée une recherche permettant de trouver
-un véritable produit de mode dans une boutique en ligne.
+un véritable produit de mode en ligne.
 
-La description et la recherche sont deux éléments différents.
+La description et la recherche doivent être différentes.
 
 Exemple :
 
@@ -308,23 +319,17 @@ recherches.haut :
 "body noir fines bretelles femme"
 
 ==========================================
-REGLES DES RECHERCHES
+REGLES RECHERCHES
 ==========================================
-
-Pour chaque recherche :
 
 - maximum 8 mots
 - mots-clés uniquement
-- aucune phrase complète
+- aucune phrase
 - aucun guillemet
 - aucun nom de personnage
-- aucun nom de marque obligatoire
-- aucun texte promotionnel
+- aucune marque obligatoire
 - aucune répétition
 - une seule recherche par champ.
-
-Les recherches doivent être naturelles pour Google,
-Amazon, Zalando, Vinted ou une boutique de mode.
 
 ==========================================
 ACCESSOIRES
@@ -332,36 +337,15 @@ ACCESSOIRES
 
 Propose entre 2 et 4 accessoires maximum.
 
-Les accessoires doivent être courts et réalistes.
-
-Exemple :
-
-[
-  "collier doré fin",
-  "bracelet minimaliste",
-  "sac noir"
-]
-
 ==========================================
 COULEURS
 ==========================================
 
 Indique entre 3 et 5 couleurs principales.
 
-Exemple :
-
-[
-  "noir",
-  "violet",
-  "doré",
-  "argenté"
-]
-
 ==========================================
-FORMAT DE REPONSE
+JSON
 ==========================================
-
-IMPORTANT :
 
 Réponds UNIQUEMENT avec le JSON.
 
@@ -369,7 +353,7 @@ Aucun texte avant.
 
 Aucun texte après.
 
-Utilise exactement cette structure :
+Structure exacte :
 
 {
   "personnage": "",
@@ -393,20 +377,15 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 6. MODELE GEMINI
+     * 6. MODELE
      * ==========================================
      *
-     * IMPORTANT :
-     * On utilise Gemini 3.5 Flash-Lite.
+     * NE PAS CHANGER.
      *
-     * Ce modèle est choisi pour :
-     * - son coût réduit
-     * - sa rapidité
-     * - les usages à gros volume
-     * - notre objectif de nombreuses générations
+     * Gemini 3.5 Flash-Lite
      *
-     * NE PAS remplacer par Gemini 2.5.
-     * NE PAS remplacer automatiquement par Gemini 3.6.
+     * Modèle rapide et économique destiné
+     * aux usages à haut volume.
      */
 
     const model =
@@ -415,7 +394,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 7. URL GEMINI
+     * 7. URL
      * ==========================================
      */
 
@@ -433,7 +412,7 @@ Utilise exactement cette structure :
      */
 
     console.log(
-      "DisneyBound : appel Gemini",
+      "DisneyBound → Gemini :",
       model
     );
 
@@ -443,51 +422,66 @@ Utilise exactement cette structure :
         url,
         {
 
-          method: "POST",
+          method:
+            "POST",
 
           headers: {
-            "Content-Type": "application/json"
+
+            "Content-Type":
+              "application/json"
+
           },
 
-          body: JSON.stringify({
+          body:
+            JSON.stringify({
 
-            contents: [
+              contents: [
 
-              {
+                {
 
-                role: "user",
+                  role:
+                    "user",
 
-                parts: [
+                  parts: [
 
-                  {
-                    text: prompt
-                  },
+                    {
 
-                  {
-                    inline_data: {
+                      text:
+                        prompt
 
-                      mime_type: mimeType,
+                    },
 
-                      data: image
+                    {
+
+                      inline_data: {
+
+                        mime_type:
+                          mimeType,
+
+                        data:
+                          image
+
+                      }
 
                     }
 
-                  }
+                  ]
 
-                ]
+                }
+
+              ],
+
+              generationConfig: {
+
+                responseMimeType:
+                  "application/json",
+
+                temperature:
+                  0.8
 
               }
 
-            ],
-
-            generationConfig: {
-
-              responseMimeType:
-                "application/json"
-
-            }
-
-          })
+            })
 
         }
       );
@@ -495,7 +489,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 9. LECTURE REPONSE GEMINI
+     * 9. REPONSE GEMINI
      * ==========================================
      */
 
@@ -504,7 +498,7 @@ Utilise exactement cette structure :
 
 
     console.log(
-      "Gemini HTTP status:",
+      "Gemini HTTP :",
       geminiResponse.status
     );
 
@@ -518,33 +512,33 @@ Utilise exactement cette structure :
     if (!geminiResponse.ok) {
 
       console.error(
-        "Erreur complète Gemini :",
+        "Gemini error:",
         geminiText
       );
 
 
-      let geminiError = null;
+      let errorData = null;
 
 
       try {
 
-        geminiError =
+        errorData =
           JSON.parse(
             geminiText
           );
 
       } catch {
 
-        geminiError = null;
+        errorData = null;
 
       }
 
 
       const message =
-        geminiError?.error?.message ||
-        geminiError?.message ||
+        errorData?.error?.message ||
+        errorData?.message ||
         geminiText ||
-        `Erreur Gemini HTTP ${geminiResponse.status}`;
+        "Erreur inconnue Gemini.";
 
 
       return res.status(500).json({
@@ -562,7 +556,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 11. PARSE REPONSE API GEMINI
+     * 11. JSON GEMINI API
      * ==========================================
      */
 
@@ -576,10 +570,10 @@ Utilise exactement cette structure :
           geminiText
         );
 
-    } catch (error) {
+    } catch {
 
       console.error(
-        "Gemini a renvoyé une réponse API non JSON :",
+        "Gemini API non JSON:",
         geminiText
       );
 
@@ -589,7 +583,7 @@ Utilise exactement cette structure :
         success: false,
 
         error:
-          "Gemini a renvoyé une réponse invalide."
+          "Gemini a renvoyé une réponse API invalide."
 
       });
 
@@ -598,7 +592,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 12. EXTRACTION DU TEXTE
+     * 12. TEXTE RESULTAT
      * ==========================================
      */
 
@@ -612,8 +606,10 @@ Utilise exactement cette structure :
     if (!resultText) {
 
       console.error(
-        "Gemini ne contient aucun texte.",
-        geminiData
+        "Gemini sans texte:",
+        JSON.stringify(
+          geminiData
+        )
       );
 
 
@@ -631,7 +627,7 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 13. PARSE DU JSON DISNEYBOUND
+     * 13. JSON DISNEYBOUND
      * ==========================================
      */
 
@@ -645,10 +641,10 @@ Utilise exactement cette structure :
           resultText
         );
 
-    } catch (error) {
+    } catch {
 
       console.error(
-        "JSON DisneyBound invalide :",
+        "JSON DisneyBound invalide:",
         resultText
       );
 
@@ -658,7 +654,7 @@ Utilise exactement cette structure :
         success: false,
 
         error:
-          "Gemini a répondu, mais le résultat DisneyBound n'est pas un JSON valide."
+          "Le résultat Gemini n'est pas un JSON DisneyBound valide."
 
       });
 
@@ -667,12 +663,13 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 14. VERIFICATION STRUCTURE
+     * 14. NORMALISATION
      * ==========================================
      */
 
     if (
-      typeof disneyBound !== "object" ||
+      typeof disneyBound !==
+      "object" ||
       disneyBound === null
     ) {
 
@@ -681,79 +678,52 @@ Utilise exactement cette structure :
         success: false,
 
         error:
-          "Le résultat DisneyBound n'est pas un objet valide."
+          "Le résultat DisneyBound est invalide."
 
       });
 
     }
 
 
-    if (!disneyBound.personnage) {
+    /*
+     * ==========================================
+     * 15. VERIFICATION
+     * ==========================================
+     */
 
-      return res.status(500).json({
+    const requiredFields = [
 
-        success: false,
+      "personnage",
 
-        error:
-          "Le personnage Disney est manquant."
+      "haut",
 
-      });
+      "bas",
 
-    }
+      "veste",
 
+      "chaussures"
 
-    if (!disneyBound.haut) {
-
-      return res.status(500).json({
-
-        success: false,
-
-        error:
-          "Le haut est manquant."
-
-      });
-
-    }
+    ];
 
 
-    if (!disneyBound.bas) {
+    for (
+      const field of requiredFields
+    ) {
 
-      return res.status(500).json({
+      if (
+        !disneyBound[field]
+      ) {
 
-        success: false,
+        return res.status(500).json({
 
-        error:
-          "Le bas est manquant."
+          success: false,
 
-      });
+          error:
+            `Le champ "${field}" est manquant.`
 
-    }
+        });
 
-
-    if (!disneyBound.veste) {
-
-      return res.status(500).json({
-
-        success: false,
-
-        error:
-          "La veste est manquante."
-
-      });
-
-    }
-
-
-    if (!disneyBound.chaussures) {
-
-      return res.status(500).json({
-
-        success: false,
-
-        error:
-          "Les chaussures sont manquantes."
-
-      });
+      }
 
     }
 
@@ -796,7 +766,8 @@ Utilise exactement cette structure :
 
     if (
       !disneyBound.recherches ||
-      typeof disneyBound.recherches !== "object"
+      typeof disneyBound.recherches !==
+        "object"
     ) {
 
       return res.status(500).json({
@@ -813,49 +784,12 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 15. VERIFICATION DES RECHERCHES
-     * ==========================================
-     */
-
-    const requiredSearches = [
-      "haut",
-      "bas",
-      "veste",
-      "chaussures",
-      "accessoires"
-    ];
-
-
-    for (
-      const key of requiredSearches
-    ) {
-
-      if (
-        !disneyBound.recherches[key]
-      ) {
-
-        return res.status(500).json({
-
-          success: false,
-
-          error:
-            `La recherche produit "${key}" est manquante.`
-
-        });
-
-      }
-
-    }
-
-
-    /*
-     * ==========================================
-     * 16. REPONSE AU SITE
+     * 16. REPONSE
      * ==========================================
      */
 
     console.log(
-      "DisneyBound généré avec succès :",
+      "DisneyBound réussi :",
       disneyBound.personnage
     );
 
@@ -864,12 +798,14 @@ Utilise exactement cette structure :
 
       success: true,
 
-      result: disneyBound
+      result:
+        disneyBound
 
     });
 
 
   } catch (error) {
+
 
     /*
      * ==========================================
@@ -878,7 +814,7 @@ Utilise exactement cette structure :
      */
 
     console.error(
-      "Erreur serveur DisneyBound :",
+      "Erreur API DisneyBound:",
       error
     );
 
@@ -889,7 +825,7 @@ Utilise exactement cette structure :
 
       error:
         error?.message ||
-        "Erreur interne du serveur DisneyBound."
+        "Erreur interne du serveur."
 
     });
 
