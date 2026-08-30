@@ -1,18 +1,10 @@
-export const config = {
-  api: {
-    bodyParser: {
-      sizeLimit: "5mb"
-    }
-  }
-};
-
 export default async function handler(req, res) {
 
   /*
    * ==========================================
    * DISNEYBOUND AI
    * GEMINI 3.5 FLASH-LITE
-   * VERSION ROBUSTE
+   * VERSION AVEC TAILLES ET PREFERENCES
    * ==========================================
    */
 
@@ -35,53 +27,61 @@ export default async function handler(req, res) {
 
   try {
 
-    /*
-     * ==========================================
-     * 2. VERIFICATION BODY
-     * ==========================================
-     */
-
-    if (!req.body) {
-
-      return res.status(400).json({
-        success: false,
-        error: "Aucune donnée reçue par le serveur."
-      });
-
-    }
-
 
     /*
      * ==========================================
-     * 3. BODY
+     * 2. BODY
      * ==========================================
      */
 
     const body =
-      typeof req.body === "string"
-        ? JSON.parse(req.body)
-        : req.body;
+      req.body || {};
 
 
     const characterType =
-      body?.characterType;
+      body.characterType;
+
 
     const height =
-      body?.height;
+      body.height;
+
 
     const weight =
-      body?.weight;
+      body.weight;
+
+
+    const clothingSize =
+      body.clothingSize;
+
+
+    const bottomSize =
+      body.bottomSize;
+
+
+    const shoeSize =
+      body.shoeSize;
+
+
+    const preferredFit =
+      body.preferredFit;
+
+
+    const shoppingSection =
+      body.shoppingSection;
+
 
     const image =
-      body?.image;
+      body.image;
+
 
     const mimeType =
-      body?.mimeType;
+      body.mimeType;
+
 
 
     /*
      * ==========================================
-     * 4. VALIDATION
+     * 3. VALIDATION
      * ==========================================
      */
 
@@ -102,6 +102,61 @@ export default async function handler(req, res) {
         success: false,
         error:
           "La taille ou le poids est manquant."
+      });
+
+    }
+
+
+    if (!clothingSize) {
+
+      return res.status(400).json({
+        success: false,
+        error:
+          "La taille de haut est manquante."
+      });
+
+    }
+
+
+    if (!bottomSize) {
+
+      return res.status(400).json({
+        success: false,
+        error:
+          "La taille de bas est manquante."
+      });
+
+    }
+
+
+    if (!shoeSize) {
+
+      return res.status(400).json({
+        success: false,
+        error:
+          "La pointure est manquante."
+      });
+
+    }
+
+
+    if (!preferredFit) {
+
+      return res.status(400).json({
+        success: false,
+        error:
+          "La coupe préférée est manquante."
+      });
+
+    }
+
+
+    if (!shoppingSection) {
+
+      return res.status(400).json({
+        success: false,
+        error:
+          "Le rayon shopping est manquant."
       });
 
     }
@@ -129,33 +184,10 @@ export default async function handler(req, res) {
     }
 
 
-    /*
-     * ==========================================
-     * 5. VERIFICATION IMAGE
-     * ==========================================
-     */
-
-    const allowedMimeTypes = [
-      "image/jpeg",
-      "image/png",
-      "image/webp"
-    ];
-
-
-    if (!allowedMimeTypes.includes(mimeType)) {
-
-      return res.status(400).json({
-        success: false,
-        error:
-          "Format d'image non supporté. Utilise JPG, PNG ou WEBP."
-      });
-
-    }
-
 
     /*
      * ==========================================
-     * 6. GEMINI API KEY
+     * 4. GEMINI API KEY
      * ==========================================
      */
 
@@ -166,7 +198,7 @@ export default async function handler(req, res) {
     if (!apiKey) {
 
       console.error(
-        "DisneyBound : gemini_api_key absente."
+        "gemini_api_key absente."
       );
 
 
@@ -179,9 +211,10 @@ export default async function handler(req, res) {
     }
 
 
+
     /*
      * ==========================================
-     * 7. PROMPT
+     * 5. PROMPT
      * ==========================================
      */
 
@@ -220,15 +253,51 @@ Ne déduis jamais :
 - état de santé
 - personnalité
 - situation sociale
-- information personnelle sensible
+- information personnelle sensible.
 
 La personne mesure ${height} cm et pèse ${weight} kg.
 
 Utilise ces informations uniquement pour déterminer
-des proportions générales de vêtements et proposer des
-coupes adaptées.
+des proportions générales de vêtements et proposer
+des coupes adaptées.
 
 Ne donne aucune analyse ou appréciation du corps.
+
+
+==========================================
+INFORMATIONS SHOPPING
+==========================================
+
+Taille de haut :
+${clothingSize}
+
+Taille de bas :
+${bottomSize}
+
+Pointure :
+${shoeSize}
+
+Coupe préférée :
+${preferredFit}
+
+Rayon shopping :
+${shoppingSection}
+
+
+IMPORTANT :
+
+Les tailles fournies par l'utilisateur sont des tailles
+qu'il porte habituellement.
+
+Utilise-les principalement pour construire des recherches
+produits réalistes et adaptées.
+
+Ne critique jamais les tailles.
+
+Ne commente jamais le corps de la personne.
+
+Ne transforme jamais les tailles en jugement physique.
+
 
 ==========================================
 TYPE DE PERSONNAGE
@@ -245,9 +314,10 @@ Choisis UN personnage Disney correspondant :
 - au style observé
 - aux couleurs observées
 - au type demandé
-- à une tenue portable au quotidien
+- à une tenue portable au quotidien.
 
 Évite de choisir systématiquement le même personnage.
+
 
 ==========================================
 PRINCIPE DISNEYBOUND
@@ -256,6 +326,10 @@ PRINCIPE DISNEYBOUND
 Inspire-toi du personnage sans reproduire son costume.
 
 La tenue doit être portable dans la vie quotidienne.
+
+Le résultat doit ressembler à une vraie tenue de mode
+et non à un déguisement.
+
 
 ==========================================
 INTERDIT
@@ -270,7 +344,8 @@ INTERDIT
 - logos du personnage
 - accessoires cosplay
 - vêtements extravagants
-- tenue de convention
+- tenue de convention.
+
 
 ==========================================
 PRIVILÉGIER
@@ -283,7 +358,8 @@ PRIVILÉGIER
 - silhouettes modernes
 - détails subtils
 - accessoires discrets
-- vêtements trouvables en boutique classique
+- vêtements trouvables en boutique classique.
+
 
 ==========================================
 COHERENCE STYLE
@@ -299,6 +375,28 @@ Chic = chic.
 
 Sportif = sportif et moderne.
 
+La coupe préférée de l'utilisateur doit également être
+respectée autant que possible :
+
+${preferredFit}
+
+
+==========================================
+RAYON SHOPPING
+==========================================
+
+Le résultat doit correspondre au rayon choisi :
+
+${shoppingSection}
+
+Utilise ce choix pour adapter :
+
+- les vêtements
+- les coupes
+- les recherches produits
+- les termes utilisés dans les recherches.
+
+
 ==========================================
 CHAUSSURES
 ==========================================
@@ -310,10 +408,14 @@ Privilégie :
 - bottines
 - mocassins
 - chaussures plates
-- chaussures casual
+- chaussures casual.
 
-Les talons sont autorisés uniquement s'ils sont
-cohérents avec le style observé.
+Les talons sont autorisés uniquement s'ils sont cohérents
+avec le style observé et avec la tenue proposée.
+
+La recherche chaussures doit prendre en compte la pointure
+${shoeSize} lorsque cela est pertinent.
+
 
 ==========================================
 TENUE
@@ -325,24 +427,69 @@ Propose :
 - 1 bas
 - 1 veste ou couche extérieure
 - 1 paire de chaussures
-- 2 à 4 accessoires
+- 2 à 4 accessoires.
+
+
+==========================================
+TAILLES DES PRODUITS
+==========================================
+
+Lorsque tu crées les recherches produits :
+
+Le haut doit être recherché avec la taille habituelle :
+
+${clothingSize}
+
+Le bas doit être recherché avec la taille habituelle :
+
+${bottomSize}
+
+Les chaussures doivent correspondre à :
+
+${shoeSize}
+
+Cependant, ne mets PAS obligatoirement la taille dans
+chaque recherche si cela rend la recherche moins naturelle.
+
+La recherche doit surtout permettre de trouver le bon type
+de produit.
+
+Exemple :
+
+Taille haut :
+M
+
+Bonne recherche :
+
+"body noir fines bretelles femme"
+
+Mauvaise recherche :
+
+"body noir fines bretelles femme taille M"
+
+La taille peut être utilisée lorsque cela améliore réellement
+la recherche.
+
 
 ==========================================
 RECHERCHES PRODUITS
 ==========================================
 
-Pour chaque pièce, crée une recherche permettant de
-trouver un véritable produit de mode en ligne.
+Pour chaque pièce, crée une recherche permettant de trouver
+un véritable produit de mode en ligne.
 
 La description et la recherche doivent être différentes.
 
 Exemple :
 
 haut :
-"Body noir à fines bretelles"
+
+"Body noir ajusté à fines bretelles"
 
 recherches.haut :
+
 "body noir fines bretelles femme"
+
 
 ==========================================
 REGLES RECHERCHES
@@ -356,6 +503,10 @@ REGLES RECHERCHES
 - aucune marque obligatoire
 - aucune répétition
 - une seule recherche par champ
+- recherche naturelle permettant de trouver un vrai produit
+- recherche adaptée au rayon shopping
+- recherche adaptée au style observé.
+
 
 ==========================================
 ACCESSOIRES
@@ -363,11 +514,37 @@ ACCESSOIRES
 
 Propose entre 2 et 4 accessoires maximum.
 
+Les accessoires doivent être courts.
+
+Ils doivent rester portables au quotidien.
+
+
 ==========================================
 COULEURS
 ==========================================
 
 Indique entre 3 et 5 couleurs principales.
+
+Les couleurs doivent correspondre à l'inspiration DisneyBound
+et à la tenue proposée.
+
+
+==========================================
+QUALITE DU RESULTAT
+==========================================
+
+Le résultat doit être cohérent de la tête aux pieds.
+
+Le haut, le bas, la veste, les chaussures et les accessoires
+doivent former une véritable tenue.
+
+Évite les associations incohérentes.
+
+Évite les pièces impossibles à porter ensemble.
+
+Le résultat doit pouvoir être acheté dans des boutiques
+de mode classiques.
+
 
 ==========================================
 JSON
@@ -379,7 +556,7 @@ Aucun texte avant.
 
 Aucun texte après.
 
-Utilise exactement cette structure :
+Structure exacte :
 
 {
   "personnage": "",
@@ -403,24 +580,18 @@ Utilise exactement cette structure :
 
     /*
      * ==========================================
-     * 8. MODELE GEMINI
+     * 6. MODELE
      * ==========================================
-     *
-     * IMPORTANT :
-     *
-     * On conserve Gemini 3.5 Flash-Lite.
-     *
-     * Modèle stable, rapide et économique.
-     *
      */
 
     const model =
       "gemini-3.5-flash-lite";
 
 
+
     /*
      * ==========================================
-     * 9. URL GEMINI
+     * 7. URL
      * ==========================================
      */
 
@@ -431,229 +602,94 @@ Utilise exactement cette structure :
       encodeURIComponent(apiKey);
 
 
+
     /*
      * ==========================================
-     * 10. LOG
+     * 8. APPEL GEMINI
      * ==========================================
      */
 
     console.log(
-      "=========================================="
-    );
-
-    console.log(
-      "DisneyBound → Gemini"
-    );
-
-    console.log(
-      "Model :",
+      "DisneyBound → Gemini :",
       model
     );
 
-    console.log(
-      "Character :",
-      characterType
-    );
 
-    console.log(
-      "Height :",
-      height
-    );
+    const geminiResponse =
+      await fetch(
+        url,
+        {
+          method: "POST",
 
-    console.log(
-      "Weight :",
-      weight
-    );
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
 
-    console.log(
-      "Mime type :",
-      mimeType
-    );
+          body:
+            JSON.stringify({
 
-    console.log(
-      "Image size :",
-      image.length
-    );
+              contents: [
 
-    console.log(
-      "=========================================="
-    );
+                {
+                  role:
+                    "user",
 
+                  parts: [
 
-    /*
-     * ==========================================
-     * 11. APPEL GEMINI
-     * ==========================================
-     */
+                    {
+                      text:
+                        prompt
+                    },
 
-    const controller =
-      new AbortController();
+                    {
+                      inline_data: {
 
+                        mime_type:
+                          mimeType,
 
-    const timeout =
-      setTimeout(
-        () => controller.abort(),
-        60000
-      );
-
-
-    let geminiResponse;
-
-
-    try {
-
-      geminiResponse =
-        await fetch(
-          url,
-          {
-            method: "POST",
-
-            headers: {
-              "Content-Type":
-                "application/json"
-            },
-
-            signal:
-              controller.signal,
-
-            body:
-              JSON.stringify({
-
-                contents: [
-
-                  {
-
-                    role: "user",
-
-                    parts: [
-
-                      {
-                        text: prompt
-                      },
-
-                      {
-                        inline_data: {
-
-                          mime_type:
-                            mimeType,
-
-                          data:
-                            image
-
-                        }
+                        data:
+                          image
 
                       }
+                    }
 
-                    ]
-
-                  }
-
-                ],
-
-                generationConfig: {
-
-                  responseMimeType:
-                    "application/json"
+                  ]
 
                 }
 
-              })
+              ],
 
-          }
-        );
+              generationConfig: {
 
-    } catch (fetchError) {
+                responseMimeType:
+                  "application/json",
 
-      clearTimeout(timeout);
+                temperature:
+                  0.8
 
+              }
 
-      console.error(
-        "=========================================="
+            })
+
+        }
       );
 
-      console.error(
-        "ERREUR FETCH GEMINI"
-      );
-
-      console.error(
-        fetchError
-      );
-
-      console.error(
-        "=========================================="
-      );
-
-
-      return res.status(502).json({
-
-        success: false,
-
-        error:
-          fetchError?.name === "AbortError"
-            ? "Gemini a mis trop de temps à répondre."
-            : "Impossible de contacter l'API Gemini.",
-
-        details:
-          fetchError?.message ||
-          "Erreur réseau inconnue."
-
-      });
-
-    }
-
-
-    clearTimeout(timeout);
 
 
     /*
      * ==========================================
-     * 12. RECUPERATION REPONSE GEMINI
+     * 9. REPONSE GEMINI
      * ==========================================
      */
 
-    let geminiText;
+    const geminiText =
+      await geminiResponse.text();
 
-
-    try {
-
-      geminiText =
-        await geminiResponse.text();
-
-    } catch (readError) {
-
-      console.error(
-        "Erreur lecture réponse Gemini :",
-        readError
-      );
-
-
-      return res.status(502).json({
-
-        success: false,
-
-        error:
-          "Impossible de lire la réponse de Gemini."
-
-      });
-
-    }
-
-
-    /*
-     * ==========================================
-     * 13. LOG REPONSE GEMINI
-     * ==========================================
-     */
 
     console.log(
       "Gemini HTTP :",
       geminiResponse.status
-    );
-
-
-    console.log(
-      "Gemini response length :",
-      geminiText.length
     );
 
 
@@ -663,13 +699,20 @@ Utilise exactement cette structure :
     );
 
 
+
     /*
      * ==========================================
-     * 14. ERREUR GEMINI
+     * 10. ERREUR GEMINI
      * ==========================================
      */
 
     if (!geminiResponse.ok) {
+
+      console.error(
+        "Gemini error:",
+        geminiText
+      );
+
 
       let errorData = null;
 
@@ -688,53 +731,30 @@ Utilise exactement cette structure :
       }
 
 
-      const geminiMessage =
+      const message =
         errorData?.error?.message ||
         errorData?.message ||
         geminiText ||
         "Erreur inconnue Gemini.";
 
 
-      console.error(
-        "=========================================="
-      );
-
-      console.error(
-        "GEMINI ERROR"
-      );
-
-      console.error(
-        geminiResponse.status
-      );
-
-      console.error(
-        geminiMessage
-      );
-
-      console.error(
-        "=========================================="
-      );
-
-
-      return res.status(502).json({
+      return res.status(500).json({
 
         success: false,
 
         error:
           "Erreur Gemini : " +
-          geminiMessage,
-
-        status:
-          geminiResponse.status
+          message
 
       });
 
     }
 
 
+
     /*
      * ==========================================
-     * 15. PARSE GEMINI API
+     * 11. JSON GEMINI API
      * ==========================================
      */
 
@@ -748,149 +768,51 @@ Utilise exactement cette structure :
           geminiText
         );
 
-    } catch (parseError) {
+    } catch {
 
       console.error(
-        "Gemini API non JSON :",
+        "Gemini API non JSON:",
         geminiText
       );
 
 
-      return res.status(502).json({
+      return res.status(500).json({
 
         success: false,
 
         error:
-          "Gemini a renvoyé une réponse API invalide.",
-
-        details:
-          parseError?.message ||
-          "JSON invalide."
+          "Gemini a renvoyé une réponse API invalide."
 
       });
 
     }
+
 
 
     /*
      * ==========================================
-     * 16. VERIFICATION CANDIDATE
+     * 12. TEXTE RESULTAT
      * ==========================================
      */
-
-    const candidate =
-      geminiData?.candidates?.[0];
-
-
-    if (!candidate) {
-
-      console.error(
-        "Gemini sans candidate :",
-        JSON.stringify(
-          geminiData
-        )
-      );
-
-
-      return res.status(502).json({
-
-        success: false,
-
-        error:
-          "Gemini n'a pas fourni de résultat."
-
-      });
-
-    }
-
-
-    /*
-     * ==========================================
-     * 17. VERIFICATION FINISH REASON
-     * ==========================================
-     */
-
-    if (
-      candidate.finishReason &&
-      candidate.finishReason !== "STOP"
-    ) {
-
-      console.error(
-        "Gemini finishReason :",
-        candidate.finishReason
-      );
-
-
-      return res.status(502).json({
-
-        success: false,
-
-        error:
-          "Gemini a interrompu la génération.",
-
-        finishReason:
-          candidate.finishReason
-
-      });
-
-    }
-
-
-    /*
-     * ==========================================
-     * 18. EXTRACTION TEXTE
-     * ==========================================
-     */
-
-    const parts =
-      candidate?.content?.parts;
-
-
-    if (!Array.isArray(parts)) {
-
-      console.error(
-        "Gemini sans parts :",
-        JSON.stringify(
-          candidate
-        )
-      );
-
-
-      return res.status(502).json({
-
-        success: false,
-
-        error:
-          "Gemini n'a pas renvoyé de contenu."
-
-      });
-
-    }
-
 
     const resultText =
-      parts
-        .map(
-          part =>
-            typeof part?.text === "string"
-              ? part.text
-              : ""
-        )
-        .join("")
-        .trim();
+      geminiData
+        ?.candidates?.[0]
+        ?.content?.parts?.[0]
+        ?.text;
 
 
     if (!resultText) {
 
       console.error(
-        "Gemini sans texte :",
+        "Gemini sans texte:",
         JSON.stringify(
           geminiData
         )
       );
 
 
-      return res.status(502).json({
+      return res.status(500).json({
 
         success: false,
 
@@ -902,21 +824,10 @@ Utilise exactement cette structure :
     }
 
 
-    /*
-     * ==========================================
-     * 19. LOG RESULTAT
-     * ==========================================
-     */
-
-    console.log(
-      "DisneyBound JSON brut :",
-      resultText
-    );
-
 
     /*
      * ==========================================
-     * 20. PARSE JSON DISNEYBOUND
+     * 13. JSON DISNEYBOUND
      * ==========================================
      */
 
@@ -930,44 +841,30 @@ Utilise exactement cette structure :
           resultText
         );
 
-    } catch (jsonError) {
+    } catch {
 
       console.error(
-        "=========================================="
-      );
-
-      console.error(
-        "JSON DISNEYBOUND INVALIDE"
-      );
-
-      console.error(
+        "JSON DisneyBound invalide:",
         resultText
       );
 
-      console.error(
-        "=========================================="
-      );
 
-
-      return res.status(502).json({
+      return res.status(500).json({
 
         success: false,
 
         error:
-          "Le résultat Gemini n'est pas un JSON DisneyBound valide.",
-
-        details:
-          jsonError?.message ||
-          "JSON invalide."
+          "Le résultat Gemini n'est pas un JSON DisneyBound valide."
 
       });
 
     }
 
 
+
     /*
      * ==========================================
-     * 21. VERIFICATION OBJET
+     * 14. NORMALISATION
      * ==========================================
      */
 
@@ -977,7 +874,7 @@ Utilise exactement cette structure :
       Array.isArray(disneyBound)
     ) {
 
-      return res.status(502).json({
+      return res.status(500).json({
 
         success: false,
 
@@ -989,9 +886,10 @@ Utilise exactement cette structure :
     }
 
 
+
     /*
      * ==========================================
-     * 22. CHAMPS OBLIGATOIRES
+     * 15. VERIFICATION
      * ==========================================
      */
 
@@ -1015,12 +913,12 @@ Utilise exactement cette structure :
         !disneyBound[field].trim()
       ) {
 
-        return res.status(502).json({
+        return res.status(500).json({
 
           success: false,
 
           error:
-            `Le champ "${field}" est manquant ou invalide.`
+            `Le champ "${field}" est manquant.`
 
         });
 
@@ -1029,11 +927,6 @@ Utilise exactement cette structure :
     }
 
 
-    /*
-     * ==========================================
-     * 23. ACCESSOIRES
-     * ==========================================
-     */
 
     if (
       !Array.isArray(
@@ -1041,7 +934,7 @@ Utilise exactement cette structure :
       )
     ) {
 
-      return res.status(502).json({
+      return res.status(500).json({
 
         success: false,
 
@@ -1053,11 +946,6 @@ Utilise exactement cette structure :
     }
 
 
-    /*
-     * ==========================================
-     * 24. COULEURS
-     * ==========================================
-     */
 
     if (
       !Array.isArray(
@@ -1065,7 +953,7 @@ Utilise exactement cette structure :
       )
     ) {
 
-      return res.status(502).json({
+      return res.status(500).json({
 
         success: false,
 
@@ -1077,11 +965,6 @@ Utilise exactement cette structure :
     }
 
 
-    /*
-     * ==========================================
-     * 25. RECHERCHES
-     * ==========================================
-     */
 
     if (
       !disneyBound.recherches ||
@@ -1089,7 +972,7 @@ Utilise exactement cette structure :
       Array.isArray(disneyBound.recherches)
     ) {
 
-      return res.status(502).json({
+      return res.status(500).json({
 
         success: false,
 
@@ -1101,194 +984,95 @@ Utilise exactement cette structure :
     }
 
 
-    /*
-     * ==========================================
-     * 26. NORMALISATION RECHERCHES
-     * ==========================================
-     */
-
-    const recherches = {
-
-      haut:
-        typeof disneyBound.recherches.haut === "string"
-          ? disneyBound.recherches.haut
-          : "",
-
-      bas:
-        typeof disneyBound.recherches.bas === "string"
-          ? disneyBound.recherches.bas
-          : "",
-
-      veste:
-        typeof disneyBound.recherches.veste === "string"
-          ? disneyBound.recherches.veste
-          : "",
-
-      chaussures:
-        typeof disneyBound.recherches.chaussures === "string"
-          ? disneyBound.recherches.chaussures
-          : "",
-
-      accessoires:
-        typeof disneyBound.recherches.accessoires === "string"
-          ? disneyBound.recherches.accessoires
-          : ""
-
-    };
-
 
     /*
      * ==========================================
-     * 27. RESULTAT FINAL
+     * 16. VERIFICATION RECHERCHES
      * ==========================================
      */
 
-    const finalResult = {
+    const searchFields = [
 
-      personnage:
-        disneyBound.personnage.trim(),
+      "haut",
+      "bas",
+      "veste",
+      "chaussures",
+      "accessoires"
 
-      haut:
-        disneyBound.haut.trim(),
+    ];
 
-      bas:
-        disneyBound.bas.trim(),
 
-      veste:
-        disneyBound.veste.trim(),
+    for (
+      const field of searchFields
+    ) {
 
-      chaussures:
-        disneyBound.chaussures.trim(),
+      if (
+        typeof disneyBound.recherches[field] !== "string" ||
+        !disneyBound.recherches[field].trim()
+      ) {
 
-      accessoires:
-        disneyBound.accessoires
-          .filter(
-            item =>
-              typeof item === "string" &&
-              item.trim()
-          )
-          .slice(0, 4)
-          .map(
-            item =>
-              item.trim()
-          ),
+        return res.status(500).json({
 
-      couleurs:
-        disneyBound.couleurs
-          .filter(
-            item =>
-              typeof item === "string" &&
-              item.trim()
-          )
-          .slice(0, 5)
-          .map(
-            item =>
-              item.trim()
-          ),
+          success: false,
 
-      recherches
+          error:
+            `La recherche "${field}" est manquante.`
 
-    };
+        });
+
+      }
+
+    }
+
 
 
     /*
      * ==========================================
-     * 28. LOG SUCCESS
+     * 17. REPONSE
      * ==========================================
      */
 
     console.log(
-      "=========================================="
+      "DisneyBound réussi :",
+      disneyBound.personnage
     );
 
-    console.log(
-      "DISNEYBOUND SUCCESS"
-    );
-
-    console.log(
-      "Personnage :",
-      finalResult.personnage
-    );
-
-    console.log(
-      "=========================================="
-    );
-
-
-    /*
-     * ==========================================
-     * 29. REPONSE
-     * ==========================================
-     */
 
     return res.status(200).json({
 
       success: true,
 
       result:
-        finalResult
+        disneyBound
 
     });
 
 
+
   } catch (error) {
+
 
     /*
      * ==========================================
-     * ERREUR GENERALE
+     * 18. ERREUR GENERALE
      * ==========================================
      */
 
     console.error(
-      "=========================================="
-    );
-
-    console.error(
-      "ERREUR CRITIQUE API DISNEYBOUND"
-    );
-
-    console.error(
+      "Erreur API DisneyBound:",
       error
     );
 
-    console.error(
-      "=========================================="
-    );
 
+    return res.status(500).json({
 
-    /*
-     * IMPORTANT :
-     *
-     * Même une erreur inattendue doit retourner
-     * un JSON valide au navigateur.
-     */
+      success: false,
 
-    try {
+      error:
+        error?.message ||
+        "Erreur interne du serveur."
 
-      return res.status(500).json({
-
-        success: false,
-
-        error:
-          error?.message ||
-          "Erreur interne du serveur DisneyBound.",
-
-        type:
-          error?.name ||
-          "UnknownError"
-
-      });
-
-    } catch (responseError) {
-
-      console.error(
-        "Impossible de retourner le JSON d'erreur :",
-        responseError
-      );
-
-      return res.status(500).end();
-
-    }
+    });
 
   }
 
