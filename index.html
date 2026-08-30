@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
@@ -26,19 +25,15 @@
       padding: 0;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       font-family: Arial, Helvetica, sans-serif;
       background:
-        radial-gradient(
-          circle at top left,
-          rgba(124, 58, 237, 0.25),
-          transparent 30%
-        ),
-        radial-gradient(
-          circle at bottom right,
-          rgba(236, 72, 153, 0.18),
-          transparent 30%
-        ),
+        radial-gradient(circle at top left, rgba(124, 58, 237, 0.25), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.18), transparent 30%),
         var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -64,6 +59,8 @@
       border-bottom: 1px solid var(--border);
       background: rgba(9, 9, 15, 0.8);
       backdrop-filter: blur(10px);
+      position: relative;
+      z-index: 10;
     }
 
     .logo {
@@ -104,12 +101,7 @@
     }
 
     .gradient-text {
-      background: linear-gradient(
-        90deg,
-        var(--purple),
-        var(--pink),
-        var(--gold)
-      );
+      background: linear-gradient(90deg, var(--purple), var(--pink), var(--gold));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -148,11 +140,7 @@
       display: grid;
       place-items: center;
       font-weight: bold;
-      background: linear-gradient(
-        135deg,
-        var(--purple),
-        var(--pink)
-      );
+      background: linear-gradient(135deg, var(--purple), var(--pink));
       flex-shrink: 0;
     }
 
@@ -160,9 +148,9 @@
       font-size: 20px;
     }
 
-    /* =========================================================
+    /* =========================
        PHOTO
-    ========================================================= */
+    ========================== */
 
     .upload-zone {
       min-height: 220px;
@@ -183,6 +171,11 @@
     .upload-zone:hover {
       border-color: var(--pink);
       background: rgba(236,72,153,0.05);
+    }
+
+    .upload-zone.has-photo {
+      border-style: solid;
+      border-color: rgba(124,58,237,0.6);
     }
 
     .upload-content {
@@ -226,9 +219,17 @@
       border: 3px solid var(--purple);
     }
 
-    /* =========================================================
+    .photo-info {
+      display: none;
+      margin-top: 12px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    /* =========================
        PERSONNAGE
-    ========================================================= */
+    ========================== */
 
     .character-grid {
       display: grid;
@@ -247,6 +248,7 @@
       transition: 0.3s;
       appearance: none;
       -webkit-appearance: none;
+      user-select: none;
     }
 
     .character-option:hover {
@@ -256,8 +258,7 @@
 
     .character-option.selected {
       border-color: var(--pink);
-      box-shadow:
-        0 0 30px rgba(236,72,153,0.25);
+      box-shadow: 0 0 30px rgba(236,72,153,0.25);
       background: rgba(236,72,153,0.10);
     }
 
@@ -277,9 +278,9 @@
       font-size: 14px;
     }
 
-    /* =========================================================
+    /* =========================
        MENSURATIONS
-    ========================================================= */
+    ========================== */
 
     .body-grid {
       display: grid;
@@ -317,14 +318,18 @@
       font-weight: bold;
     }
 
+    .input-wrapper input::placeholder {
+      color: #52525b;
+    }
+
     .input-wrapper span {
       color: var(--pink);
       font-weight: bold;
     }
 
-    /* =========================================================
+    /* =========================
        COUPES
-    ========================================================= */
+    ========================== */
 
     .style-grid {
       display: grid;
@@ -363,9 +368,9 @@
       border-color: var(--pink);
     }
 
-    /* =========================================================
+    /* =========================
        TAILLES
-    ========================================================= */
+    ========================== */
 
     .size-grid {
       display: grid;
@@ -387,9 +392,9 @@
       font-size: 14px;
     }
 
-    /* =========================================================
+    /* =========================
        GENERATION
-    ========================================================= */
+    ========================== */
 
     .generate-button {
       width: 100%;
@@ -398,17 +403,12 @@
       font-size: 18px;
       font-weight: bold;
       color: white;
-      background: linear-gradient(
-        90deg,
-        var(--purple),
-        var(--pink)
-      );
-      box-shadow:
-        0 15px 35px rgba(124,58,237,0.3);
+      background: linear-gradient(90deg, var(--purple), var(--pink));
+      box-shadow: 0 15px 35px rgba(124,58,237,0.3);
       transition: 0.3s;
     }
 
-    .generate-button:hover {
+    .generate-button:hover:not(:disabled) {
       transform: scale(1.02);
     }
 
@@ -439,9 +439,24 @@
       }
     }
 
-    /* =========================================================
+    /* =========================
+       MESSAGE ERREUR
+    ========================== */
+
+    .error-message {
+      display: none;
+      margin-top: 20px;
+      padding: 15px 18px;
+      border-radius: 14px;
+      background: rgba(239,68,68,0.12);
+      border: 1px solid rgba(239,68,68,0.35);
+      color: #fecaca;
+      line-height: 1.5;
+    }
+
+    /* =========================
        RESULTAT
-    ========================================================= */
+    ========================== */
 
     #result {
       display: none;
@@ -516,9 +531,9 @@
       line-height: 1.5;
     }
 
-    /* =========================================================
+    /* =========================
        COULEURS
-    ========================================================= */
+    ========================== */
 
     .colors-section {
       margin-top: 25px;
@@ -544,9 +559,9 @@
       font-size: 14px;
     }
 
-    /* =========================================================
+    /* =========================
        RECHERCHES
-    ========================================================= */
+    ========================== */
 
     .search-section {
       margin-top: 30px;
@@ -576,6 +591,8 @@
       flex: 1;
       color: #d4d4d8;
       font-size: 14px;
+      line-height: 1.4;
+      word-break: break-word;
     }
 
     .search-actions {
@@ -614,9 +631,9 @@
       transform: translateY(-1px);
     }
 
-    /* =========================================================
+    /* =========================
        MOBILE
-    ========================================================= */
+    ========================== */
 
     @media (max-width: 700px) {
 
@@ -676,7 +693,6 @@
       }
     }
   </style>
-
 </head>
 
 <body>
@@ -695,1565 +711,1671 @@
 
 <main>
 
-  <!-- =======================================================
-       HERO
-  ======================================================== -->
-
   <section class="hero">
 
-```
-<h1>
-  Trouve ton
-  <span class="gradient-text">
-    DisneyBound
-  </span>
-</h1>
+    <h1>
+      Trouve ton
+      <span class="gradient-text">
+        DisneyBound
+      </span>
+    </h1>
 
-<p>
-  Télécharge ta photo, choisis ton univers et laisse
-  l'intelligence artificielle imaginer ton prochain look.
-</p>
-```
+    <p>
+      Télécharge ta photo, choisis ton univers et laisse
+      l'intelligence artificielle imaginer ton prochain look.
+    </p>
 
   </section>
-
-  <!-- =======================================================
-       GENERATEUR
-  ======================================================== -->
 
   <section class="generator">
 
-```
-<!-- =====================================================
-     1. PHOTO
-====================================================== -->
+    <!-- =========================
+         1. PHOTO
+    ========================== -->
 
-<div class="step">
+    <div class="step">
 
-  <div class="step-title">
+      <div class="step-title">
 
-    <div class="step-number">
-      1
+        <div class="step-number">
+          1
+        </div>
+
+        <h2>
+          Ajoute ta photo
+        </h2>
+
+      </div>
+
+      <label
+        class="upload-zone"
+        id="uploadZone"
+        for="photoInput"
+      >
+
+        <div
+          class="upload-content"
+          id="uploadContent"
+        >
+
+          <div class="upload-icon">
+            📸
+          </div>
+
+          <h3>
+            Choisis une photo
+          </h3>
+
+          <p>
+            Une photo en pied donnera un meilleur résultat.
+          </p>
+
+          <div class="upload-button">
+            Importer une photo
+          </div>
+
+        </div>
+
+        <img
+          id="preview"
+          alt="Aperçu de votre photo"
+        >
+
+      </label>
+
+      <div
+        class="photo-info"
+        id="photoInfo"
+      ></div>
+
+      <input
+        type="file"
+        id="photoInput"
+        accept="image/jpeg,image/png,image/webp"
+      >
+
     </div>
 
-    <h2>
-      Ajoute ta photo
-    </h2>
 
-  </div>
+    <!-- =========================
+         2. PERSONNAGE
+    ========================== -->
+
+    <div class="step">
+
+      <div class="step-title">
+
+        <div class="step-number">
+          2
+        </div>
+
+        <h2>
+          Choisis ton univers
+        </h2>
+
+      </div>
+
+      <div class="character-grid">
+
+        <button
+          type="button"
+          class="character-option"
+          data-type="hero"
+        >
+
+          <span class="emoji">
+            😊
+          </span>
+
+          <h3>
+            Gentil
+          </h3>
+
+          <p>
+            Héros, princesses et personnages iconiques.
+          </p>
+
+        </button>
+
+        <button
+          type="button"
+          class="character-option"
+          data-type="villain"
+        >
+
+          <span class="emoji">
+            😈
+          </span>
+
+          <h3>
+            Méchant
+          </h3>
+
+          <p>
+            Villains, styles sombres et looks puissants.
+          </p>
+
+        </button>
+
+      </div>
+
+    </div>
 
 
-  <label
-    class="upload-zone"
-    for="photoInput"
-  >
+    <!-- =========================
+         3. MENSURATIONS
+    ========================== -->
+
+    <div class="step">
+
+      <div class="step-title">
+
+        <div class="step-number">
+          3
+        </div>
+
+        <h2>
+          Tes mensurations
+        </h2>
+
+      </div>
+
+      <div class="body-grid">
+
+        <div class="input-card">
+
+          <label for="height">
+            Taille
+          </label>
+
+          <div class="input-wrapper">
+
+            <input
+              type="number"
+              id="height"
+              placeholder="175"
+              min="100"
+              max="250"
+              inputmode="numeric"
+            >
+
+            <span>
+              cm
+            </span>
+
+          </div>
+
+        </div>
+
+        <div class="input-card">
+
+          <label for="weight">
+            Poids
+          </label>
+
+          <div class="input-wrapper">
+
+            <input
+              type="number"
+              id="weight"
+              placeholder="75"
+              min="30"
+              max="300"
+              inputmode="numeric"
+            >
+
+            <span>
+              kg
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         4. TAILLES
+    ========================== -->
+
+    <div class="step">
+
+      <div class="step-title">
+
+        <div class="step-number">
+          4
+        </div>
+
+        <h2>
+          Tes tailles de vêtements
+        </h2>
+
+      </div>
+
+      <div class="size-grid">
+
+        <div class="size-card">
+
+          <label for="topSize">
+            Taille du haut
+          </label>
+
+          <select id="topSize">
+
+            <option value="">
+              Choisir une taille
+            </option>
+
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+            <option value="3XL">3XL</option>
+            <option value="4XL">4XL</option>
+
+          </select>
+
+        </div>
+
+        <div class="size-card">
+
+          <label for="bottomSize">
+            Taille du bas
+          </label>
+
+          <select id="bottomSize">
+
+            <option value="">
+              Choisir une taille
+            </option>
+
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+            <option value="3XL">3XL</option>
+            <option value="4XL">4XL</option>
+
+            <option value="34">34</option>
+            <option value="36">36</option>
+            <option value="38">38</option>
+            <option value="40">40</option>
+            <option value="42">42</option>
+            <option value="44">44</option>
+            <option value="46">46</option>
+            <option value="48">48</option>
+            <option value="50">50</option>
+            <option value="52">52</option>
+            <option value="54">54</option>
+            <option value="56">56</option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         5. COUPES
+    ========================== -->
+
+    <div class="step">
+
+      <div class="step-title">
+
+        <div class="step-number">
+          5
+        </div>
+
+        <h2>
+          Tes préférences de coupe
+        </h2>
+
+      </div>
+
+      <div class="style-grid">
+
+        <div class="style-card">
+
+          <label for="topStyle">
+            Coupe du haut
+          </label>
+
+          <select id="topStyle">
+
+            <option value="libre">
+              Laisser l'IA choisir
+            </option>
+
+            <option value="ajusté">
+              Ajusté
+            </option>
+
+            <option value="slim">
+              Slim
+            </option>
+
+            <option value="oversize">
+              Oversize
+            </option>
+
+            <option value="large">
+              Large
+            </option>
+
+            <option value="streetwear">
+              Streetwear
+            </option>
+
+            <option value="casual">
+              Casual
+            </option>
+
+            <option value="chic">
+              Chic
+            </option>
+
+            <option value="sexy">
+              Sexy
+            </option>
+
+            <option value="sportif">
+              Sportif
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="style-card">
+
+          <label for="bottomStyle">
+            Coupe du bas
+          </label>
+
+          <select id="bottomStyle">
+
+            <option value="libre">
+              Laisser l'IA choisir
+            </option>
+
+            <option value="ajusté">
+              Ajusté
+            </option>
+
+            <option value="slim">
+              Slim
+            </option>
+
+            <option value="droit">
+              Droit
+            </option>
+
+            <option value="large">
+              Large
+            </option>
+
+            <option value="oversize">
+              Oversize
+            </option>
+
+            <option value="évasé">
+              Évasé
+            </option>
+
+            <option value="fluide">
+              Fluide
+            </option>
+
+            <option value="bootcut">
+              Bootcut
+            </option>
+
+            <option value="streetwear">
+              Streetwear
+            </option>
+
+            <option value="casual">
+              Casual
+            </option>
+
+            <option value="chic">
+              Chic
+            </option>
+
+            <option value="sexy">
+              Sexy
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div class="style-card">
+
+          <label for="jacketStyle">
+            Coupe de la veste
+          </label>
+
+          <select id="jacketStyle">
+
+            <option value="libre">
+              Laisser l'IA choisir
+            </option>
+
+            <option value="ajustée">
+              Ajustée
+            </option>
+
+            <option value="courte">
+              Courte
+            </option>
+
+            <option value="longue">
+              Longue
+            </option>
+
+            <option value="oversize">
+              Oversize
+            </option>
+
+            <option value="large">
+              Large
+            </option>
+
+            <option value="cintrée">
+              Cintrée
+            </option>
+
+            <option value="streetwear">
+              Streetwear
+            </option>
+
+            <option value="casual">
+              Casual
+            </option>
+
+            <option value="chic">
+              Chic
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         GENERATION
+    ========================== -->
+
+    <button
+      type="button"
+      class="generate-button"
+      id="generateButton"
+    >
+      ✨ Générer mon DisneyBound
+    </button>
+
 
     <div
-      class="upload-content"
-      id="uploadContent"
+      class="loading"
+      id="loading"
     >
 
-      <div class="upload-icon">
-        📸
-      </div>
-
-      <h3>
-        Choisis une photo
-      </h3>
+      <div class="spinner"></div>
 
       <p>
-        Une photo en pied donnera un meilleur résultat.
+        L'IA analyse ta photo et crée ton DisneyBound...
       </p>
 
-      <div class="upload-button">
-        Importer une photo
-      </div>
-
     </div>
 
 
-    <img
-      id="preview"
-      alt="Aperçu de votre photo"
-    >
-
-  </label>
-
-
-  <input
-    type="file"
-    id="photoInput"
-    accept="image/jpeg,image/png,image/webp"
-  >
-
-</div>
-
-
-<!-- =====================================================
-     2. PERSONNAGE
-====================================================== -->
-
-<div class="step">
-
-  <div class="step-title">
-
-    <div class="step-number">
-      2
-    </div>
-
-    <h2>
-      Choisis ton univers
-    </h2>
-
-  </div>
-
-
-  <div class="character-grid">
-
-
-    <button
-      type="button"
-      class="character-option"
-      data-type="hero"
-      aria-pressed="false"
-    >
-
-      <span class="emoji">
-        😊
-      </span>
-
-      <h3>
-        Gentil
-      </h3>
-
-      <p>
-        Héros, princesses et personnages iconiques.
-      </p>
-
-    </button>
-
-
-    <button
-      type="button"
-      class="character-option"
-      data-type="villain"
-      aria-pressed="false"
-    >
-
-      <span class="emoji">
-        😈
-      </span>
-
-      <h3>
-        Méchant
-      </h3>
-
-      <p>
-        Villains, styles sombres et looks puissants.
-      </p>
-
-    </button>
-
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     3. MENSURATIONS
-====================================================== -->
-
-<div class="step">
-
-  <div class="step-title">
-
-    <div class="step-number">
-      3
-    </div>
-
-    <h2>
-      Tes mensurations
-    </h2>
-
-  </div>
-
-
-  <div class="body-grid">
-
-
-    <div class="input-card">
-
-      <label for="height">
-        Taille
-      </label>
-
-      <div class="input-wrapper">
-
-        <input
-          type="number"
-          id="height"
-          placeholder="175"
-          min="100"
-          max="250"
-        >
-
-        <span>
-          cm
-        </span>
-
-      </div>
-
-    </div>
-
-
-    <div class="input-card">
-
-      <label for="weight">
-        Poids
-      </label>
-
-      <div class="input-wrapper">
-
-        <input
-          type="number"
-          id="weight"
-          placeholder="75"
-          min="30"
-          max="300"
-        >
-
-        <span>
-          kg
-        </span>
-
-      </div>
-
-    </div>
-
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     4. TAILLES
-====================================================== -->
-
-<div class="step">
-
-  <div class="step-title">
-
-    <div class="step-number">
-      4
-    </div>
-
-    <h2>
-      Tes tailles de vêtements
-    </h2>
-
-  </div>
-
-
-  <div class="size-grid">
-
-
-    <div class="size-card">
-
-      <label for="topSize">
-        Taille du haut
-      </label>
-
-      <select id="topSize">
-
-        <option value="">
-          Choisir une taille
-        </option>
-
-        <option value="XS">XS</option>
-        <option value="S">S</option>
-        <option value="M">M</option>
-        <option value="L">L</option>
-        <option value="XL">XL</option>
-        <option value="XXL">XXL</option>
-        <option value="3XL">3XL</option>
-        <option value="4XL">4XL</option>
-
-      </select>
-
-    </div>
-
-
-    <div class="size-card">
-
-      <label for="bottomSize">
-        Taille du bas
-      </label>
-
-      <select id="bottomSize">
-
-        <option value="">
-          Choisir une taille
-        </option>
-
-        <option value="XS">XS</option>
-        <option value="S">S</option>
-        <option value="M">M</option>
-        <option value="L">L</option>
-        <option value="XL">XL</option>
-        <option value="XXL">XXL</option>
-        <option value="3XL">3XL</option>
-        <option value="4XL">4XL</option>
-
-        <option value="34">34</option>
-        <option value="36">36</option>
-        <option value="38">38</option>
-        <option value="40">40</option>
-        <option value="42">42</option>
-        <option value="44">44</option>
-        <option value="46">46</option>
-        <option value="48">48</option>
-        <option value="50">50</option>
-        <option value="52">52</option>
-        <option value="54">54</option>
-        <option value="56">56</option>
-
-      </select>
-
-    </div>
-
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     5. COUPES
-====================================================== -->
-
-<div class="step">
-
-  <div class="step-title">
-
-    <div class="step-number">
-      5
-    </div>
-
-    <h2>
-      Tes préférences de coupe
-    </h2>
-
-  </div>
-
-
-  <div class="style-grid">
-
-
-    <div class="style-card">
-
-      <label for="topStyle">
-        Coupe du haut
-      </label>
-
-      <select id="topStyle">
-
-        <option value="libre">
-          Laisser l'IA choisir
-        </option>
-
-        <option value="ajusté">
-          Ajusté
-        </option>
-
-        <option value="slim">
-          Slim
-        </option>
-
-        <option value="oversize">
-          Oversize
-        </option>
-
-        <option value="large">
-          Large
-        </option>
-
-        <option value="streetwear">
-          Streetwear
-        </option>
-
-        <option value="casual">
-          Casual
-        </option>
-
-        <option value="chic">
-          Chic
-        </option>
-
-        <option value="sexy">
-          Sexy
-        </option>
-
-        <option value="sportif">
-          Sportif
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="style-card">
-
-      <label for="bottomStyle">
-        Coupe du bas
-      </label>
-
-      <select id="bottomStyle">
-
-        <option value="libre">
-          Laisser l'IA choisir
-        </option>
-
-        <option value="ajusté">
-          Ajusté
-        </option>
-
-        <option value="slim">
-          Slim
-        </option>
-
-        <option value="droit">
-          Droit
-        </option>
-
-        <option value="large">
-          Large
-        </option>
-
-        <option value="oversize">
-          Oversize
-        </option>
-
-        <option value="évasé">
-          Évasé
-        </option>
-
-        <option value="fluide">
-          Fluide
-        </option>
-
-        <option value="bootcut">
-          Bootcut
-        </option>
-
-        <option value="streetwear">
-          Streetwear
-        </option>
-
-        <option value="casual">
-          Casual
-        </option>
-
-        <option value="chic">
-          Chic
-        </option>
-
-        <option value="sexy">
-          Sexy
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <div class="style-card">
-
-      <label for="jacketStyle">
-        Coupe de la veste
-      </label>
-
-      <select id="jacketStyle">
-
-        <option value="libre">
-          Laisser l'IA choisir
-        </option>
-
-        <option value="ajustée">
-          Ajustée
-        </option>
-
-        <option value="courte">
-          Courte
-        </option>
-
-        <option value="longue">
-          Longue
-        </option>
-
-        <option value="oversize">
-          Oversize
-        </option>
-
-        <option value="large">
-          Large
-        </option>
-
-        <option value="cintrée">
-          Cintrée
-        </option>
-
-        <option value="streetwear">
-          Streetwear
-        </option>
-
-        <option value="casual">
-          Casual
-        </option>
-
-        <option value="chic">
-          Chic
-        </option>
-
-      </select>
-
-    </div>
-
-
-  </div>
-
-</div>
-
-
-<!-- =====================================================
-     GENERATION
-====================================================== -->
-
-<button
-  type="button"
-  class="generate-button"
-  id="generateButton"
->
-  ✨ Générer mon DisneyBound
-</button>
-
-
-<div
-  class="loading"
-  id="loading"
->
-
-  <div class="spinner"></div>
-
-  <p>
-    L'IA analyse ta photo et crée ton DisneyBound...
-  </p>
-
-</div>
-```
+    <div
+      class="error-message"
+      id="errorMessage"
+    ></div>
 
   </section>
 
-  <!-- =======================================================
+
+  <!-- =========================
        RESULTAT
-  ======================================================== -->
+  ========================== -->
 
   <section id="result">
 
-```
-<div class="result-card">
+    <div class="result-card">
+
+      <div class="result-header">
+
+        <div
+          class="result-character"
+          id="resultEmoji"
+        >
+          ✨
+        </div>
+
+        <h2 id="resultTitle">
+          Ton look est prêt !
+        </h2>
+
+        <p id="resultSubtitle">
+          Voici les pièces à rechercher pour créer ton look.
+        </p>
+
+      </div>
 
 
-  <div class="result-header">
+      <div class="look-list">
 
-    <div
-      class="result-character"
-      id="resultEmoji"
-    >
-      ✨
+        <div class="look-item">
+
+          <strong>
+            👕 Haut
+          </strong>
+
+          <span id="resultTop"></span>
+
+        </div>
+
+
+        <div class="look-item">
+
+          <strong>
+            👖 Bas
+          </strong>
+
+          <span id="resultBottom"></span>
+
+        </div>
+
+
+        <div class="look-item">
+
+          <strong>
+            🧥 Veste
+          </strong>
+
+          <span id="resultJacket"></span>
+
+        </div>
+
+
+        <div class="look-item">
+
+          <strong>
+            👟 Chaussures
+          </strong>
+
+          <span id="resultShoes"></span>
+
+        </div>
+
+
+        <div class="look-item">
+
+          <strong>
+            ✨ Accessoires
+          </strong>
+
+          <span id="resultAccessory"></span>
+
+        </div>
+
+      </div>
+
+
+      <div class="colors-section">
+
+        <h3>
+          🎨 Palette de couleurs
+        </h3>
+
+        <div
+          class="colors-list"
+          id="resultColors"
+        ></div>
+
+      </div>
+
+
+      <div class="search-section">
+
+        <h3>
+          🔎 Recherches produits
+        </h3>
+
+        <div
+          class="search-list"
+          id="searchList"
+        ></div>
+
+      </div>
+
     </div>
-
-    <h2 id="resultTitle">
-      Ton look est prêt !
-    </h2>
-
-    <p id="resultSubtitle">
-      Voici les pièces à rechercher pour créer ton look.
-    </p>
-
-  </div>
-
-
-  <div class="look-list">
-
-
-    <div class="look-item">
-
-      <strong>
-        👕 Haut
-      </strong>
-
-      <span id="resultTop"></span>
-
-    </div>
-
-
-    <div class="look-item">
-
-      <strong>
-        👖 Bas
-      </strong>
-
-      <span id="resultBottom"></span>
-
-    </div>
-
-
-    <div class="look-item">
-
-      <strong>
-        🧥 Veste
-      </strong>
-
-      <span id="resultJacket"></span>
-
-    </div>
-
-
-    <div class="look-item">
-
-      <strong>
-        👟 Chaussures
-      </strong>
-
-      <span id="resultShoes"></span>
-
-    </div>
-
-
-    <div class="look-item">
-
-      <strong>
-        ✨ Accessoires
-      </strong>
-
-      <span id="resultAccessory"></span>
-
-    </div>
-
-
-  </div>
-
-
-  <div class="colors-section">
-
-    <h3>
-      🎨 Palette de couleurs
-    </h3>
-
-    <div
-      class="colors-list"
-      id="resultColors"
-    ></div>
-
-  </div>
-
-
-  <div class="search-section">
-
-    <h3>
-      🔎 Recherches produits
-    </h3>
-
-    <div
-      class="search-list"
-      id="searchList"
-    ></div>
-
-  </div>
-
-
-</div>
-```
 
   </section>
 
 </main>
 
+
 <script>
 
-  /* =========================================================
-     DISNEYBOUND AI — SCRIPT
-     ========================================================= */
+  /* =====================================================
+     ELEMENTS
+  ===================================================== */
 
-  document.addEventListener(
-    "DOMContentLoaded",
-    function () {
+  const photoInput =
+    document.getElementById("photoInput");
+
+  const preview =
+    document.getElementById("preview");
+
+  const uploadContent =
+    document.getElementById("uploadContent");
+
+  const uploadZone =
+    document.getElementById("uploadZone");
+
+  const photoInfo =
+    document.getElementById("photoInfo");
+
+  const characterButtons =
+    document.querySelectorAll(".character-option");
+
+  const generateButton =
+    document.getElementById("generateButton");
+
+  const loading =
+    document.getElementById("loading");
+
+  const result =
+    document.getElementById("result");
+
+  const errorMessage =
+    document.getElementById("errorMessage");
 
 
-      /* =======================================================
-         ELEMENTS
-      ======================================================== */
+  let selectedType = null;
 
-      const photoInput =
-        document.getElementById("photoInput");
 
-      const preview =
-        document.getElementById("preview");
+  /* =====================================================
+     MESSAGE ERREUR
+  ===================================================== */
 
-      const uploadContent =
-        document.getElementById("uploadContent");
+  function showError(message) {
 
-      const characterButtons =
-        document.querySelectorAll(
-          ".character-option"
+    errorMessage.textContent =
+      message;
+
+    errorMessage.style.display =
+      "block";
+
+    errorMessage.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+
+  }
+
+
+  function hideError() {
+
+    errorMessage.textContent =
+      "";
+
+    errorMessage.style.display =
+      "none";
+
+  }
+
+
+  /* =====================================================
+     PHOTO
+  ===================================================== */
+
+  photoInput.addEventListener(
+    "change",
+    function(event) {
+
+      const file =
+        event.target.files &&
+        event.target.files[0];
+
+      if (!file) {
+        return;
+      }
+
+
+      /* Vérification type */
+
+      const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+      ];
+
+      if (!allowedTypes.includes(file.type)) {
+
+        showError(
+          "Format non accepté. Utilise JPG, PNG ou WEBP."
         );
 
-      const generateButton =
-        document.getElementById(
-          "generateButton"
-        );
+        photoInput.value =
+          "";
 
-      const loading =
-        document.getElementById(
-          "loading"
-        );
-
-      const result =
-        document.getElementById(
-          "result"
-        );
-
-
-      let selectedType = null;
-
-
-      /* =======================================================
-         DEBUG INITIALISATION
-      ======================================================== */
-
-      console.log(
-        "DisneyBound AI : initialisation"
-      );
-
-
-      console.log(
-        "Boutons personnage :",
-        characterButtons.length
-      );
-
-
-      /* =======================================================
-         PHOTO
-      ======================================================== */
-
-      if (photoInput) {
-
-        photoInput.addEventListener(
-          "change",
-          function (event) {
-
-            const file =
-              event.target.files &&
-              event.target.files[0];
-
-
-            if (!file) {
-              return;
-            }
-
-
-            console.log(
-              "Photo sélectionnée :",
-              file.name,
-              file.type,
-              Math.round(
-                file.size / 1024
-              ),
-              "KB"
-            );
-
-
-            /* Formats autorisés */
-
-            const allowedTypes = [
-              "image/jpeg",
-              "image/png",
-              "image/webp"
-            ];
-
-
-            if (
-              !allowedTypes.includes(
-                file.type
-              )
-            ) {
-
-              alert(
-                "Format non supporté.\n\n" +
-                "Utilise une image JPG, PNG ou WEBP."
-              );
-
-
-              photoInput.value = "";
-
-
-              if (preview) {
-
-                preview.style.display =
-                  "none";
-
-                preview.removeAttribute(
-                  "src"
-                );
-
-              }
-
-
-              if (uploadContent) {
-
-                uploadContent.style.display =
-                  "flex";
-
-              }
-
-
-              return;
-
-            }
-
-
-            /* Taille maximale */
-
-            const maxSize =
-              10 * 1024 * 1024;
-
-
-            if (
-              file.size > maxSize
-            ) {
-
-              alert(
-                "La photo est trop lourde.\n\n" +
-                "Taille maximale : 10 Mo."
-              );
-
-
-              photoInput.value = "";
-
-
-              return;
-
-            }
-
-
-            /* Lecture */
-
-            const reader =
-              new FileReader();
-
-
-            reader.onload =
-              function (event) {
-
-                const imageData =
-                  event.target.result;
-
-
-                if (
-                  typeof imageData !==
-                  "string" ||
-                  !imageData.startsWith(
-                    "data:image/"
-                  )
-                ) {
-
-                  alert(
-                    "Impossible de charger l'aperçu de la photo."
-                  );
-
-                  return;
-
-                }
-
-
-                preview.src =
-                  imageData;
-
-
-                preview.style.display =
-                  "block";
-
-
-                uploadContent.style.display =
-                  "none";
-
-
-                console.log(
-                  "Aperçu photo chargé."
-                );
-
-              };
-
-
-            reader.onerror =
-              function () {
-
-                console.error(
-                  "Erreur lecture photo :",
-                  reader.error
-                );
-
-
-                alert(
-                  "Impossible de lire cette photo."
-                );
-
-
-                photoInput.value = "";
-
-              };
-
-
-            reader.readAsDataURL(
-              file
-            );
-
-          }
-        );
+        return;
 
       }
 
 
-      /* =======================================================
-         PERSONNAGE
-      ======================================================== */
+      /* Limite de taille */
 
-      characterButtons.forEach(
-        function (button) {
+      const maxSize =
+        10 * 1024 * 1024;
 
-          button.addEventListener(
-            "click",
-            function (event) {
+      if (file.size > maxSize) {
 
-              event.preventDefault();
-              event.stopPropagation();
+        showError(
+          "La photo est trop volumineuse. Taille maximale : 10 Mo."
+        );
 
+        photoInput.value =
+          "";
 
-              /* Désélectionner */
+        return;
 
-              characterButtons.forEach(
-                function (item) {
-
-                  item.classList.remove(
-                    "selected"
-                  );
-
-                  item.setAttribute(
-                    "aria-pressed",
-                    "false"
-                  );
-
-                }
-              );
+      }
 
 
-              /* Sélectionner */
-
-              button.classList.add(
-                "selected"
-              );
+      hideError();
 
 
-              button.setAttribute(
-                "aria-pressed",
-                "true"
-              );
+      const reader =
+        new FileReader();
 
 
-              /* Sauvegarder le choix */
+      reader.onload =
+        function(e) {
 
-              selectedType =
-                button.dataset.type;
-
-
-              console.log(
-                "Type sélectionné :",
-                selectedType
-              );
-
-            }
-          );
-
-        }
-      );
-
-
-      /* =======================================================
-         COPIE
-      ======================================================== */
-
-      async function copySearch(
-        text,
-        button
-      ) {
-
-        if (!text) {
-          return;
-        }
-
-
-        try {
+          const resultData =
+            e.target.result;
 
           if (
-            navigator.clipboard &&
-            navigator.clipboard.writeText
+            typeof resultData !==
+            "string"
           ) {
 
-            await navigator.clipboard.writeText(
-              text
+            showError(
+              "Impossible de charger cette photo."
             );
 
-          } else {
-
-            const textarea =
-              document.createElement(
-                "textarea"
-              );
-
-
-            textarea.value =
-              text;
-
-
-            textarea.style.position =
-              "fixed";
-
-
-            textarea.style.opacity =
-              "0";
-
-
-            document.body.appendChild(
-              textarea
-            );
-
-
-            textarea.select();
-
-
-            document.execCommand(
-              "copy"
-            );
-
-
-            textarea.remove();
+            return;
 
           }
 
 
-          const originalText =
-            button.textContent;
+          preview.src =
+            resultData;
 
+          preview.style.display =
+            "block";
 
-          button.textContent =
-            "✓ Copié";
+          uploadContent.style.display =
+            "none";
 
-
-          setTimeout(
-            function () {
-
-              button.textContent =
-                originalText;
-
-            },
-            1500
+          uploadZone.classList.add(
+            "has-photo"
           );
 
 
-        } catch (error) {
+          photoInfo.textContent =
+            `${file.name} • ${Math.round(file.size / 1024)} Ko`;
 
-          console.error(
-            "Erreur copie :",
-            error
+          photoInfo.style.display =
+            "block";
+
+
+          console.log(
+            "Photo sélectionnée :",
+            file.name,
+            file.type,
+            Math.round(file.size / 1024),
+            "KB"
           );
-
-
-          alert(
-            "Impossible de copier la recherche."
-          );
-
-        }
-
-      }
-
-
-      /* =======================================================
-         VINTED
-      ======================================================== */
-
-      function openVintedSearch(
-        search
-      ) {
-
-        if (
-          !search ||
-          !search.trim()
-        ) {
-
-          return;
-
-        }
-
-
-        const query =
-          encodeURIComponent(
-            search.trim()
-          );
-
-
-        const url =
-          "https://www.vinted.fr/catalog?search_text=" +
-          query;
-
-
-        window.open(
-          url,
-          "_blank",
-          "noopener,noreferrer"
-        );
-
-      }
-
-
-      /* =======================================================
-         COULEURS
-      ======================================================== */
-
-      function displayColors(
-        colors
-      ) {
-
-        const container =
-          document.getElementById(
-            "resultColors"
-          );
-
-
-        if (!container) {
-          return;
-        }
-
-
-        container.innerHTML =
-          "";
-
-
-        if (
-          !Array.isArray(colors)
-        ) {
-
-          return;
-
-        }
-
-
-        colors.forEach(
-          function (color) {
-
-            if (
-              typeof color !==
-                "string" ||
-              !color.trim()
-            ) {
-
-              return;
-
-            }
-
-
-            const tag =
-              document.createElement(
-                "span"
-              );
-
-
-            tag.className =
-              "color-tag";
-
-
-            tag.textContent =
-              color.trim();
-
-
-            container.appendChild(
-              tag
-            );
-
-          }
-        );
-
-      }
-
-
-      /* =======================================================
-         RECHERCHES
-      ======================================================== */
-
-      function displaySearches(
-        searches
-      ) {
-
-        const container =
-          document.getElementById(
-            "searchList"
-          );
-
-
-        if (!container) {
-          return;
-        }
-
-
-        container.innerHTML =
-          "";
-
-
-        if (
-          !searches ||
-          typeof searches !==
-            "object"
-        ) {
-
-          container.innerHTML =
-            "<p style='color:#a1a1aa;'>" +
-            "Aucune recherche disponible." +
-            "</p>";
-
-
-          return;
-
-        }
-
-
-        const labels = {
-
-          haut: "👕 Haut",
-
-          bas: "👖 Bas",
-
-          veste: "🧥 Veste",
-
-          chaussures: "👟 Chaussures",
-
-          accessoires: "✨ Accessoires"
 
         };
 
 
-        Object.keys(labels).forEach(
-          function (key) {
+      reader.onerror =
+        function() {
 
-            const value =
-              searches[key];
+          showError(
+            "Impossible de lire cette photo."
+          );
+
+        };
 
 
-            if (
-              typeof value !==
-                "string" ||
-              !value.trim()
-            ) {
+      reader.readAsDataURL(file);
 
-              return;
+    }
+  );
+
+
+  /* =====================================================
+     PERSONNAGE
+  ===================================================== */
+
+  characterButtons.forEach(
+    function(button) {
+
+      button.addEventListener(
+        "click",
+        function(event) {
+
+          event.preventDefault();
+          event.stopPropagation();
+
+
+          characterButtons.forEach(
+            function(item) {
+
+              item.classList.remove(
+                "selected"
+              );
 
             }
+          );
 
 
-            const cleanValue =
-              value.trim();
+          button.classList.add(
+            "selected"
+          );
 
 
-            const item =
-              document.createElement(
-                "div"
-              );
+          selectedType =
+            button.dataset.type;
 
 
-            item.className =
-              "search-item";
+          console.log(
+            "Type sélectionné :",
+            selectedType
+          );
 
 
-            const label =
-              document.createElement(
-                "div"
-              );
+          hideError();
+
+        }
+      );
+
+    }
+  );
 
 
-            label.className =
-              "search-label";
+  /* =====================================================
+     COPIE
+  ===================================================== */
+
+  async function copySearch(
+    text,
+    button
+  ) {
+
+    try {
+
+      if (
+        navigator.clipboard &&
+        navigator.clipboard.writeText
+      ) {
+
+        await navigator.clipboard.writeText(
+          text
+        );
+
+      } else {
+
+        const textarea =
+          document.createElement(
+            "textarea"
+          );
+
+        textarea.value =
+          text;
+
+        textarea.style.position =
+          "fixed";
+
+        textarea.style.opacity =
+          "0";
+
+        document.body.appendChild(
+          textarea
+        );
+
+        textarea.focus();
+        textarea.select();
+
+        document.execCommand(
+          "copy"
+        );
+
+        textarea.remove();
+
+      }
 
 
-            label.textContent =
-              labels[key];
+      const originalText =
+        button.textContent;
+
+      button.textContent =
+        "✓ Copié";
 
 
-            const search =
-              document.createElement(
-                "div"
-              );
+      setTimeout(
+        function() {
+
+          button.textContent =
+            originalText;
+
+        },
+        1500
+      );
 
 
-            search.className =
-              "search-value";
+    } catch (error) {
+
+      console.error(
+        "Erreur copie :",
+        error
+      );
+
+      showError(
+        "Impossible de copier la recherche."
+      );
+
+    }
+
+  }
 
 
-            search.textContent =
-              cleanValue;
+  /* =====================================================
+     VINTED
+  ===================================================== */
+
+  function openVintedSearch(
+    search
+  ) {
+
+    if (!search) {
+      return;
+    }
 
 
-            const actions =
-              document.createElement(
-                "div"
-              );
+    const query =
+      encodeURIComponent(
+        search.trim()
+      );
 
 
-            actions.className =
-              "search-actions";
+    const url =
+      "https://www.vinted.fr/catalog?search_text=" +
+      query;
 
 
-            /* COPIER */
+    window.open(
+      url,
+      "_blank",
+      "noopener,noreferrer"
+    );
 
-            const copyButton =
-              document.createElement(
-                "button"
-              );
-
-
-            copyButton.type =
-              "button";
+  }
 
 
-            copyButton.className =
-              "copy-button";
+  /* =====================================================
+     COULEURS
+  ===================================================== */
+
+  function displayColors(
+    colors
+  ) {
+
+    const container =
+      document.getElementById(
+        "resultColors"
+      );
 
 
-            copyButton.textContent =
-              "Copier";
+    container.innerHTML =
+      "";
 
 
-            copyButton.addEventListener(
-              "click",
-              function () {
-
-                copySearch(
-                  cleanValue,
-                  copyButton
-                );
-
-              }
-            );
+    if (!Array.isArray(colors)) {
+      return;
+    }
 
 
-            /* VINTED */
+    colors.forEach(
+      function(color) {
 
-            const vintedButton =
-              document.createElement(
-                "button"
-              );
+        if (
+          typeof color !==
+          "string" ||
+          !color.trim()
+        ) {
 
+          return;
 
-            vintedButton.type =
-              "button";
-
-
-            vintedButton.className =
-              "vinted-button";
+        }
 
 
-            vintedButton.textContent =
-              "🛍️ Vinted";
+        const tag =
+          document.createElement(
+            "span"
+          );
 
 
-            vintedButton.addEventListener(
-              "click",
-              function () {
-
-                openVintedSearch(
-                  cleanValue
-                );
-
-              }
-            );
+        tag.className =
+          "color-tag";
 
 
-            actions.appendChild(
+        tag.textContent =
+          color.trim();
+
+
+        container.appendChild(
+          tag
+        );
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     RECHERCHES
+  ===================================================== */
+
+  function displaySearches(
+    searches
+  ) {
+
+    const container =
+      document.getElementById(
+        "searchList"
+      );
+
+
+    container.innerHTML =
+      "";
+
+
+    if (
+      !searches ||
+      typeof searches !== "object"
+    ) {
+
+      container.innerHTML =
+        "<p style='color:#a1a1aa;'>Aucune recherche disponible.</p>";
+
+      return;
+
+    }
+
+
+    const labels = {
+
+      haut: "👕 Haut",
+      bas: "👖 Bas",
+      veste: "🧥 Veste",
+      chaussures: "👟 Chaussures",
+      accessoires: "✨ Accessoires"
+
+    };
+
+
+    Object.keys(labels).forEach(
+      function(key) {
+
+        const value =
+          searches[key];
+
+
+        if (
+          typeof value !==
+          "string" ||
+          !value.trim()
+        ) {
+
+          return;
+
+        }
+
+
+        const item =
+          document.createElement(
+            "div"
+          );
+
+        item.className =
+          "search-item";
+
+
+        const label =
+          document.createElement(
+            "div"
+          );
+
+        label.className =
+          "search-label";
+
+        label.textContent =
+          labels[key];
+
+
+        const search =
+          document.createElement(
+            "div"
+          );
+
+        search.className =
+          "search-value";
+
+        search.textContent =
+          value;
+
+
+        const actions =
+          document.createElement(
+            "div"
+          );
+
+        actions.className =
+          "search-actions";
+
+
+        /* COPIER */
+
+        const copyButton =
+          document.createElement(
+            "button"
+          );
+
+        copyButton.type =
+          "button";
+
+        copyButton.className =
+          "copy-button";
+
+        copyButton.textContent =
+          "Copier";
+
+
+        copyButton.addEventListener(
+          "click",
+          function(event) {
+
+            event.preventDefault();
+
+            copySearch(
+              value,
               copyButton
             );
 
-
-            actions.appendChild(
-              vintedButton
-            );
+          }
+        );
 
 
-            item.appendChild(
-              label
-            );
+        /* VINTED */
+
+        const vintedButton =
+          document.createElement(
+            "button"
+          );
+
+        vintedButton.type =
+          "button";
+
+        vintedButton.className =
+          "vinted-button";
+
+        vintedButton.textContent =
+          "🛍️ Vinted";
 
 
-            item.appendChild(
-              search
-            );
+        vintedButton.addEventListener(
+          "click",
+          function(event) {
 
+            event.preventDefault();
 
-            item.appendChild(
-              actions
-            );
-
-
-            container.appendChild(
-              item
+            openVintedSearch(
+              value
             );
 
           }
         );
 
+
+        actions.appendChild(
+          copyButton
+        );
+
+        actions.appendChild(
+          vintedButton
+        );
+
+
+        item.appendChild(
+          label
+        );
+
+        item.appendChild(
+          search
+        );
+
+        item.appendChild(
+          actions
+        );
+
+
+        container.appendChild(
+          item
+        );
+
       }
+    );
+
+  }
 
 
-      /* =======================================================
-         FILE → BASE64
-      ======================================================== */
+  /* =====================================================
+     CONVERSION IMAGE
+  ===================================================== */
 
-      function fileToBase64(
-        file
-      ) {
+  function fileToBase64(
+    file
+  ) {
 
-        return new Promise(
-          function (resolve, reject) {
+    return new Promise(
+      function(resolve, reject) {
 
-            if (!file) {
+        const reader =
+          new FileReader();
+
+
+        reader.onload =
+          function() {
+
+            if (
+              typeof reader.result !==
+              "string"
+            ) {
 
               reject(
                 new Error(
-                  "Aucune photo sélectionnée."
+                  "Format de photo invalide."
                 )
               );
-
 
               return;
 
             }
 
 
-            const reader =
-              new FileReader();
+            const commaIndex =
+              reader.result.indexOf(",");
 
 
-            reader.onload =
-              function () {
+            if (
+              commaIndex ===
+              -1
+            ) {
 
-                const dataUrl =
-                  reader.result;
+              reject(
+                new Error(
+                  "Impossible de convertir la photo."
+                )
+              );
 
+              return;
 
-                if (
-                  typeof dataUrl !==
-                  "string"
-                ) {
-
-                  reject(
-                    new Error(
-                      "Format de photo invalide."
-                    )
-                  );
+            }
 
 
-                  return;
-
-                }
-
-
-                const commaIndex =
-                  dataUrl.indexOf(
-                    ","
-                  );
+            const base64 =
+              reader.result.substring(
+                commaIndex + 1
+              );
 
 
-                if (
-                  commaIndex === -1
-                ) {
+            if (!base64) {
 
-                  reject(
-                    new Error(
-                      "Impossible de convertir la photo."
-                    )
-                  );
+              reject(
+                new Error(
+                  "La photo est vide."
+                )
+              );
 
+              return;
 
-                  return;
-
-                }
+            }
 
 
-                const base64 =
-                  dataUrl.substring(
-                    commaIndex + 1
-                  );
-
-
-                if (!base64) {
-
-                  reject(
-                    new Error(
-                      "La photo est vide."
-                    )
-                  );
-
-
-                  return;
-
-                }
-
-
-                resolve(
-                  base64
-                );
-
-              };
-
-
-            reader.onerror =
-              function () {
-
-                reject(
-                  new Error(
-                    "Impossible de lire la photo."
-                  )
-                );
-
-              };
-
-
-            reader.readAsDataURL(
-              file
+            resolve(
+              base64
             );
 
-          }
+          };
+
+
+        reader.onerror =
+          function() {
+
+            reject(
+              new Error(
+                "Impossible de lire la photo."
+              )
+            );
+
+          };
+
+
+        reader.readAsDataURL(
+          file
         );
+
+      }
+    );
+
+  }
+
+
+  /* =====================================================
+     GENERATION
+  ===================================================== */
+
+  generateButton.addEventListener(
+    "click",
+    async function() {
+
+      hideError();
+
+
+      /* =========================
+         RECUPERATION
+      ========================== */
+
+      const height =
+        document.getElementById(
+          "height"
+        ).value.trim();
+
+
+      const weight =
+        document.getElementById(
+          "weight"
+        ).value.trim();
+
+
+      const topSize =
+        document.getElementById(
+          "topSize"
+        ).value;
+
+
+      const bottomSize =
+        document.getElementById(
+          "bottomSize"
+        ).value;
+
+
+      const topStyle =
+        document.getElementById(
+          "topStyle"
+        ).value;
+
+
+      const bottomStyle =
+        document.getElementById(
+          "bottomStyle"
+        ).value;
+
+
+      const jacketStyle =
+        document.getElementById(
+          "jacketStyle"
+        ).value;
+
+
+      const file =
+        photoInput.files &&
+        photoInput.files[0];
+
+
+      /* =========================
+         VALIDATIONS
+      ========================== */
+
+      if (!file) {
+
+        showError(
+          "Ajoute d'abord une photo."
+        );
+
+        return;
 
       }
 
 
-      /* =======================================================
-         REPONSE API
-      ======================================================== */
+      if (!selectedType) {
 
-      async function parseApiResponse(
-        response
-      ) {
+        showError(
+          "Choisis Gentil ou Méchant."
+        );
+
+        return;
+
+      }
+
+
+      if (!height || !weight) {
+
+        showError(
+          "Entre ta taille et ton poids."
+        );
+
+        return;
+
+      }
+
+
+      if (!topSize) {
+
+        showError(
+          "Choisis ta taille de haut."
+        );
+
+        return;
+
+      }
+
+
+      if (!bottomSize) {
+
+        showError(
+          "Choisis ta taille de bas."
+        );
+
+        return;
+
+      }
+
+
+      /* =========================
+         ETAT CHARGEMENT
+      ========================== */
+
+      generateButton.disabled =
+        true;
+
+      generateButton.style.display =
+        "none";
+
+      loading.style.display =
+        "block";
+
+      result.style.display =
+        "none";
+
+
+      try {
+
+        /* =========================
+           IMAGE
+        ========================== */
+
+        const imageBase64 =
+          await fileToBase64(
+            file
+          );
+
+
+        console.log(
+          "Photo envoyée :",
+          Math.round(
+            imageBase64.length / 1024
+          ),
+          "KB"
+        );
+
+
+        /* =========================
+           DONNEES
+        ========================== */
+
+        const requestBody = {
+
+          characterType:
+            selectedType,
+
+          height:
+            height,
+
+          weight:
+            weight,
+
+          topSize:
+            topSize,
+
+          bottomSize:
+            bottomSize,
+
+          topStyle:
+            topStyle,
+
+          bottomStyle:
+            bottomStyle,
+
+          jacketStyle:
+            jacketStyle,
+
+          image:
+            imageBase64,
+
+          mimeType:
+            file.type
+
+        };
+
+
+        console.log(
+          "DisneyBound → API",
+          {
+            characterType:
+              selectedType,
+
+            height:
+              height,
+
+            weight:
+              weight,
+
+            topSize:
+              topSize,
+
+            bottomSize:
+              bottomSize,
+
+            topStyle:
+              topStyle,
+
+            bottomStyle:
+              bottomStyle,
+
+            jacketStyle:
+              jacketStyle,
+
+            imageKB:
+              Math.round(
+                imageBase64.length / 1024
+              ),
+
+            mimeType:
+              file.type
+          }
+        );
+
+
+        /* =========================
+           APPEL API
+        ========================== */
+
+        const response =
+          await fetch(
+            "/api/generate",
+            {
+
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json",
+
+                "Accept":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify(
+                  requestBody
+                )
+
+            }
+          );
+
+
+        /* =========================
+           REPONSE
+        ========================== */
 
         const rawText =
           await response.text();
@@ -2271,7 +2393,7 @@
         );
 
 
-        let data;
+        let data = null;
 
 
         try {
@@ -2281,12 +2403,36 @@
               rawText
             );
 
-        } catch (error) {
+        } catch (jsonError) {
 
           console.error(
-            "Réponse serveur non JSON :",
-            rawText
+            "Réponse non JSON :",
+            jsonError
           );
+
+
+          if (
+            response.status ===
+            404
+          ) {
+
+            throw new Error(
+              "L'API /api/generate est introuvable. Vérifie que le fichier api/generate.js est bien présent dans GitHub."
+            );
+
+          }
+
+
+          if (
+            response.status >=
+            500
+          ) {
+
+            throw new Error(
+              "Le serveur DisneyBound a rencontré une erreur. Vérifie les logs Vercel de /api/generate."
+            );
+
+          }
 
 
           throw new Error(
@@ -2296,34 +2442,29 @@
         }
 
 
+        /* =========================
+           ERREUR API
+        ========================== */
+
         if (!response.ok) {
 
           throw new Error(
             data?.error ||
-            data?.message ||
             `Erreur serveur ${response.status}`
           );
 
         }
 
 
+        /* =========================
+           RESULTAT
+        ========================== */
+
         if (
           !data ||
-          typeof data !==
-            "object"
-        ) {
-
-          throw new Error(
-            "Réponse serveur invalide."
-          );
-
-        }
-
-
-        if (
           !data.result ||
           typeof data.result !==
-            "object"
+          "object"
         ) {
 
           throw new Error(
@@ -2333,519 +2474,147 @@
         }
 
 
-        return data;
-
-      }
-
-
-      /* =======================================================
-         GENERATION
-      ======================================================== */
-
-      if (generateButton) {
-
-        generateButton.addEventListener(
-          "click",
-          async function () {
+        const disneyBound =
+          data.result;
 
 
-            /* =================================================
-               CHAMPS
-            ================================================== */
+        /* =========================
+           AFFICHAGE
+        ========================== */
 
-            const height =
-              document.getElementById(
-                "height"
-              )?.value?.trim();
-
-
-            const weight =
-              document.getElementById(
-                "weight"
-              )?.value?.trim();
+        document.getElementById(
+          "resultEmoji"
+        ).textContent =
+          "✨";
 
 
-            const topSize =
-              document.getElementById(
-                "topSize"
-              )?.value?.trim();
+        document.getElementById(
+          "resultTitle"
+        ).textContent =
+          `DisneyBound inspiré de ${
+            disneyBound.personnage ||
+            "ton personnage Disney"
+          }`;
 
 
-            const bottomSize =
-              document.getElementById(
-                "bottomSize"
-              )?.value?.trim();
+        document.getElementById(
+          "resultSubtitle"
+        ).textContent =
+          "Voici les pièces à rechercher pour créer ton look.";
 
 
-            const topStyle =
-              document.getElementById(
-                "topStyle"
-              )?.value ||
-              "libre";
+        document.getElementById(
+          "resultTop"
+        ).textContent =
+          disneyBound.haut ||
+          "Non renseigné";
 
 
-            const bottomStyle =
-              document.getElementById(
-                "bottomStyle"
-              )?.value ||
-              "libre";
+        document.getElementById(
+          "resultBottom"
+        ).textContent =
+          disneyBound.bas ||
+          "Non renseigné";
 
 
-            const jacketStyle =
-              document.getElementById(
-                "jacketStyle"
-              )?.value ||
-              "libre";
+        document.getElementById(
+          "resultJacket"
+        ).textContent =
+          disneyBound.veste ||
+          "Non renseigné";
 
 
-            const file =
-              photoInput?.files?.[0];
+        document.getElementById(
+          "resultShoes"
+        ).textContent =
+          disneyBound.chaussures ||
+          "Non renseigné";
 
 
-            /* =================================================
-               VALIDATION PHOTO
-            ================================================== */
+        const accessories =
+          disneyBound.accessoires;
 
-            if (!file) {
 
-              alert(
-                "📸 Ajoute d'abord une photo."
+        if (
+          Array.isArray(accessories) &&
+          accessories.length > 0
+        ) {
+
+          document.getElementById(
+            "resultAccessory"
+          ).textContent =
+            accessories
+              .filter(
+                item =>
+                  typeof item ===
+                  "string" &&
+                  item.trim()
+              )
+              .join(
+                " • "
               );
 
+        } else {
 
-              return;
+          document.getElementById(
+            "resultAccessory"
+          ).textContent =
+            "Aucun accessoire renseigné";
 
-            }
+        }
 
 
-            /* =================================================
-               VALIDATION PERSONNAGE
-            ================================================== */
-
-            if (!selectedType) {
-
-              alert(
-                "🎭 Choisis Gentil ou Méchant."
-              );
-
-
-              return;
-
-            }
-
-
-            /* =================================================
-               VALIDATION MENSURATIONS
-            ================================================== */
-
-            if (
-              !height ||
-              !weight
-            ) {
-
-              alert(
-                "📏 Entre ta taille et ton poids."
-              );
-
-
-              return;
-
-            }
-
-
-            /* =================================================
-               VALIDATION TAILLES
-            ================================================== */
-
-            if (!topSize) {
-
-              alert(
-                "👕 Choisis ta taille de haut."
-              );
-
-
-              return;
-
-            }
-
-
-            if (!bottomSize) {
-
-              alert(
-                "👖 Choisis ta taille de bas."
-              );
-
-
-              return;
-
-            }
-
-
-            /* =================================================
-               CHARGEMENT
-            ================================================== */
-
-            generateButton.disabled =
-              true;
-
-
-            generateButton.style.display =
-              "none";
-
-
-            loading.style.display =
-              "block";
-
-
-            result.style.display =
-              "none";
-
-
-            try {
-
-
-              /* ===============================================
-                 IMAGE
-              ================================================ */
-
-              const imageBase64 =
-                await fileToBase64(
-                  file
-                );
-
-
-              console.log(
-                "Photo envoyée :",
-                Math.round(
-                  imageBase64.length /
-                  1024
-                ),
-                "KB"
-              );
-
-
-              /* ===============================================
-                 PAYLOAD
-              ================================================ */
-
-              const payload = {
-
-                characterType:
-                  selectedType,
-
-                height:
-                  height,
-
-                weight:
-                  weight,
-
-                topSize:
-                  topSize,
-
-                bottomSize:
-                  bottomSize,
-
-                topStyle:
-                  topStyle,
-
-                bottomStyle:
-                  bottomStyle,
-
-                jacketStyle:
-                  jacketStyle,
-
-                image:
-                  imageBase64,
-
-                mimeType:
-                  file.type
-
-              };
-
-
-              console.log(
-                "Paramètres DisneyBound :",
-                {
-                  characterType:
-                    payload.characterType,
-
-                  height:
-                    payload.height,
-
-                  weight:
-                    payload.weight,
-
-                  topSize:
-                    payload.topSize,
-
-                  bottomSize:
-                    payload.bottomSize,
-
-                  topStyle:
-                    payload.topStyle,
-
-                  bottomStyle:
-                    payload.bottomStyle,
-
-                  jacketStyle:
-                    payload.jacketStyle,
-
-                  mimeType:
-                    payload.mimeType,
-
-                  imageKB:
-                    Math.round(
-                      imageBase64.length /
-                      1024
-                    )
-                }
-              );
-
-
-              /* ===============================================
-                 API
-              ================================================ */
-
-              const response =
-                await fetch(
-                  "/api/generate",
-                  {
-
-                    method:
-                      "POST",
-
-                    headers: {
-
-                      "Content-Type":
-                        "application/json",
-
-                      "Accept":
-                        "application/json"
-
-                    },
-
-                    body:
-                      JSON.stringify(
-                        payload
-                      )
-
-                  }
-                );
-
-
-              /* ===============================================
-                 REPONSE
-              ================================================ */
-
-              const data =
-                await parseApiResponse(
-                  response
-                );
-
-
-              const disneyBound =
-                data.result;
-
-
-              /* ===============================================
-                 PERSONNAGE
-              ================================================ */
-
-              document.getElementById(
-                "resultEmoji"
-              ).textContent =
-                selectedType ===
-                "villain"
-                  ? "😈"
-                  : "😊";
-
-
-              document.getElementById(
-                "resultTitle"
-              ).textContent =
-                `DisneyBound inspiré de ${
-                  disneyBound.personnage ||
-                  "ton personnage Disney"
-                }`;
-
-
-              document.getElementById(
-                "resultSubtitle"
-              ).textContent =
-                "Voici les pièces à rechercher pour créer ton look.";
-
-
-              /* ===============================================
-                 TENUE
-              ================================================ */
-
-              document.getElementById(
-                "resultTop"
-              ).textContent =
-                disneyBound.haut ||
-                "Non renseigné";
-
-
-              document.getElementById(
-                "resultBottom"
-              ).textContent =
-                disneyBound.bas ||
-                "Non renseigné";
-
-
-              document.getElementById(
-                "resultJacket"
-              ).textContent =
-                disneyBound.veste ||
-                "Non renseigné";
-
-
-              document.getElementById(
-                "resultShoes"
-              ).textContent =
-                disneyBound.chaussures ||
-                "Non renseigné";
-
-
-              /* ===============================================
-                 ACCESSOIRES
-              ================================================ */
-
-              const accessories =
-                disneyBound.accessoires;
-
-
-              const accessoryElement =
-                document.getElementById(
-                  "resultAccessory"
-                );
-
-
-              if (
-                Array.isArray(
-                  accessories
-                ) &&
-                accessories.length > 0
-              ) {
-
-                accessoryElement.textContent =
-                  accessories
-                    .filter(
-                      function (item) {
-
-                        return (
-                          typeof item ===
-                            "string" &&
-                          item.trim()
-                        );
-
-                      }
-                    )
-                    .join(
-                      " • "
-                    );
-
-              } else {
-
-                accessoryElement.textContent =
-                  "Aucun accessoire renseigné";
-
-              }
-
-
-              /* ===============================================
-                 COULEURS
-              ================================================ */
-
-              displayColors(
-                disneyBound.couleurs
-              );
-
-
-              /* ===============================================
-                 RECHERCHES
-              ================================================ */
-
-              displaySearches(
-                disneyBound.recherches
-              );
-
-
-              /* ===============================================
-                 RESULTAT
-              ================================================ */
-
-              result.style.display =
-                "block";
-
-
-              result.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-              });
-
-
-              console.log(
-                "DisneyBound réussi :",
-                disneyBound.personnage
-              );
-
-
-            } catch (error) {
-
-
-              /* ===============================================
-                 ERREUR
-              ================================================ */
-
-              console.error(
-                "Erreur DisneyBound :",
-                error
-              );
-
-
-              alert(
-                "❌ Impossible de générer ton DisneyBound.\n\n" +
-                (
-                  error?.message ||
-                  "Erreur inconnue."
-                )
-              );
-
-
-            } finally {
-
-
-              /* ===============================================
-                 RESTAURATION
-              ================================================ */
-
-              loading.style.display =
-                "none";
-
-
-              generateButton.style.display =
-                "block";
-
-
-              generateButton.disabled =
-                false;
-
-            }
-
-          }
+        displayColors(
+          disneyBound.couleurs
         );
 
+
+        displaySearches(
+          disneyBound.recherches
+        );
+
+
+        result.style.display =
+          "block";
+
+
+        result.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        });
+
+
+      } catch (error) {
+
+        console.error(
+          "Erreur DisneyBound :",
+          error
+        );
+
+
+        showError(
+          "Impossible de générer ton DisneyBound : " +
+          (
+            error?.message ||
+            "Erreur inconnue."
+          )
+        );
+
+
+      } finally {
+
+        loading.style.display =
+          "none";
+
+
+        generateButton.style.display =
+          "block";
+
+
+        generateButton.disabled =
+          false;
+
       }
-
-
-      /* =======================================================
-         FIN
-      ======================================================== */
-
-      console.log(
-        "DisneyBound AI : prêt."
-      );
 
     }
   );
